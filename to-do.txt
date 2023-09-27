@@ -1,0 +1,6 @@
+
+    - Refrescar el slug al cambiarlo
+    - Validar los datos de los productos relacionados
+    - Paginacion de las imagenes de add a producto
+    - Validar el slug con javascript
+    - Cambiar texto de url de navegador en pagina de producto al cambiar entre productos relacionados

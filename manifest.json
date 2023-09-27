@@ -1,0 +1,7 @@
+{
+    "name": "hive",
+    "short_name": "hive",
+    "start_url": "/home",
+    "display": "standalone",
+    "theme_color": "#f5f5f5"
+}
