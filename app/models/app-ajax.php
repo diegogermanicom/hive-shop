@@ -157,19 +157,14 @@
 
         public function add_cart() {
             // If you already have the product in the cart, I will add 1 to the amount
-            $sql = 'SELECT id FROM '.DDBB_PREFIX.'carts WHERE id_cart = ? AND id_product = ? AND id_product_related = ? LIMIT 1';
+            $sql = 'SELECT id_cart FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ? AND id_product = ? AND id_product_related = ? LIMIT 1';
             $result = $this->query($sql, array($_COOKIE['id_cart'], $_POST['id_product'], $_POST['id_product_related']));
             if($result->num_rows == 0) {
-                if(isset($_SESSION['user'])) {
-                    $id_user = $_SESSION['user']['id_user'];
-                } else {
-                    $id_user = 0;
-                }
-                $sql = 'INSERT INTO '.DDBB_PREFIX.'carts (id_cart, id_product, id_product_related, id_category, amount, id_user)
-                        VALUES (?, ?, ?, ?, 1, ?)';
-                $this->query($sql, array($_COOKIE['id_cart'], $_POST['id_product'], $_POST['id_product_related'], $_POST['id_category'], $id_user));
+                $sql = 'INSERT INTO '.DDBB_PREFIX.'carts_products (id_cart, id_product, id_product_related, id_category, amount)
+                        VALUES (?, ?, ?, ?, 1)';
+                $this->query($sql, array($_COOKIE['id_cart'], $_POST['id_product'], $_POST['id_product_related'], $_POST['id_category']));
             } else {
-                $sql = 'UPDATE '.DDBB_PREFIX.'carts SET amount = amount + 1 WHERE id_cart = ? AND id_product = ? AND id_product_related = ? LIMIT 1';
+                $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = amount + 1 WHERE id_cart = ? AND id_product = ? AND id_product_related = ? LIMIT 1';
                 $this->query($sql, array($_COOKIE['id_cart'], $_POST['id_product'], $_POST['id_product_related']));
             }
             return array('response' => 'ok');
@@ -233,7 +228,7 @@
             $button_url = $urls[strtolower(LANG)];
             // I get the product and cart data
             $sql = 'SELECT c.*, p.price, pl.name AS product_name, r.price_change, r.stock
-                    FROM '.DDBB_PREFIX.'carts AS c
+                    FROM '.DDBB_PREFIX.'carts_products AS c
                         INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
                         INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
                         INNER JOIN '.DDBB_PREFIX.'products_language AS pl ON pl.id_product = c.id_product
@@ -262,8 +257,8 @@
                         }
                         // If there is less stock than what you ask for, I update it
                         if($row['stock'] < $row['amount']) {
-                            $sql = 'UPDATE '.DDBB_PREFIX.'carts SET amount = ? WHERE id = ? LIMIT 1';
-                            $this->query($sql, array($row['stock'], $row['id']));
+                            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id_product = ? LIMIT 1';
+                            $this->query($sql, array($row['stock'], $row['id_product']));
                             $row['amount'] = $row['stock'];
                         }
                         // I adjust the price if there is a variant or offer
@@ -301,8 +296,8 @@
                         $html .= '</div>';    
                     } else {
                         // If it's out of stock, I'll remove it from the cart.
-                        $sql = 'DELETE FROM '.DDBB_PREFIX.'carts WHERE id = ? LIMIT 1';
-                        $this->query($sql, array($row['id']));
+                        $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ? AND id_product_related = ? LIMIT 1';
+                        $this->query($sql, array($_COOKIE['id_cart'], $row['id_product_related']));
                     }
                 }
             } else {
@@ -319,15 +314,15 @@
         }
 
         public function remove_cart_product() {
-            $sql = 'DELETE FROM '.DDBB_PREFIX.'carts WHERE id_cart = ? AND id = ? LIMIT 1';
+            $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ? AND id = ? LIMIT 1';
             $this->query($sql, array($_COOKIE['id_cart'], $_POST['id']));
             return array('response' => 'ok');
         }
 
         public function change_product_amount() {
             // I do not need to check the stock here since I do it when loading the cart again
-            $sql = 'UPDATE '.DDBB_PREFIX.'carts SET amount = ? WHERE id = ? AND id_cart = ? LIMIT 1';
-            $this->query($sql, array($_POST['amount'], $_POST['id'], $_COOKIE['id_cart']));
+            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id = ? LIMIT 1';
+            $this->query($sql, array($_POST['amount'], $_POST['id']));
             return array('response' => 'ok');
         }
 

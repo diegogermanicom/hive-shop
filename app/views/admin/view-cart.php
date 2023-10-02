@@ -11,6 +11,7 @@
                 <section>
                     <div class="container">
                         <div class="title-container underline text-left">View Cart</div>
+                        <div><?= $data['carts']['html_products']; ?></div>
                     </div>
                 </section>
                 <?php include VIEWS_ADMIN.'/footer.php'; ?>

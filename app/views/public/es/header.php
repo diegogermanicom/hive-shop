@@ -49,6 +49,6 @@
         </ul>
         <div class="content-buttons">
             <a href="<?= PUBLIC_ROUTE; ?>/acceso"><i class="fa-solid fa-user"></i></a>
-            <div id="btn-show-cart"><i class="fa-solid fa-cart-shopping"></i></div>
+            <div id="btn-show-cart"><i class="fa-solid fa-cart-shopping"></i><?= $_COOKIE["cart_items"]; ?></div>
         </div>
     </header>

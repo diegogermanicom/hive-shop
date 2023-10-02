@@ -15,7 +15,8 @@
             parent::__construct();
             $this->name_page = $name_page;
             $this->check_maintenance();
-            $this->set_cesta();
+            $this->set_cart();
+            $this->set_cart_items();
             $this->login_remember();
         }
 
@@ -49,13 +50,27 @@
             return $data;
         }
 
-        public function set_cesta() {
+        public function set_cart() {
             // If you don't have the id_cart cookie, I create one
 			if(!(isset($_COOKIE["id_cart"]))) {
                 $uniq = uniqid();
 				setcookie("id_cart", $uniq, time() + (60 * 60 * 24 * 30 * 4), PUBLIC_PATH.'/'); // 4 meses
                 $_COOKIE["id_cart"] = $uniq;
+                $sql = 'INSERT INTO '.DDBB_PREFIX.'carts (id_cart) VALUES (?)';
+                $this->query($sql, array($_COOKIE['id_cart']));
 			}
+        }
+
+        public function set_cart_items() {
+			if(!(isset($_COOKIE["cart_items"]))) {
+				setcookie("cart_items", 0, time() + (60 * 60 * 24 * 30 * 4), PUBLIC_PATH.'/'); // 4 meses
+			}
+            $sql = 'SELECT SUM(amount) AS num_items FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ?';
+            $result = $this->query($sql, array($_COOKIE["id_cart"]));
+            if($result->num_rows != 0) {
+                $row = $result->fetch_assoc();
+                $_COOKIE["cart_items"] = $row['num_items'];
+            }
         }
 
         public function set_cookies() {
@@ -109,6 +124,10 @@
                     if($remember == 1) {
                         setcookie("user_remember", $row["remember_code"], time() + (60 * 60 * 24 * 7), PUBLIC_PATH.'/'); // 7 dias
                     }
+                    // I associate the cart to the user
+                    $sql = 'UPDATE '.DDBB_PREFIX.'carts SET id_user = ? WHERE id_cart = ? AND id_user = 0 LIMIT 1';
+                    $this->query($sql, array($row['id_user'], $_COOKIE['id_cart']));
+                    // If you come from the place order page
                     if(isset($_POST['checkout']) && $_POST['checkout'] == 1) {
                         if(LANG == 'en') {
                             $url = PUBLIC_ROUTE.'/checkout?login';

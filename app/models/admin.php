@@ -1021,7 +1021,7 @@
                 $html .= '</thead>';
                 $html .= '<tbody>';
                 foreach($pager['result'] as $row) {
-                    $sql = 'SELECT c.*, p.price, r.price_change FROM '.DDBB_PREFIX.'carts AS c
+                    $sql = 'SELECT c.*, p.price, r.price_change FROM '.DDBB_PREFIX.'carts_products AS c
                                 INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
                                 INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
                             WHERE c.id_cart = ?';
@@ -1055,9 +1055,12 @@
         }
 
         public function get_cart($id_cart) {
-            $sql = 'SELECT c.*, p.price, p.alias AS alias_product
-                    FROM carts AS c
+            // I paint the list of products in the cart
+            $sql = 'SELECT c.*, p.price, p.alias AS alias_product, i.url AS url_image
+                    FROM carts_products AS c
                         INNER JOIN products AS p ON p.id_product = c.id_product
+                        INNER JOIN products_images AS ip ON ip.id_product_image = p.main_image
+                        INNER JOIN images AS i ON i.id_image = ip.id_image
                     WHERE c.id_cart = ?';
             $result = $this->query($sql, array($id_cart));
             if($result->num_rows != 0) {
@@ -1065,7 +1068,7 @@
                 while($row = $result->fetch_assoc()) {
                     $html .= '<div class="row item">';
                     $html .=    '<div class="col-4">';
-                    $html .=        '<a href="#" class="image" style="background-image: url();"></a>';
+                    $html .=        '<a href="#" class="image" style="background-image: url('.PUBLIC_PATH.$row['url_image'].');"></a>';
                     $html .=    '</div>';
                     $html .=    '<div class="col-4">';
                     $html .=    '</div>';
@@ -1075,7 +1078,7 @@
                 $html = 'There are no products in the cart.';
             }
             return array(
-                'html' => $html
+                'html_products' => $html
             );
         }
 
