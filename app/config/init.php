@@ -75,6 +75,7 @@
     setcookie('lang', LANG, time() + (24 * 60 * 60 * 365), PUBLIC_PATH.'/'); // 1 año
     $_COOKIE['lang'] = LANG;
     include LANG_PATH.'/'.LANG.'.php';
+    include LANG_PATH.'/routes.php';
 
     // Declare public paths
     if(MULTILANGUAGE == true) {
@@ -96,9 +97,13 @@
         exit;
     }
 
-    // Determino el color de la aplicacion
+    // I save the application theme
     if(!isset($_COOKIE['color-mode'])) {
         setcookie('color-mode', 'light-mode', time() + (24 * 60 * 60 * 365), PUBLIC_PATH.'/'); // 1 año
     }
+
+    // I connect to the database
+    include SERVER_PATH.'/app/config/ddbb.php';
+    $DB = new Ddbb();
 
 ?>

@@ -281,6 +281,15 @@
             $this->viewAdmin('/languages', $data);
         }
 
+        public function language($args) {
+            $admin = new Admin('admin-language-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['meta']['title'] = $admin->setTitle('Language');
+            $data['language'] = $admin->get_language($_GET['id_language']);
+            $this->viewAdmin('/language', $data);
+        }
+
         public function users($args) {
             $admin = new Admin('admin-users-page');
             $admin->security_admin_login();

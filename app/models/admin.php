@@ -495,7 +495,7 @@
                     $html .=    '<td>'.$row['alias'].'</td>';
                     $html .=    '<td class="text-center">'.$active.'</td>';
                     $html .=    '<td class="text-center">';
-                    $html .=        '<a href="#?id_language='.$row['id_language'].'"class="btn btn-black btn-sm">Edit</a>';
+                    $html .=        '<a href="language?id_language='.$row['id_language'].'"class="btn btn-black btn-sm">Edit</a>';
                     $html .=    '</td>';
                     $html .= '</tr>';
                 }
@@ -508,6 +508,11 @@
                 'html' => $html,
                 'pager' => (isset($pager)) ? $pager['pager'] : ''
             );
+        }
+
+        public function get_language($id_language) {
+            $sql = '';
+            return 1;
         }
 
         public function get_users($page = 1, $per_page = 20) {

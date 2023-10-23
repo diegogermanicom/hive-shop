@@ -110,10 +110,10 @@
             echo json_encode($result);
         }
 
-        public function get_address($args) {
-            $app = new AppAjax('ajax-get-address');
+        public function get_addresses($args) {
+            $app = new AppAjax('ajax-get-addresses');
             $result = [];
-            $result['get_address'] = $app->get_address();
+            $result['get_addresses'] = $app->get_addresses();
             echo json_encode($result);
         }
 
@@ -128,6 +128,76 @@
             $app = new AppAjax('ajax-get-provinces-list');
             $result = [];
             $result['get_provinces_list'] = $app->get_provinces_list($_POST['id_country']);
+            echo json_encode($result);
+        }
+
+        public function save_new_address($args) {
+            $app = new AppAjax('ajax-save-new-address');
+            $result = [];
+            $result['save_new_address'] = $app->save_new_address();
+            echo json_encode($result);
+        }
+
+        public function get_address($args) {
+            $app = new AppAjax('ajax-get-address');
+            $result = [];
+            $result['get_address'] = $app->get_address($_POST['id_user_address']);
+            echo json_encode($result);
+        }
+
+        public function delete_address($args) {
+            $app = new AppAjax('ajax-delete-address');
+            $result = [];
+            $result['delete_address'] = $app->delete_address($_POST['id_user_address']);
+            echo json_encode($result);
+        }
+
+        public function save_edit_address($args) {
+            $app = new AppAjax('ajax-save-edit-address');
+            $result = [];
+            $result['save_edit_address'] = $app->save_edit_address();
+            echo json_encode($result);
+        }
+
+        public function get_billing_addresses($args) {
+            $app = new AppAjax('ajax-get-billing-addresses');
+            $result = [];
+            $result['get_billing_addresses'] = $app->get_billing_addresses();
+            echo json_encode($result);
+        }
+
+        public function save_new_billing_address($args) {
+            $app = new AppAjax('ajax-save-new-billing-address');
+            $result = [];
+            $result['save_new_billing_address'] = $app->save_new_billing_address();
+            echo json_encode($result);
+        }
+
+        public function get_billing_address($args) {
+            $app = new AppAjax('ajax-get-billing-address');
+            $result = [];
+            $result['get_billing_address'] = $app->get_billing_address($_POST['id_user_billing_address']);
+            echo json_encode($result);
+        }
+
+        public function delete_billing_address($args) {
+            $app = new AppAjax('ajax-delete-billing-address');
+            $result = [];
+            $result['delete_billing_address'] = $app->delete_billing_address($_POST['id_user_billing_address']);
+            echo json_encode($result);
+        }
+
+        public function save_edit_billing_address($args) {
+            $app = new AppAjax('ajax-save-edit-billing-address');
+            $result = [];
+            $result['save_edit_billing_address'] = $app->save_edit_billing_address();
+            echo json_encode($result);
+        }
+
+        public function save_order($args) {
+            $app = new AppAjax('ajax-save-order');
+            $result = [];
+            $result['save_order'] = $app->save_order();
             echo json_encode($result);
         }
 

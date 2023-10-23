@@ -21,8 +21,17 @@
     $R->post('/get-popup-cart'                      , 'CAppAjax#get_popup_cart');
     $R->post('/remove-cart-product'                 , 'CAppAjax#remove_cart_product');
     $R->post('/change-product-amount'               , 'CAppAjax#change_product_amount');
-    $R->post('/get-address'                         , 'CAppAjax#get_address');
+    $R->post('/get-addresses'                       , 'CAppAjax#get_addresses');
     $R->post('/save-new-address'                    , 'CAppAjax#save_new_address');
+    $R->post('/get-address'                         , 'CAppAjax#get_address');
+    $R->post('/delete-address'                      , 'CAppAjax#delete_address');
+    $R->post('/save-edit-address'                   , 'CAppAjax#save_edit_address');
+    $R->post('/get-billing-addresses'               , 'CAppAjax#get_billing_addresses');
+    $R->post('/save-new-billing-address'            , 'CAppAjax#save_new_billing_address');
+    $R->post('/get-billing-address'                 , 'CAppAjax#get_billing_address');
+    $R->post('/delete-billing-address'              , 'CAppAjax#delete_billing_address');
+    $R->post('/save-edit-billing-address'           , 'CAppAjax#save_edit_billing_address');    
+    $R->post('/save-order'                          , 'CAppAjax#save_order');
     $R->post('/get-countries-list'                  , 'CAppAjax#get_countries_list');
     $R->post('/get-provinces-list'                  , 'CAppAjax#get_provinces_list');
     

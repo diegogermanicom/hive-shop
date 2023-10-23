@@ -10,7 +10,6 @@
      class Model {
         
         public $db;
-        public $db_success = false;
         public $sleep = 200000;
         public $months = [
             'es' => ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -26,13 +25,8 @@
         ];
 
         function __construct() {
-            $this->connect_ddbb();
-        }
-
-        function __destruct() {
-            if($this->db_success == true) {
-                $this->db->close();
-            }
+            global $DB;
+            $this->db = $DB->db;
         }
 
         public function check_maintenance() {
@@ -50,22 +44,6 @@
             }
         }
 
-        public function connect_ddbb() {
-            if(HAS_DDBB == true) {
-                $this->db = @new mysqli(DDBB_HOST, DDBB_USER, DDBB_PASS, DDBB);
-                if($this->db->connect_errno) {
-                    new Err(
-                        LANGTXT['error-ddbb-title'],
-                        LANGTXT['error-ddbb-description']
-                    );
-                } else {
-                    $this->db_success = true;
-                    $this->db->set_charset("utf8");
-                    $this->db->query('SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY",""));');
-                }
-            }
-        }
-        
         public function query($sql, $params = null) {
             // This function is created to avoid malicious sql injections
             $query = $this->db->prepare($sql);

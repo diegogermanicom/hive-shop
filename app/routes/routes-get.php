@@ -20,6 +20,7 @@
         $R->get('/privacy-policy'                       , 'CApp#privacy_policy');
         $R->get('/access'                               , 'CApp#access');
         $R->get('/register'                             , 'CApp#register');
+        $R->get('/cart'                                 , 'CApp#cart');
         $R->get('/checkout'                             , 'CApp#checkout');
     } else if(LANG == 'es') {
         $R->get('/servicio-caido'                       , 'CApp#service_down');
@@ -27,6 +28,7 @@
         $R->get('/politica-de-privacidad'               , 'CApp#privacy_policy');
         $R->get('/acceso'                               , 'CApp#access');
         $R->get('/registro'                             , 'CApp#register');
+        $R->get('/carrito'                              , 'CApp#cart');
         $R->get('/tramitar-pedido'                      , 'CApp#checkout');
     }
 

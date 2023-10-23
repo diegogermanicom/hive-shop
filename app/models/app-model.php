@@ -31,6 +31,60 @@
             }
         }
 
+        public function login($email, $pass, $remember) {
+            // Pass must come in md5
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'users WHERE email = ? AND pass = ? LIMIT 1';
+            $result = $this->query($sql, array($email, $pass));
+            if($result->num_rows != 0) {
+                $row = $result->fetch_assoc();
+                if($row['id_state'] == 2) {
+                    $sql = 'UPDATE '.DDBB_PREFIX.'users SET last_access = NOW(), ip_last_access = ? WHERE id_user = ? LIMIT 1';
+                    $this->query($sql, array($this->get_ip(), $row['id_user']));
+                    $_SESSION['user'] = [
+                        'id_user' => $row['id_user'],
+                        'email' => $row['email'],
+                        'name' => $row['name']
+                    ];
+                    // If the user still does not have a remember code, I will create one for him
+                    if($row["remember_code"] == '') {
+                        $row["remember_code"] = uniqid();
+                        $sql = 'UPDATE '.DDBB_PREFIX.'users SET remember_code = ? WHERE id_user = ? LIMIT 1';
+                        $this->query($sql, array($row["remember_code"], $row['id_user']));
+                    }
+                    if($remember == 1) {
+                        setcookie("user_remember", $row["remember_code"], time() + (60 * 60 * 24 * 7), PUBLIC_PATH.'/'); // 7 dias
+                    }
+                    // I associate the cart to the user
+                    $sql = 'UPDATE '.DDBB_PREFIX.'carts SET id_user = ? WHERE id_cart = ? AND id_user = 0 LIMIT 1';
+                    $this->query($sql, array($row['id_user'], $_COOKIE['id_cart']));
+                    // If you come from the place order page
+                    if(isset($_POST['checkout']) && $_POST['checkout'] == 1) {
+                        if(LANG == 'en') {
+                            $url = PUBLIC_ROUTE.'/checkout?login';
+                        } else if(LANG == 'es') {
+                            $url = PUBLIC_ROUTE.'/tramitar-pedido?login';
+                        }
+                    } else {
+                        $url = PUBLIC_ROUTE.'/?login';
+                    }
+                    return array(
+                        'response' => 'ok',
+                        'url' => $url
+                    );
+                } else {
+                    return array(
+                        'response' => 'error',
+                        'mensaje' => LANGTXT['user-fail']
+                    );                    
+                }
+            } else {
+                return array(
+                    'response' => 'error',
+                    'mensaje' => LANGTXT['error-login']
+                );
+            }
+        }
+
         public function get_product_routes($id_product, $id_category) {
             // I take the route of the product in a certain category in all languages
             $sql = 'SELECT r.*, l.name AS language_name FROM products_routes AS r

@@ -30,6 +30,7 @@
     $R->getAdmin('/edit-code'                       , 'CAdmin#edit_code');
     $R->getAdmin('/stats'                           , 'CAdmin#stats');
     $R->getAdmin('/languages'                       , 'CAdmin#languages');
+    $R->getAdmin('/language'                        , 'CAdmin#language');
     $R->getAdmin('/users'                           , 'CAdmin#users');
     $R->getAdmin('/edit-user'                       , 'CAdmin#edit_user');
     $R->getAdmin('/users-admin'                     , 'CAdmin#users_admin');

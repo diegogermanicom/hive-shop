@@ -1,6 +1,10 @@
 <?php
 
     define('LANGTXT', array(
+            'select'                    => 'Select',
+            'edit'                      => 'Edit',
+            'delete'                    => 'Delete',
+            'telephone'                 => 'Telephone',
             'error-register'            => 'That email is already associated with another account.',
             'error-login'               => 'Incorrect user or password.',
             'user-fail'                 => 'This user does not have access permissions.',
@@ -13,7 +17,14 @@
             'error-ddbb-title'          => 'Failed to connect to the database',
             'error-ddbb-description'    => 'Check that the connection variables are correct in the file <b>app/config/config.php</b>.',
             'error-query-title'         => 'Query failed',
-            'error-query-description'   => 'An error has occurred when performing the query to the database, check the parameters.'
+            'error-query-description'   => 'An error has occurred when performing the query to the database, check the parameters.',
+            'send-notify-stock'         => 'Your request has been registered correctly!',
+            'new-address'               => 'You need to create a new shipping address.',
+            'new-billing-address'       => 'You need to create a new billing address.',
+            'delete-from-cart'          => 'Remove from cart.',
+            'cart-empty'                => 'Your cart is empty.',
+            'newsletter-validation-ok'  => 'Your account has been successfully validated.',
+            'newsletter-validation-ko'  => 'Your account could not be validated.'
         )
     );
     

@@ -1,5 +1,5 @@
     <footer>
-        <?php if(MULTILANGUAGE == true) { ?>
+        <?php if(MULTILANGUAGE == true && isset($data['routes'])) { ?>
         <div class="pb-15 animate animate-opacity text-center">
             <label>Elige tu idioma</label>
             <?php

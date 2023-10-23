@@ -83,10 +83,7 @@
             } else if(LANG == 'es') {
                 $data['meta']['title'] = $app->setTitle('Inicio');
             }
-            $data['routes'] = array(
-                'en' => '/home',
-                'es' => '/inicio'
-            );
+            $data['routes'] = LANG_ROUTES['home'];
             $this->view('/home', $data);
         }
 
@@ -102,10 +99,7 @@
                 $data['meta']['description'] = 'Infórmate de nuestras políticas de privacidad para hacer un buen uso de nuestra aplicación.';
                 $data['meta']['keywords'] .= ', política de privacidad, legal, cookies, política de cookies';
             }
-            $data['routes'] = array(
-                'en' => '/privacy-policy',
-                'es' => '/politica-de-privacidad'
-            );
+            $data['routes'] = LANG_ROUTES['privacy-policy'];
             $this->view('/privacy-policy', $data);
         }
 
@@ -119,10 +113,7 @@
                 $data['meta']['title'] = $app->setTitle('Servicio caído');
                 $data['meta']['description'] = 'Estamos realizando mejoras en nuestra aplicación. En muy poco tiempo estaremos de vuelta.';
             }
-            $data['routes'] = array(
-                'en' => '/service-down',
-                'es' => '/servicio-caido'
-            );
+            $data['routes'] = LANG_ROUTES['service-down'];
             $this->view('/service-down', $data);
         }
 
@@ -137,10 +128,7 @@
                 $data['meta']['title'] = $app->setTitle('Acceso');
                 $data['meta']['description'] = 'Accede a tu cuenta de usuario de la tienda o crea una cuenta nueva.';
             }
-            $data['routes'] = array(
-                'en' => '/access',
-                'es' => '/acceso'
-            );
+            $data['routes'] = LANG_ROUTES['access'];
             $this->view('/access', $data);
         }
 
@@ -194,6 +182,23 @@
             $data['meta']['title'] = $app->setTitle('Validate email');
             $data['validate'] = $app->validate_email($_GET['code']);
             $this->view('/validate-email', $data);
+        }
+
+        public function cart($args) {
+            $app = new App('cart-page');
+            $data = $app->getAppData();
+            if(LANG == 'en') {
+                $data['meta']['title'] = $app->setTitle('Cart');
+                $data['meta']['description'] = 'Review and modify the products in your cart.';
+            } else if(LANG == 'es') {
+                $data['meta']['title'] = $app->setTitle('Carrito');
+                $data['meta']['description'] = 'Revisa y modifica los productos de tu carrito.';
+            }
+            $data['routes'] = array(
+                'en' => '/cart',
+                'es' => '/carrito'
+            );
+            $this->view('/cart', $data);
         }
 
         public function checkout($args) {

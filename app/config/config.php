@@ -51,6 +51,16 @@
     define('OG_IMAGE', 'http://hiveframework.com/img/hive-logo.png');
     define('OG_APP_ID', '112651260921384');
 
+    // I define Stripe tokens
+    define('STRIPE_PRE', array(
+        'secret_key' => '',
+        'publishable_key' => ''
+    ));
+    define('STRIPE_PRO', array(
+        'secret_key' => '',
+        'publishable_key' => ''
+    ));
+
     if(strpos(HOST, HOST_DEV) !== false) {
         define('ENVIRONMENT', 'PRE');
         define('PROTOCOL', 'https');
@@ -73,5 +83,5 @@
         echo json_encode(array('error' => 'Permission denied.'));
         exit;
     }
-
+    
 ?>

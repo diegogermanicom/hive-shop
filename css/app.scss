@@ -306,3 +306,15 @@ body#product-page {
         }
     }
 }
+#address-list, #billing-list {
+    .item {
+        margin: 5px 5px 5px 5px;
+        padding: 15px 20px 15px 20px;
+        border: 1px solid #eaeaea;
+        border-radius: 4px;
+        &.active {
+            background-color: #eaeaea;
+            border: 1px solid $black;
+        }
+    }
+}

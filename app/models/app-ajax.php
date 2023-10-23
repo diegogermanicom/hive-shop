@@ -206,7 +206,7 @@
             }
             return array(
                 'response' => 'ok',
-                'mensaje' => 'Tu solicitud a sido registrada correctamente!'
+                'mensaje' => LANGTXT['send-notify-stock']
             );
         }
 
@@ -257,8 +257,8 @@
                         }
                         // If there is less stock than what you ask for, I update it
                         if($row['stock'] < $row['amount']) {
-                            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id_product = ? LIMIT 1';
-                            $this->query($sql, array($row['stock'], $row['id_product']));
+                            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id = ? LIMIT 1';
+                            $this->query($sql, array($row['stock'], $row['id']));
                             $row['amount'] = $row['stock'];
                         }
                         // I adjust the price if there is a variant or offer
@@ -268,7 +268,7 @@
                         $price .= ' €';
                         // Draw html
                         $html .= '<div class="row item" id-cart="'.$row['id'].'">';
-                        $html .=    '<div class="btn-remove-cart-product" title="Eliminar del carrito">';
+                        $html .=    '<div class="btn-remove-cart-product" title="'.LANGTXT['delete-from-cart'].'">';
                         $html .=        '<i class="fa-solid fa-trash-can"></i>';
                         $html .=    '</div>';
                         $html .=    '<div class="col-4">';
@@ -296,12 +296,12 @@
                         $html .= '</div>';    
                     } else {
                         // If it's out of stock, I'll remove it from the cart.
-                        $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ? AND id_product_related = ? LIMIT 1';
-                        $this->query($sql, array($_COOKIE['id_cart'], $row['id_product_related']));
+                        $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id = ? LIMIT 1';
+                        $this->query($sql, array($_COOKIE['id_cart'], $row['id']));
                     }
                 }
             } else {
-                $html = '<div class="pt-20">Your cart is empty.</div>';
+                $html = '<div class="pt-20">'.LANGTXT['cart-empty'].'</div>';
                 $button = false;
             }
             return array(
@@ -321,25 +321,51 @@
 
         public function change_product_amount() {
             // I do not need to check the stock here since I do it when loading the cart again
-            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id = ? LIMIT 1';
-            $this->query($sql, array($_POST['amount'], $_POST['id']));
+            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id_cart = ? AND id = ? LIMIT 1';
+            $this->query($sql, array($_POST['amount'], $_COOKIE['id_cart'], $_POST['id']));
             return array('response' => 'ok');
         }
 
-        public function get_address() {
-            $sql = 'SELECT * FROM '.DDBB_PREFIX.'users_addresses WHERE id_user = ?';
+        public function get_addresses() {
+            usleep($this->sleep);
+            $sql = 'SELECT a.*, c.'.LANG.' AS country_name, p.'.LANG.' AS province_name
+                    FROM '.DDBB_PREFIX.'users_addresses AS a
+                        INNER JOIN '.DDBB_PREFIX.'ct_countries AS c ON c.id_country = a.id_country
+                        INNER JOIN '.DDBB_PREFIX.'ct_provinces AS p ON p.id_province = a.id_province
+                    WHERE a.id_user = ?';
             $result = $this->query($sql, array($_SESSION['user']['id_user']));
-            $html = '';
             if($result->num_rows != 0) {
+                $html = '';
                 while($row = $result->fetch_assoc()) {
-                    $html .= '<div class="item">';
-                    $html .=    '<div>'.$row['name'].'</div>';
+                    if($row['main_address'] == 1) {
+                        $class = ' active';
+                    } else {
+                        $class = '';
+                    }
+                    $html .= '<div class="col-12 col-sm-6">';
+                    $html .=    '<div class="item'.$class.'" id-user-address="'.$row['id_user_address'].'">';
+                    $html .=        '<div class="pb-10"><b>'.$row['name'].' '.$row['lastname'].'</b></div>';
+                    $html .=        '<div class="pb-5">'.$row['address'].'</div>';
+                    $html .=        '<div class="pb-5">'.$row['location'].' '.$row['postal_code'].'</div>';
+                    $html .=        '<div class="pb-5">'.$row['province_name'].', '.$row['country_name'].'</div>';
+                    $html .=        '<div class="pb-5">'.LANGTXT['telephone'].': '.$row['telephone'].'</div>';
+                    $html .=        '<div class="row pt-20">';
+                    $html .=            '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
+                    $html .=                '<div class="btn-select-address btn btn-black btn-sm w-100">'.LANGTXT['select'].'</div>';
+                    $html .=            '</div>';
+                    $html .=            '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
+                    $html .=                '<div class="btn-edit-address btn btn-black btn-sm w-100">'.LANGTXT['edit'].'</div>';
+                    $html .=            '</div>';
+                    $html .=            '<div class="col-12 col-sm-4">';
+                    $html .=                '<div class="btn-delete-address btn btn-black btn-sm w-100">'.LANGTXT['delete'].'</div>';
+                    $html .=            '</div>';
+                    $html .=        '</div>';
+                    $html .=    '</div>';
                     $html .= '</div>';
                 }
+            } else {
+                $html = '<div class="col-12 text-center pb-20">'.LANGTXT['new-address'].'</div>';
             }
-            $html .= '<div>';
-            $html .=    '<div class="btn btn-black btn-md" id="btn-create-new-address">Crear nueva dirección</div>';
-            $html .= '</div>';
             return array(
                 'response' => 'ok',
                 'html' => $html
@@ -347,8 +373,198 @@
         }
 
         public function save_new_address() {
-            $sql = 'INSERT INTO '.DDBB_PREFIX.'users_addresses (name, lastname, id_continent, id_country, id_province, location, address, postal_code, telephone)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            if($_POST['main'] == 1) {
+                $sql = 'UPDATE '.DDBB_PREFIX.'users_addresses SET main_address = 0 WHERE id_user = ?';
+                $this->query($sql, array($_SESSION['user']['id_user']));
+            } else {
+                // I check if it is the first address it saves to make it the main one
+                $sql = 'SELECT id_user_address FROM users_addresses WHERE id_user = ? LIMIT 1';
+                $result = $this->query($sql, array($_SESSION['user']['id_user']));
+                if($result->num_rows == 0) {
+                    $_POST['main'] = 1;
+                }
+            }
+            // Insert new address
+            $sql = 'INSERT INTO '.DDBB_PREFIX.'users_addresses
+                        (id_user, main_address, name, lastname, id_continent, id_country, id_province, location, address, postal_code, telephone)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            $values = array(
+                $_SESSION['user']['id_user'], $_POST['main'],
+                $_POST['name'], $_POST['lastname'], $_POST['id_continent'],
+                $_POST['id_country'], $_POST['id_province'],$_POST['location'],
+                $_POST['address'], $_POST['postal_code'], $_POST['telephone']
+            );
+            $this->query($sql, $values);
+            return array('response' => 'ok');
+        }
+
+        public function get_address($id_user_address) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'users_addresses WHERE id_user = ? AND id_user_address = ? LIMIT 1';
+            $result = $this->query($sql, array($_SESSION['user']['id_user'], $id_user_address));
+            if($result->num_rows != 0) {
+                $row = $result->fetch_assoc();
+                return array(
+                    'response' => 'ok',
+                    'address' => $row,
+                    'countries' => $this->get_countries_list($row['id_continent'], $row['id_country'])['html'],
+                    'provinces' => $this->get_provinces_list($row['id_country'], $row['id_province'])['html']
+                );
+            } else {
+                return array('response' => 'error');
+            }
+        }
+
+        public function delete_address($id_user_address) {
+            // I check if it is the main address and if it is I change it to another
+            $sql = 'SELECT id_user_address FROM '.DDBB_PREFIX.'users_addresses WHERE id_user = ? AND id_user_address = ? AND main_address = 1 LIMIT 1';
+            $result = $this->query($sql, array($_SESSION['user']['id_user'], $id_user_address));
+            if($result->num_rows != 0) {
+                $sql = 'UPDATE '.DDBB_PREFIX.'users_addresses SET main_address = 1 WHERE id_user = ? AND id_user_address != ? LIMIT 1';
+                $this->query($sql, array($_SESSION['user']['id_user'], $id_user_address));
+            }
+            $sql = 'DELETE FROM '.DDBB_PREFIX.'users_addresses WHERE id_user = ? AND id_user_address = ? LIMIT 1';
+            $this->query($sql, array($_SESSION['user']['id_user'], $id_user_address));
+            return array('response' => 'ok');
+        }
+
+        public function save_edit_address() {
+            if($_POST['main'] == 1) {
+                $sql = 'UPDATE '.DDBB_PREFIX.'users_addresses SET main_address = 0 WHERE id_user = ?';
+                $this->query($sql, array($_SESSION['user']['id_user']));
+                $sql = 'UPDATE '.DDBB_PREFIX.'users_addresses SET main_address = 1 WHERE id_user = ? AND id_user_address = ? LIMIT 1';
+                $this->query($sql, array($_SESSION['user']['id_user'], $_POST['id_user_address']));
+            }
+            $sql = 'UPDATE '.DDBB_PREFIX.'users_addresses SET name = ?, lastname = ?, id_continent = ?,
+                        id_country = ?, id_province = ?, location = ?, address = ?, postal_code = ?, telephone = ?, update_date = NOW()
+                    WHERE id_user = ? AND id_user_address = ? LIMIT 1';
+            $this->query($sql, array($_POST['name'], $_POST['lastname'], $_POST['id_continent'], $_POST['id_country'], $_POST['id_province'],
+                $_POST['location'], $_POST['address'], $_POST['postal_code'], $_POST['telephone'], $_SESSION['user']['id_user'], $_POST['id_user_address']
+            ));
+            return array('response' => 'ok');
+        }
+
+        public function get_billing_addresses() {
+            usleep($this->sleep);
+            $sql = 'SELECT a.*, c.'.LANG.' AS country_name, p.'.LANG.' AS province_name
+                    FROM '.DDBB_PREFIX.'users_billing_addresses AS a
+                        INNER JOIN '.DDBB_PREFIX.'ct_countries AS c ON c.id_country = a.id_country
+                        INNER JOIN '.DDBB_PREFIX.'ct_provinces AS p ON p.id_province = a.id_province
+                    WHERE a.id_user = ?';
+            $result = $this->query($sql, array($_SESSION['user']['id_user']));
+            if($result->num_rows != 0) {
+                $html = '';
+                while($row = $result->fetch_assoc()) {
+                    if($row['main_address'] == 1) {
+                        $class = ' active';
+                    } else {
+                        $class = '';
+                    }
+                    $html .= '<div class="col-12 col-sm-6">';
+                    $html .=    '<div class="item'.$class.'" id-user-billing-address="'.$row['id_user_billing_address'].'">';
+                    $html .=        '<div class="pb-10"><b>'.$row['name'].' '.$row['lastname'].'</b></div>';
+                    $html .=        '<div class="pb-5">'.$row['address'].'</div>';
+                    $html .=        '<div class="pb-5">'.$row['location'].' '.$row['postal_code'].'</div>';
+                    $html .=        '<div class="pb-5">'.$row['province_name'].', '.$row['country_name'].'</div>';
+                    $html .=        '<div class="pb-5">'.LANGTXT['telephone'].': '.$row['telephone'].'</div>';
+                    $html .=        '<div class="row pt-20">';
+                    $html .=            '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
+                    $html .=                '<div class="btn-select-address btn btn-black btn-sm w-100">'.LANGTXT['select'].'</div>';
+                    $html .=            '</div>';
+                    $html .=            '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
+                    $html .=                '<div class="btn-edit-address btn btn-black btn-sm w-100">'.LANGTXT['edit'].'</div>';
+                    $html .=            '</div>';
+                    $html .=            '<div class="col-12 col-sm-4">';
+                    $html .=                '<div class="btn-delete-address btn btn-black btn-sm w-100">'.LANGTXT['delete'].'</div>';
+                    $html .=            '</div>';
+                    $html .=        '</div>';
+                    $html .=    '</div>';
+                    $html .= '</div>';
+                }
+            } else {
+                $html = '<div class="col-12 text-center pb-20">'.LANGTXT['new-billing-address'].'</div>';
+            }
+            return array(
+                'response' => 'ok',
+                'html' => $html
+            );
+        }
+
+        public function get_billing_address($id_user_billing_address) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'users_billing_addresses WHERE id_user = ? AND id_user_billing_address = ? LIMIT 1';
+            $result = $this->query($sql, array($_SESSION['user']['id_user'], $id_user_billing_address));
+            if($result->num_rows != 0) {
+                $row = $result->fetch_assoc();
+                return array(
+                    'response' => 'ok',
+                    'address' => $row,
+                    'countries' => $this->get_countries_list($row['id_continent'], $row['id_country'])['html'],
+                    'provinces' => $this->get_provinces_list($row['id_country'], $row['id_province'])['html']
+                );
+            } else {
+                return array('response' => 'error');
+            }
+        }
+
+        public function delete_billing_address($id_user_billing_address) {
+            // I check if it is the main address and if it is I change it to another
+            $sql = 'SELECT id_user_billing_address FROM '.DDBB_PREFIX.'users_billing_addresses
+                    WHERE id_user = ? AND id_user_billing_address = ? AND main_address = 1 LIMIT 1';
+            $result = $this->query($sql, array($_SESSION['user']['id_user'], $id_user_billing_address));
+            if($result->num_rows != 0) {
+                $sql = 'UPDATE '.DDBB_PREFIX.'users_billing_addresses SET main_address = 1 WHERE id_user = ? AND id_user_billing_address != ? LIMIT 1';
+                $this->query($sql, array($_SESSION['user']['id_user'], $id_user_billing_address));
+            }
+            $sql = 'DELETE FROM '.DDBB_PREFIX.'users_billing_addresses WHERE id_user = ? AND id_user_billing_address = ? LIMIT 1';
+            $this->query($sql, array($_SESSION['user']['id_user'], $id_user_billing_address));
+            return array('response' => 'ok');
+        }
+
+        public function save_edit_billing_address() {
+            if($_POST['main'] == 1) {
+                $sql = 'UPDATE '.DDBB_PREFIX.'users_billing_addresses SET main_address = 0 WHERE id_user = ?';
+                $this->query($sql, array($_SESSION['user']['id_user']));
+                $sql = 'UPDATE '.DDBB_PREFIX.'users_billing_addresses SET main_address = 1 WHERE id_user = ? AND id_user_billing_address = ? LIMIT 1';
+                $this->query($sql, array($_SESSION['user']['id_user'], $_POST['id_user_address']));
+            }
+            $sql = 'UPDATE '.DDBB_PREFIX.'users_billing_addresses SET name = ?, lastname = ?, id_continent = ?,
+                        id_country = ?, id_province = ?, location = ?, address = ?, postal_code = ?, telephone = ?, update_date = NOW()
+                    WHERE id_user = ? AND id_user_billing_address = ? LIMIT 1';
+            $this->query($sql, array($_POST['name'], $_POST['lastname'], $_POST['id_continent'], $_POST['id_country'], $_POST['id_province'],
+                $_POST['location'], $_POST['address'], $_POST['postal_code'], $_POST['telephone'], $_SESSION['user']['id_user'], $_POST['id_user_billing_address']
+            ));
+            return array('response' => 'ok');
+        }
+
+        public function save_new_billing_address() {
+            if($_POST['main'] == 1) {
+                $sql = 'UPDATE '.DDBB_PREFIX.'users_billing_addresses SET main_address = 0 WHERE id_user = ?';
+                $this->query($sql, array($_SESSION['user']['id_user']));
+            } else {
+                // I check if it is the first address it saves to make it the main one
+                $sql = 'SELECT id_user_billing_address FROM users_billing_addresses WHERE id_user = ? LIMIT 1';
+                $result = $this->query($sql, array($_SESSION['user']['id_user']));
+                if($result->num_rows == 0) {
+                    $_POST['main'] = 1;
+                }
+            }
+            // Insert new address
+            $sql = 'INSERT INTO '.DDBB_PREFIX.'users_billing_addresses
+                        (id_user, main_address, name, lastname, id_continent, id_country, id_province, location, address, postal_code, telephone)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            $values = array(
+                $_SESSION['user']['id_user'], $_POST['main'],
+                $_POST['name'], $_POST['lastname'], $_POST['id_continent'],
+                $_POST['id_country'], $_POST['id_province'],$_POST['location'],
+                $_POST['address'], $_POST['postal_code'], $_POST['telephone']
+            );
+            $this->query($sql, $values);
+            return array('response' => 'ok');
+        }
+
+        public function save_order() {
+            $order_code = uniqid();
+            $sql = 'INSERT INTO orders ()
+                    VALUES ()';
             return array('response' => 'ok');
         }
 

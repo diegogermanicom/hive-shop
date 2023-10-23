@@ -54,8 +54,7 @@
                     if($class_exist == true) {
                         $obj = eval('return new '.$controller.'();');
                         // If the function exists in the object
-                        $method_exists = method_exists($obj, $function_controller);
-                        if($method_exists == true) {
+                        if(method_exists($obj, $function_controller)) {
                             eval('$obj->'.$function_controller.'($args);');    
                             exit;
                         }
