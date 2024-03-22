@@ -216,6 +216,7 @@
                 'es' => '/tramitar-pedido'
             );
             $data['continents'] = $app->get_continents_active_list();
+            $data['cart'] = $app->get_checkout_cart();
             $this->view('/checkout', $data);
         }
 

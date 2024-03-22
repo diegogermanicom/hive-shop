@@ -1211,7 +1211,6 @@
                     $html .= '</div>';
                     $i++;
                 }
-                $i++;
                 $html .=    '</div>';
                 $html .= '</div>';
                 return array(

@@ -9,7 +9,7 @@
     $priority_controllers = array(
         'controller.php'
     );
-    foreach($priority_controllers as $i => $value) {
+    foreach($priority_controllers as $value) {
         include SERVER_PATH.'/app/controllers/'.$value;
     }
     // I automatically include each controller

@@ -952,9 +952,11 @@ footer {
     font-family: $font1;
     font-size: 20px;
     letter-spacing: 0.5px;
-    padding: 14px 20px 14px 20px;
+    padding: 13px 19px 13px 19px;
     text-align: center;
     border-radius: 2px;
+    border: 1px solid $black;
+    background-color: white;
     cursor: pointer;
     color: $black;
     -webkit-user-select: none;  /* Chrome all / Safari all */
@@ -974,11 +976,11 @@ footer {
         }
     }
     &.btn-sm {
-        padding: 2px 18px 2px 18px;
+        padding: 1px 17px 1px 17px;
         font-size: 16px;
     }
     &.btn-md {
-        padding: 6px 20px 6px 20px;        
+        padding: 5px 19px 5px 19px;        
     }
     &.disabled {
         cursor: default;

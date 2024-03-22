@@ -142,6 +142,74 @@
             }
         }
 
+        public function get_cart_array($id_cart) {
+            // I get the product and cart data
+            $sql = 'SELECT c.*, p.price, pl.name AS product_name, r.price_change, r.stock
+                    FROM '.DDBB_PREFIX.'carts_products AS c
+                        INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
+                        INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
+                        INNER JOIN '.DDBB_PREFIX.'products_language AS pl ON pl.id_product = c.id_product
+                        INNER JOIN '.DDBB_PREFIX.'ct_languages AS a ON a.id_language = pl.id_language
+                    WHERE c.id_cart = ? AND a.name = ? ORDER BY c.id';
+            $result = $this->query($sql, array($id_cart, strtolower(LANG)));
+            if($result->num_rows != 0) {
+                $cart = array(
+                    'total' => 0,
+                    'total_string' => '',
+                    'products' => array()
+                );
+                $total = 0;
+                while($row = $result->fetch_assoc()) {
+                    if($row['stock'] > 0) {
+                        // Get attributes
+                        $attributes = $this->get_product_related_attributes($row['id_product_related'])[strtolower(LANG)];
+                        // Get the route of the main product related of the product
+                        $product_url = $this->get_product_routes($row['id_product'], $row['id_category']);
+                        $product_url = PUBLIC_ROUTE.$product_url[strtolower(LANG)].'?r='.$row['id_product_related'];
+                        // Get the image
+                        $sql = 'SELECT i.name FROM '.DDBB_PREFIX.'products_related_images AS ri
+                                    INNER JOIN '.DDBB_PREFIX.'products_images AS p ON p.id_product_image = ri.id_product_image
+                                    INNER JOIN '.DDBB_PREFIX.'images AS i ON i.id_image = p.id_image
+                                WHERE ri.id_product_related = ? ORDER BY p.priority LIMIT 1';
+                        $result_image = $this->query($sql, array($row['id_product_related']));
+                        if($result_image->num_rows != 0) {
+                            $row_image = $result_image->fetch_assoc();
+                            $image_url = PUBLIC_PATH.'/img/products/thumbnails/'.$row_image['name'];
+                        } else {
+                            $image_url = '';
+                        }
+                        // If there is less stock than what you ask for, I update it
+                        if($row['stock'] < $row['amount']) {
+                            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id = ? LIMIT 1';
+                            $this->query($sql, array($row['stock'], $row['id']));
+                            $row['amount'] = $row['stock'];
+                        }
+                        // Product object
+                        $product = array(
+                            'row' => $row,
+                            'attributes' => $attributes,
+                            'url' => $product_url,
+                            'image' => $image_url,
+                            'price' => $row['price'] + $row['price_change']
+                        );
+                        // I adjust the price if there is a variant or offer
+                        $product['price_string'] = number_format(floatval($product['price']), 2, ',', '.');
+                        $product['price_string'] .= ' €';
+                        $cart['total'] += ($product['price'] * $row['amount']);
+                        array_push($cart['products'], $product);
+                    } else {
+                        // If it's out of stock, I'll remove it from the cart.
+                        $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id = ? LIMIT 1';
+                        $this->query($sql, array($id_cart, $row['id']));
+                    }
+                }
+                $cart['total_string'] = number_format(floatval($cart['total']), 2, ',', '.').' €';
+            } else {
+                $cart = null;
+            }
+            return $cart;
+        }
+
     }
 
 ?>

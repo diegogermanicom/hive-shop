@@ -275,6 +275,38 @@
             }
         }
 
+        public function get_checkout_cart() {
+            $cart = $this->get_cart_array($_COOKIE['id_cart']);
+            if($cart != null) {
+                $html = '';
+                foreach($cart['products'] as $value) {
+                    // Draw html
+                    $html .= '<div class="row item">';
+                    $html .=    '<div class="col-4">';
+                    $html .=        '<a href="'.$value['url'].'" class="image" style="background-image: url('.$value['image'].');"></a>';
+                    $html .=    '</div>';
+                    $html .=    '<div class="col-8">';
+                    $html .=        '<a href="'.$value['url'].'" class="name dots" title="'.$value['row']['product_name'].'">'.$value['row']['product_name'].'</a>';
+                    if($value['attributes'] != null) {
+                        $html .= '<div class="content-attributes">';
+                        foreach($value['attributes'] as $valuea) {
+                            $html .= '<div class="dots">'.$valuea['attribute_name'].': '.$valuea['value_name'].'</div>';
+                        }
+                        $html .= '</div>';
+                    }
+                    $html .=        '<div class="amount">Cantidad: '.$value['row']['amount'].' a <span class="price">'.$value['price_string'].'</span></div>';
+                    $html .=    '</div>';
+                    $html .= '</div>';    
+                }
+            } else {
+                $html = '';
+            }
+            return array(
+                'html' => $html,
+                'total' => $cart['total_string']
+            );
+        }
+
     }
     
 ?> 

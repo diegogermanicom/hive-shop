@@ -100,6 +100,7 @@
     // I save the application theme
     if(!isset($_COOKIE['color-mode'])) {
         setcookie('color-mode', 'light-mode', time() + (24 * 60 * 60 * 365), PUBLIC_PATH.'/'); // 1 año
+        $_COOKIE['color-mode'] = 'light-mode';
     }
 
     // I connect to the database

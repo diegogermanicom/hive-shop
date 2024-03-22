@@ -12,7 +12,7 @@
         'app-model.php',
         'admin-model.php'
     );
-    foreach($priority_models as $i => $value) {
+    foreach($priority_models as $value) {
         include SERVER_PATH.'/app/models/'.$value;
     }
     // I automatically include each model

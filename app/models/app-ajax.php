@@ -211,9 +211,7 @@
         }
 
         public function get_popup_cart() {
-            $total = 0;
-            $html = '';
-            $button = true;
+            $cart = $this->get_cart_array($_COOKIE['id_cart']);
             // url of the 'process order' button depending on whether you are a user or not and the language
             $urls = array(
                 'en' => PUBLIC_ROUTE.'/checkout',
@@ -226,89 +224,50 @@
                 );
             }
             $button_url = $urls[strtolower(LANG)];
-            // I get the product and cart data
-            $sql = 'SELECT c.*, p.price, pl.name AS product_name, r.price_change, r.stock
-                    FROM '.DDBB_PREFIX.'carts_products AS c
-                        INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
-                        INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
-                        INNER JOIN '.DDBB_PREFIX.'products_language AS pl ON pl.id_product = c.id_product
-                        INNER JOIN '.DDBB_PREFIX.'ct_languages AS a ON a.id_language = pl.id_language
-                    WHERE c.id_cart = ? AND a.name = ? ORDER BY c.id';
-            $result = $this->query($sql, array($_COOKIE['id_cart'], strtolower(LANG)));
-            if($result->num_rows != 0) {
-                while($row = $result->fetch_assoc()) {
-                    if($row['stock'] > 0) {
-                        // Get attributes
-                        $attributes = $this->get_product_related_attributes($row['id_product_related']);
-                        // Get the route of the main product related of the product
-                        $product_url = $this->get_product_routes($row['id_product'], $row['id_category']);
-                        $product_url = PUBLIC_ROUTE.$product_url[strtolower(LANG)].'?r='.$row['id_product_related'];
-                        // Get the image
-                        $sql = 'SELECT i.name FROM '.DDBB_PREFIX.'products_related_images AS ri
-                                    INNER JOIN '.DDBB_PREFIX.'products_images AS p ON p.id_product_image = ri.id_product_image
-                                    INNER JOIN '.DDBB_PREFIX.'images AS i ON i.id_image = p.id_image
-                                WHERE ri.id_product_related = ? ORDER BY p.priority LIMIT 1';
-                        $result_image = $this->query($sql, array($row['id_product_related']));
-                        if($result_image->num_rows != 0) {
-                            $row_image = $result_image->fetch_assoc();
-                            $image_url = PUBLIC_PATH.'/img/products/thumbnails/'.$row_image['name'];
-                        } else {
-                            $image_url = '';
+            if($cart != null) {
+                $buttons = true;
+                $total = $cart['total_string'];
+                $html = '';
+                foreach($cart['products'] as $value) {
+                    // Draw html
+                    $html .= '<div class="row item" id-cart="'.$value['row']['id'].'">';
+                    $html .=    '<div class="btn-remove-cart-product" title="'.LANGTXT['delete-from-cart'].'">';
+                    $html .=        '<i class="fa-solid fa-trash-can"></i>';
+                    $html .=    '</div>';
+                    $html .=    '<div class="col-4">';
+                    $html .=        '<a href="'.$value['url'].'" class="image" style="background-image: url('.$value['image'].');"></a>';
+                    $html .=    '</div>';
+                    $html .=    '<div class="col-8">';
+                    $html .=        '<a href="'.$value['url'].'" class="name dots" title="'.$value['row']['product_name'].'">'.$value['row']['product_name'].'</a>';
+                    if($value['attributes'] != null) {
+                        $html .= '<div class="content-attributes">';
+                        foreach($value['attributes'] as $valuea) {
+                            $html .= '<div class="dots">'.$valuea['attribute_name'].': '.$valuea['value_name'].'</div>';
                         }
-                        // If there is less stock than what you ask for, I update it
-                        if($row['stock'] < $row['amount']) {
-                            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id = ? LIMIT 1';
-                            $this->query($sql, array($row['stock'], $row['id']));
-                            $row['amount'] = $row['stock'];
-                        }
-                        // I adjust the price if there is a variant or offer
-                        $price = $row['price'] + $row['price_change'];
-                        $total += ($price * $row['amount']);
-                        $price = number_format(floatval($price), 2, ',', '.');
-                        $price .= ' €';
-                        // Draw html
-                        $html .= '<div class="row item" id-cart="'.$row['id'].'">';
-                        $html .=    '<div class="btn-remove-cart-product" title="'.LANGTXT['delete-from-cart'].'">';
-                        $html .=        '<i class="fa-solid fa-trash-can"></i>';
-                        $html .=    '</div>';
-                        $html .=    '<div class="col-4">';
-                        $html .=        '<a href="'.$product_url.'" class="image" style="background-image: url('.$image_url.');"></a>';
-                        $html .=    '</div>';
-                        $html .=    '<div class="col-8">';
-                        $html .=        '<a href="'.$product_url.'" class="name dots" title="'.$row['product_name'].'">'.$row['product_name'].'</a>';
-                        if($attributes != null) {
-                            $html .= '<div class="content-attributes">';
-                            foreach($attributes[strtolower(LANG)] as $value) {
-                                $html .= '<div class="dots">'.$value['attribute_name'].': '.$value['value_name'].'</div>';
-                            }
-                            $html .= '</div>';
-                        }
-                        $html .=        '<div class="row">';
-                        $html .=            '<div class="col-3">';
-                        $html .=                '<input type="number" class="input-sm w-100 input-cart-product-amount" value="'.$row['amount'].'">';
-                        $html .=            '</div>';
-                        $html .=            '<div class="col-2 text-center">x</div>';
-                        $html .=            '<div class="col-7">';
-                        $html .=                '<div class="price">'.$price.'</div>';
-                        $html .=            '</div>';
-                        $html .=        '</div>';
-                        $html .=    '</div>';
-                        $html .= '</div>';    
-                    } else {
-                        // If it's out of stock, I'll remove it from the cart.
-                        $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id = ? LIMIT 1';
-                        $this->query($sql, array($_COOKIE['id_cart'], $row['id']));
+                        $html .= '</div>';
                     }
+                    $html .=        '<div class="row">';
+                    $html .=            '<div class="col-3">';
+                    $html .=                '<input type="number" class="input-sm w-100 input-cart-product-amount" value="'.$value['row']['amount'].'">';
+                    $html .=            '</div>';
+                    $html .=            '<div class="col-2 text-center">x</div>';
+                    $html .=            '<div class="col-7">';
+                    $html .=                '<div class="price">'.$value['price_string'].'</div>';
+                    $html .=            '</div>';
+                    $html .=        '</div>';
+                    $html .=    '</div>';
+                    $html .= '</div>';    
                 }
             } else {
+                $buttons = false;
+                $total = '';
                 $html = '<div class="pt-20">'.LANGTXT['cart-empty'].'</div>';
-                $button = false;
             }
             return array(
                 'response' => 'ok',
-                'total' => number_format(floatval($total), 2, ',', '.').' €',
+                'total' => $total,
                 'html' => $html,
-                'button_display' => $button,
+                'button_display' => $buttons,
                 'button_url' => $button_url
             );
         }
@@ -339,25 +298,23 @@
                 while($row = $result->fetch_assoc()) {
                     if($row['main_address'] == 1) {
                         $class = ' active';
+                        $class_btn = ' hidden';
                     } else {
                         $class = '';
+                        $class_btn = '';
                     }
                     $html .= '<div class="col-12 col-sm-6">';
                     $html .=    '<div class="item'.$class.'" id-user-address="'.$row['id_user_address'].'">';
                     $html .=        '<div class="pb-10"><b>'.$row['name'].' '.$row['lastname'].'</b></div>';
-                    $html .=        '<div class="pb-5">'.$row['address'].'</div>';
-                    $html .=        '<div class="pb-5">'.$row['location'].' '.$row['postal_code'].'</div>';
-                    $html .=        '<div class="pb-5">'.$row['province_name'].', '.$row['country_name'].'</div>';
-                    $html .=        '<div class="pb-5">'.LANGTXT['telephone'].': '.$row['telephone'].'</div>';
-                    $html .=        '<div class="row pt-20">';
-                    $html .=            '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
-                    $html .=                '<div class="btn-select-address btn btn-black btn-sm w-100">'.LANGTXT['select'].'</div>';
-                    $html .=            '</div>';
-                    $html .=            '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
-                    $html .=                '<div class="btn-edit-address btn btn-black btn-sm w-100">'.LANGTXT['edit'].'</div>';
-                    $html .=            '</div>';
-                    $html .=            '<div class="col-12 col-sm-4">';
-                    $html .=                '<div class="btn-delete-address btn btn-black btn-sm w-100">'.LANGTXT['delete'].'</div>';
+                    $html .=        '<div class="info">';
+                    $html .=            '<div class="pb-3 dots">'.$row['address'].'</div>';
+                    $html .=            '<div class="pb-3 dots">'.$row['location'].' '.$row['postal_code'].'</div>';
+                    $html .=            '<div class="pb-3 dots">'.$row['province_name'].', '.$row['country_name'].'</div>';
+                    $html .=            '<div class="pb-3">'.LANGTXT['telephone'].': '.$row['telephone'].'</div>';
+                    $html .=            '<div class="pt-12">';
+                    $html .=                '<div class="btn-select-address btn btn-sm mr-5 mr-sm-0'.$class_btn.'">'.LANGTXT['select'].'</div>';
+                    $html .=                '<div class="btn-edit-address btn btn-sm mr-5 mr-sm-0">'.LANGTXT['edit'].'</div>';
+                    $html .=                '<div class="btn-delete-address btn btn-sm">'.LANGTXT['delete'].'</div>';
                     $html .=            '</div>';
                     $html .=        '</div>';
                     $html .=    '</div>';
@@ -456,25 +413,23 @@
                 while($row = $result->fetch_assoc()) {
                     if($row['main_address'] == 1) {
                         $class = ' active';
+                        $class_btn = ' hidden';
                     } else {
                         $class = '';
+                        $class_btn = '';
                     }
                     $html .= '<div class="col-12 col-sm-6">';
                     $html .=    '<div class="item'.$class.'" id-user-billing-address="'.$row['id_user_billing_address'].'">';
                     $html .=        '<div class="pb-10"><b>'.$row['name'].' '.$row['lastname'].'</b></div>';
-                    $html .=        '<div class="pb-5">'.$row['address'].'</div>';
-                    $html .=        '<div class="pb-5">'.$row['location'].' '.$row['postal_code'].'</div>';
-                    $html .=        '<div class="pb-5">'.$row['province_name'].', '.$row['country_name'].'</div>';
-                    $html .=        '<div class="pb-5">'.LANGTXT['telephone'].': '.$row['telephone'].'</div>';
-                    $html .=        '<div class="row pt-20">';
-                    $html .=            '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
-                    $html .=                '<div class="btn-select-address btn btn-black btn-sm w-100">'.LANGTXT['select'].'</div>';
-                    $html .=            '</div>';
-                    $html .=            '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
-                    $html .=                '<div class="btn-edit-address btn btn-black btn-sm w-100">'.LANGTXT['edit'].'</div>';
-                    $html .=            '</div>';
-                    $html .=            '<div class="col-12 col-sm-4">';
-                    $html .=                '<div class="btn-delete-address btn btn-black btn-sm w-100">'.LANGTXT['delete'].'</div>';
+                    $html .=        '<div class="info">';
+                    $html .=            '<div class="pb-3 dots">'.$row['address'].'</div>';
+                    $html .=            '<div class="pb-3 dots">'.$row['location'].' '.$row['postal_code'].'</div>';
+                    $html .=            '<div class="pb-3 dots">'.$row['province_name'].', '.$row['country_name'].'</div>';
+                    $html .=            '<div class="pb-3">'.LANGTXT['telephone'].': '.$row['telephone'].'</div>';
+                    $html .=            '<div class="pt-12">';
+                    $html .=                '<div class="btn-select-address btn btn-sm mr-5 mr-sm-0'.$class_btn.'">'.LANGTXT['select'].'</div>';
+                    $html .=                '<div class="btn-edit-address btn btn-sm mr-5 mr-sm-0">'.LANGTXT['edit'].'</div>';
+                    $html .=                '<div class="btn-delete-address btn btn-sm">'.LANGTXT['delete'].'</div>';
                     $html .=            '</div>';
                     $html .=        '</div>';
                     $html .=    '</div>';

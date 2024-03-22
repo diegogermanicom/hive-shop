@@ -33,10 +33,10 @@
         </script>
         <?php
             if(ENVIRONMENT == 'PRE') {
-                echo '<script src="'.PUBLIC_PATH.'/js/assets.js?'.uniqid().'"></script>';
+                echo '<script src="'.PUBLIC_PATH.'/js/hive.js?'.uniqid().'"></script>';
                 echo '<script src="'.PUBLIC_PATH.'/js/app.js?'.uniqid().'"></script>';    
             } else {
-                echo '<script src="'.PUBLIC_PATH.'/js/min/assets.min.js?'.uniqid().'"></script>';
+                echo '<script src="'.PUBLIC_PATH.'/js/min/hive.min.js?'.uniqid().'"></script>';
                 echo '<script src="'.PUBLIC_PATH.'/js/min/app.min.js?'.uniqid().'"></script>';                
             }
         ?>
