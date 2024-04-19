@@ -42,12 +42,15 @@
 
         public function call($type, $route, $function) {
             list($scan_route, $args) = $this->scan_route($route);
+            $args['_type'] = $type;
+            $args['_route'] = $route;
             if(METHOD == $type && ROUTE == $scan_route) {
                 // If i pass a function
                 if(is_callable($function)) {
                     $function($args);
                     exit;
                 } else {
+                    $args['_function'] = $function;
                     list($controller, $function_controller) = explode("#", $function);
                     // If the object exists
                     $class_exist = class_exists($controller);
