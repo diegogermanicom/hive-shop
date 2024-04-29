@@ -17,9 +17,9 @@
         ?>
         <!-- Open Graph end -->
         <link rel="icon" href="<?= PUBLIC_PATH; ?>/icono.png" type="image/png">
-        <link href="<?= PUBLIC_PATH; ?>/css/fontawesome.min.css" rel="stylesheet">
-        <link href="<?= PUBLIC_PATH; ?>/css/brands.min.css" rel="stylesheet">
-        <link href="<?= PUBLIC_PATH; ?>/css/solid.min.css" rel="stylesheet">
+        <link href="<?= PUBLIC_PATH; ?>/css/vendor/fontawesome.min.css" rel="stylesheet">
+        <link href="<?= PUBLIC_PATH; ?>/css/vendor/brands.min.css" rel="stylesheet">
+        <link href="<?= PUBLIC_PATH; ?>/css/vendor/solid.min.css" rel="stylesheet">
         <link href="<?= PUBLIC_PATH; ?>/css/vendor/balloon.css" rel="stylesheet">
         <link href="<?= PUBLIC_PATH; ?>/css/vendor/slick.css" rel="stylesheet">
         <link href="<?= PUBLIC_PATH; ?>/css/vendor/slick-theme.css" rel="stylesheet">
