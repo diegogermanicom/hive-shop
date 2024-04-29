@@ -2,7 +2,7 @@
 * Author: Diego Martin
 * Copyright: Hive®
 * Version: 1.0
-* Last Update: 2023
+* Last Update: 2024
 */   
 
 var HIVE = {
@@ -16,7 +16,8 @@ var HIVE = {
         this.btnPopupCloseEvent();
         this.customTabEvent();
         this.colorModeEvent();
-        this.scrollEvent();
+        this.scrollEvent();        
+        this.customCollapse();
     },
     // Functions
     initAjax: function() {
@@ -201,6 +202,30 @@ var HIVE = {
             }
             if(active) {
                 $(this).addClass("active");
+            }
+        });    
+    },
+    customCollapse: function() {
+        $('.custom-collapse li').each(function() {
+            if($(this).children('.options').length != 0) {
+                $(this).children('.label').addClass('has-options');
+            }
+        });
+        $('.custom-collapse li .label.has-options').off().on('click', function() {
+            var item = $(this).parent('li');
+            var hasActive = item.hasClass('active');
+            var collapse = $(this).closest('.custom-collapse');
+            if(collapse.hasClass('only-one')) {
+                collapse.find('li.active').each(function() {
+                    $(this).removeClass('active');
+                });
+            }
+            if(item.children('.options').length != 0) {
+                if(hasActive) {
+                    item.removeClass('active');
+                } else {
+                    item.addClass('active');
+                }    
             }
         });
     }

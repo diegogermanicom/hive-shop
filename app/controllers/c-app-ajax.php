@@ -29,7 +29,7 @@
         }
 
         public function login_send($args) {
-            $app = new App();
+            $app = new AppAjax();
             $result = [];
             $result['login'] = $app->login($_POST['email'], md5($_POST['pass']), $_POST['remember']);
             echo json_encode($result);

@@ -1,8 +1,8 @@
 /*
 * Hive
-* Copyright 2022 Diego Martin
+* Copyright 2024 Diego Martin
 * npm install -g sass
-* sass --watch css:css --style compressed
+* sass --watch css/sass:css --style compressed
 */   
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@800&family=Maven+Pro:wght@400;500;700&display=swap');
@@ -42,14 +42,15 @@ $font3: 'Inter';
     transition-delay: $val;
 }
 
+@mixin box-sizing($val) {
+    -webkit-box-sizing: $val;
+    -moz-box-sizing: $val;
+    box-sizing: $val;
+}
+
 @for $i from 1 through 100 {
     .font-#{$i} {
         font-size: #{$i}px !important;
-    }
-}
-@for $i from 1 through 100 {
-    .lh-#{$i} {
-        line-height: #{$i}px !important;
     }
 }
 @for $i from 1 through 100 {
@@ -63,6 +64,26 @@ $font3: 'Inter';
     @media (max-width: ($md - 1) + px) {
         .font-md-#{$i} {
             font-size: #{$i}px !important;
+        }
+    }
+}
+
+@for $i from 1 through 100 {
+    .lh-#{$i} {
+        line-height: #{$i}px !important;
+    }
+}
+@for $i from 0 through 100 {
+    @media (max-width: ($sm - 1) + px) {
+        .lh-sm-#{$i} {
+            line-height: #{$i}px !important;
+        }
+    }
+}
+@for $i from 0 through 100 {
+    @media (max-width: ($md - 1) + px) {
+        .lh-md-#{$i} {
+            line-height: #{$i}px !important;
         }
     }
 }
@@ -261,11 +282,8 @@ $font3: 'Inter';
 }
 
 *, *:after, *:before {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    @include box-sizing(border-box);
     outline: none;
-    text-decoration: none;
     margin: 0px;
     padding: 0px;
     border: 0px;
@@ -285,6 +303,7 @@ body {
 }
 a {
     color: $black;
+    text-decoration: none;
     cursor: pointer;
 }
 article, header, footer, nav, section {
@@ -299,15 +318,49 @@ ul {
 table {
     width: 100%;
     border-collapse: collapse;
-    th {
-        padding: 10px 10px 10px 10px;
-        background-color: $black;
-        color: white;
-        font-weight: normal;
+    thead {
+        border: 1px solid $black;
+        th {
+            padding: 10px 10px 10px 10px;
+            background-color: $black;
+            color: white;
+            font-weight: normal;
+        }    
     }
-    td {
-        padding: 10px 10px 10px 10px;
-        border-top: 1px solid #dee2e6;
+    tbody {
+        border: 1px solid #dee2e6;
+        tr {
+            border-top: 1px solid #dee2e6;
+            &:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            &.no-border {
+                border-top: transparent;
+            }
+        }
+        td {
+            padding: 10px 10px 10px 10px;
+        }
+    }
+    &.no-even {
+        tbody {
+            tr:nth-child(even) {
+                background-color: transparent;
+            }
+        }
+    }
+    &.no-border {
+        thead {
+            border: 0px;
+        }
+        tbody {
+            border: 0px;
+        }
+    }
+    &.no-tr-border {
+        tr {
+            border-top: transparent;
+        }
     }
 }
 input, textarea, select {
@@ -465,7 +518,22 @@ footer {
         text-align: right;
     }
 }
-.text-underline{
+.text-md-center {
+    @media (max-width: ($md - 1) + px) {
+        text-align: center;
+    }
+}
+.text-md-left {
+    @media (max-width: ($md - 1) + px) {
+        text-align: left;
+    }
+}
+.text-md-right {
+    @media (max-width: ($md - 1) + px) {
+        text-align: right;
+    }
+}
+.text-underline {
     text-decoration: underline !important;
 }
 .w-100 {
@@ -490,17 +558,17 @@ footer {
         display: none !important;
     }
 }
-.hidden-sm {
+.hidden-md {
     @media (max-width: ($md - 1) + px) {
         display: none !important;
     }
 }
-.hidden-md {
+.hidden-lg {
     @media (max-width: ($lg - 1) + px) {
         display: none !important;
     }
 }
-.hidden-lg {
+.hidden-xl {
     @media (max-width: ($xl - 1) + px) {
         display: none !important;
     }
@@ -511,17 +579,17 @@ footer {
         display: none !important;
     }
 }
-.visible-sm {
+.visible-md {
     @media (min-width: $md + px) {
         display: none !important;
     }
 }
-.visible-md {
+.visible-lg {
     @media (min-width: $lg + px) {
         display: none !important;
     }
 }
-.visible-lg {
+.visible-xl {
     @media (min-width: $xl + px) {
         display: none !important;
     }
@@ -532,7 +600,7 @@ footer {
         display: none !important;
     }
 }
-.visible-sm-only {
+.visible-md-only {
     @media (max-width: ($sm - 1) + px) {
         display: none !important;
     }
@@ -540,7 +608,7 @@ footer {
         display: none !important;
     }
 }
-.visible-md-only {
+.visible-lg-only {
     @media (max-width: ($md - 1) + px) {
         display: none !important;
     }
@@ -548,16 +616,11 @@ footer {
         display: none !important;
     }
 }
-.visible-lg-only {
+.visible-xl-only {
     @media (max-width: ($lg - 1) + px) {
         display: none !important;
     }
     @media (min-width: $xl + px) {
-        display: none !important;
-    }
-}
-.visible-xl-only {
-    @media (max-width: ($xl - 1) + px) {
         display: none !important;
     }
 }
@@ -635,7 +698,7 @@ footer {
     position: relative;
     display: inline-block;
     width: 60px;
-    height: 34px;
+    height: 30px;
     input {
         opacity: 0;
         width: 0;
@@ -660,8 +723,8 @@ footer {
         &:before {
             position: absolute;
             content: "";
-            height: 26px;
-            width: 26px;
+            height: 22px;
+            width: 22px;
             left: 4px;
             bottom: 4px;
             background-color: white;
@@ -749,39 +812,104 @@ footer {
         }
     }
 }
+.custom-collapse {
+    border: 1px solid #ddd;
+    padding: 5px 0px 5px 0px;
+    & > li {
+        .label {
+            cursor: pointer;
+            display: block;
+            padding: 8px 5px 8px 26px;
+            background-repeat: no-repeat;
+            background-size: 8px 8px;
+            background-position: left 9px center;
+            &.has-options {
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='24' height='32' viewBox='0 0 24 32'><polygon points='0,0 24,16 0,32' style='fill: rgb%2850, 50, 50%29'></polygon></svg>");
+            }
+            &:not(.no-pointer):hover {
+                background-color: $black;
+                color: white;
+            }
+            &.has-options:not(.no-options):hover {
+                color: white;
+                background-color: $black;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='24' height='32' viewBox='0 0 24 32'><polygon points='0,0 24,16 0,32' style='fill: rgb%28255, 255, 255%29'></polygon></svg>");
+            }
+            &.no-pointer {
+                cursor: default;
+            }
+        }
+        .options {
+            display: none;
+            background-color: #ededed;
+            padding: 5px 0px 5px 0px;
+            & > a {
+                display: block;
+                padding: 8px 5px 8px 26px;
+                &.active {
+                    color: white;
+                    background-color: $black;
+                }
+                &:hover {
+                    background-color: #c5c5c5;
+                }
+            }
+        }
+        &.active {
+            .label {
+                &:not(.no-pointer) {
+                    background-color: #ddd;
+                    &:hover {
+                        background-color: $black;
+                        & > a {
+                            color: white;
+                        }
+                    }
+                }
+                &.has-options:not(.no-options) {
+                    color: white;
+                    background-color: $black;
+                    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%28255, 255, 255%29'></polygon></svg>");
+                }
+            }
+            .options {
+                display: block;
+            }
+        }
+    }
+    &.no-border {
+        border: 0px;
+    }
+}
+
 // Animaciones
 .animate {
     &.active {
-        -webkit-transform: translate(0px, 0px) !important;
-        transform: translate(0px, 0px) !important;
+        @include transform(translate(0px, 0px) !important);
         opacity: 1 !important;
     }
     &.animate-top {
         -webkit-transition: -webkit-transform $velocidad ease-out, opacity $velocidad ease-out;
         transition: transform $velocidad ease-out, opacity $velocidad ease-out;
-        -webkit-transform: translate(0px, -20px);
-        transform: translate(0px, -20px);
+        @include transform(translate(0px, -20px));
         opacity: 0;
     }
     &.animate-bottom {
         -webkit-transition: -webkit-transform $velocidad ease-out, opacity $velocidad ease-out;
         transition: transform $velocidad ease-out, opacity $velocidad ease-out;
-        -webkit-transform: translate(0px, 20px);
-        transform: translate(0px, 20px);
+        @include transform(translate(0px, 20px));
         opacity: 0;
     }
     &.animate-left {
         -webkit-transition: -webkit-transform $velocidad ease-out, opacity $velocidad ease-out;
         transition: transform $velocidad ease-out, opacity $velocidad ease-out;
-        -webkit-transform: translate(-20px, 0px);
-        transform: translate(-20px, 0px);
+        @include transform(translate(-20px, 0px));
         opacity: 0;
     }
     &.animate-right {
         -webkit-transition: -webkit-transform $velocidad ease-out, opacity $velocidad ease-out;
         transition: transform $velocidad ease-out, opacity $velocidad ease-out;
-        -webkit-transform: translate(20px, 0px);
-        transform: translate(20px, 0px);
+        @include transform(translate(20px, 0px));
         opacity: 0;
     }
     &.animate-opacity {
@@ -791,9 +919,9 @@ footer {
     }
     @for $i from 0 through 20 {
         &.animate-d-#{$i} {
-            transition-delay: calc($i / 10) + s;
+            @include transition-delay(calc($i / 10) + s);
             @media (max-width: $lg + px) {
-                transition-delay: 0s;
+                @include transition-delay(0s);
             }
         }
     }    
@@ -822,8 +950,7 @@ footer {
             position: static;
             top: 0%;
             left: 0%;
-            -webkit-transform: translate(0%, 0%);
-            transform: translate(0%, 0%);
+            @include transform(translate(0%, 0%));
             margin: auto auto;
             padding: 30px 20px 30px 20px;
         }
@@ -837,8 +964,7 @@ footer {
         background-color: white;
         border-radius: 8px;
         padding: 25px 40px 25px 40px;
-        -webkit-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
+        @include transform(translate(-50%, -50%));
         -webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0,.2);
         -moz-box-shadow: 0px 0px 8px 0px rgba(0,0,0,.2);
         box-shadow: 0px 0px 8px 0px rgba(0,0,0,.2);
@@ -846,8 +972,7 @@ footer {
             position: static;
             top: 0%;
             left: 0%;
-            -webkit-transform: translate(0%, 0%);
-            transform: translate(0%, 0%);
+            @include transform(translate(0%, 0%));
             margin: auto auto;
             padding: 30px 20px 30px 20px;
         }
@@ -952,6 +1077,7 @@ footer {
     font-family: $font1;
     font-size: 20px;
     letter-spacing: 0.5px;
+    text-decoration: none;
     padding: 13px 19px 13px 19px;
     text-align: center;
     border-radius: 2px;
@@ -986,9 +1112,6 @@ footer {
         cursor: default;
         opacity: .6;
     }
-    &.btn-white {
-        background-color: white;
-    }
     &.btn-black {
         color: white;
         background-color: $black;
@@ -996,34 +1119,56 @@ footer {
     &.btn-red {
         color: white;
         background-color: #c94f4f;
+        border: 1px solid #c94f4f;
     }
     &.btn-blue {
         color: white;
         background-color: #4f76c9;
+        border: 1px solid #4f76c9;
     }
     &.btn-green {
         color: white;
         background-color: #74b750;
+        border: 1px solid #74b750;
     }
     &.btn-yellow {
         color: white;
-        background-color: #74b750;
+        background-color: #e0e24e;
+        border: 1px solid #e0e24e;
     }
     &.btn-ok {
+        color: white;
         background-color: #7a9651;
+        border: 1px solid #7a9651;
     }
 }
 
-.box, .box-sm {
+.box {
     padding: 20px 30px 20px 30px;
     background-color: $light-gray;
-    border-radius: 10px;
+    border-radius: 6px;
     -webkit-transition: background-color $velocidad ease-out;
     transition: background-color $velocidad ease-out;
-}
-.box-sm {
-    padding: 15px 20px 15px 20px;
-    border-radius: 8px;
+    &.box-sm {
+        padding: 10px 15px 10px 15px;
+        border-radius: 6px;
+    }
+    &.box-md {
+        padding: 15px 20px 15px 20px;
+        border-radius: 6px;
+    }
+    &.box-yellow {
+        background-color: #ffeba9;
+        color: #594f2f;    
+    }
+    &.box-red {
+        background-color: #ffb5b5;
+        color: #6d2f2f;        
+    }
+    &.box-blue {
+        background-color: #b8dcf9;
+        color: #325775;        
+    }
 }
 
 .hive-color {
@@ -1032,7 +1177,7 @@ footer {
 
 // Dark Mode
 body.dark-mode {
-    background-color: #1a1a1a;
+    background-color: #272727;
     color: #c9c9c9;
     a {
         color: white;        
@@ -1045,8 +1190,8 @@ body.dark-mode {
         border-bottom: 1px solid #3c3c3c;
     }
     footer {
-        background-color: #1a1a1a;
-        border-top: 1px solid #3c3c3c;
+        background-color: #272727;
+        border-top: 1px solid #272727;
     }
     .box {
         background-color: #2e2e2e;
@@ -1059,10 +1204,31 @@ body.dark-mode {
     .btn {
         &.btn-black {
             color: white;
-            background-color: #7c7c7c;
+            background-color: #5f5f5f;
+            border: 1px solid #5f5f5f;
         }
     }
     #back-top {
         background-color: #2e2e2e;
+    }
+    .custom-collapse {
+        border: 1px solid $black;
+        & > li {
+            .options {
+                background-color: #232323;
+                & > a {
+                    &:hover {
+                        background-color: #313131;
+                    }
+                }
+            }
+            &.active {
+                .label {
+                    &:not(.no-pointer) {
+                        background-color: $black;
+                    }
+                }
+            }
+        }
     }
 }

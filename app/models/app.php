@@ -24,13 +24,14 @@
             // Declare here the variables that you are going to use in several different views
             $data = array();
             $data['app'] = array(
-                'name_page' => $this->name_page
+                'name_page' => $this->name_page,
+                'tags' => array()
             );
             $data['head'] = array(
                 'application-name' => 'Hive',
                 'author' => 'Diego Martín',
                 'robots' => 'index, follow',
-                'canonical' => PROTOCOL.'://'.HOST_PRO
+                'canonical' => URL
             );
             $data['meta'] = array(
                 'title' => META_TITLE,

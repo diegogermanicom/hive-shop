@@ -22,10 +22,10 @@
             if($result->num_rows == 0) {
                 $validation_code = uniqid();
                 $sql = 'INSERT INTO '.DDBB_PREFIX.'newsletters (email, validation_code) VALUES (?, ?)';
-                $result = $this->query($sql, array($email, $validation_code));
+                $this->query($sql, array($email, $validation_code));
             } else {
                 $sql = 'UPDATE '.DDBB_PREFIX.'newsletters SET status = 1 WHERE email = ? LIMIT 1';
-                $result = $this->query($sql, array($email));
+                $this->query($sql, array($email));
             }
             return array(
                 'response' => 'ok',
@@ -44,7 +44,7 @@
                 if($newsletter == 1) {
                     $validation_code = uniqid();
                     $sql = 'INSERT INTO '.DDBB_PREFIX.'newsletters (email, validation_code) VALUES (?, ?)';
-                    $result = $this->query($sql, array($email, $validation_code));
+                    $this->query($sql, array($email, $validation_code));
                 }
                 if(isset($_POST['checkout']) && $_POST['checkout'] == 1) {
                     if(LANG == 'en') {

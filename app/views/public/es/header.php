@@ -39,7 +39,7 @@
         <div class="logo-header">
             <img src="<?= PUBLIC_PATH.'/img/hive-logo.png'; ?>" height="100%" alt="Hive Framework">
         </div>
-        <ul class="menu animar animar-opacity">
+        <ul class="menu animate animate-opacity">
             <li>
                 <a href="<?= PUBLIC_ROUTE.'/inicio'; ?>"><i class="fa-solid fa-house"></i> Inicio</a>
             </li>

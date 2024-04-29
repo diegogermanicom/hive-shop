@@ -1459,7 +1459,7 @@
             $result = $this->query($sql, array($id_user));
             $row = $result->fetch_assoc();
             // We build the validation url for the email
-            $link = PROTOCOL.'://'.HOST.PUBLIC_ROUTE.'/validate-email?code='.$row['validation_code'];
+            $link = URL.'/validate-email?code='.$row['validation_code'];
             $title = 'Validate your account from this email';
             $body = '<a href="'.$link.'">'.$link.'</a>';
             $this->send_email($row['email'], $title, $body);

@@ -83,5 +83,5 @@
         echo json_encode(array('error' => 'Permission denied.'));
         exit;
     }
-    
+
 ?>

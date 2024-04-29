@@ -4,7 +4,7 @@
      * Author: Diego Martin
      * Copyright: Hive®
      * Version: 1.0
-     * Last Update: 2023
+     * Last Update: 2024
      */
 
     // App call method
@@ -85,6 +85,8 @@
         define('VIEWS_PUBLIC', SERVER_PATH.'/app/views/public');
         define('PUBLIC_ROUTE', PUBLIC_PATH);
     }
+    define('URL', PROTOCOL.'://'.HOST.PUBLIC_ROUTE);
+
     // I check that it has the views folder of the translation
     if(!file_exists(VIEWS_PUBLIC)) {
         echo 'The public directory of the language views <b>'.VIEWS_PUBLIC.'</b> does not exist.';
