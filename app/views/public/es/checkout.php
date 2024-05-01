@@ -8,10 +8,10 @@
         <div class="app">
             <?php
                 include VIEWS_PUBLIC.'/header.php';
-                include VIEWS_PUBLIC.'/modules/popup-new-address.php';
-                include VIEWS_PUBLIC.'/modules/popup-edit-address.php';
-                include VIEWS_PUBLIC.'/modules/popup-new-billing-address.php';
-                include VIEWS_PUBLIC.'/modules/popup-edit-billing-address.php';
+                include VIEWS_PUBLIC.'/partials/popup-new-address.php';
+                include VIEWS_PUBLIC.'/partials/popup-edit-address.php';
+                include VIEWS_PUBLIC.'/partials/popup-new-billing-address.php';
+                include VIEWS_PUBLIC.'/partials/popup-edit-billing-address.php';
             ?>
             <section>
                 <div class="container container-xl">

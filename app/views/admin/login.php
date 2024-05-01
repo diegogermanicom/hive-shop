@@ -8,6 +8,7 @@
             <?php include VIEWS_ADMIN.'/header.php'; ?>
             <section>
                 <div class="container container-sm">
+                    <?php if(HAS_DDBB == true) { ?>
                     <div class="login-content pt-50">
                         <div class="title-container">Restricted access</div>
                         <div>
@@ -20,6 +21,11 @@
                             <div id="btn-send-login" class="btn btn-black w-100"><i class="fa-solid fa-right-to-bracket"></i> Login</div>
                         </div>
                     </div>
+                    <?php
+                        } else {
+                            echo '<div class="text-center pt-50">This project does not have an administrator.</div>';
+                        }
+                    ?>
                     <div class="text-center pt-20">
                         <a href="<?= PUBLIC_ROUTE ?>/home" class="btn btn-black btn-md"><i class="fa-solid fa-house"></i> Back to Public Home</a>
                     </div>

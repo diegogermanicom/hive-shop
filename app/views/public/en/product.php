@@ -7,17 +7,50 @@
         <?php include VIEWS_PUBLIC.'/header-body.php'; ?>
         <div class="app">
             <?php include VIEWS_PUBLIC.'/header.php'; ?>
+            <div id="popup-notify-stock" class="popup">
+                <div class="content">
+                    <div class="title">Aviso de Stock</div>
+                    <div class="texto">Rellena los datos para que podamos contactarte cuando el producto esté disponible.</div>
+                    <div class="pb-10"><b>Nombre</b></div>
+                    <div class="pb-10">
+                        <input type="text" class="w-100" id="input-notify-stock-name" maxlength="90">
+                    </div>
+                    <div class="pb-10"><b>Correo electrónico</b></div>
+                    <div>
+                        <input type="text" class="w-100" id="input-notify-stock-email" maxlength="255">
+                    </div>
+                    <div class="row pt-20">
+                        <div class="col-12 col-sm-6 pr-5 pr-sm-0">
+                            <div class="btn btn-black w-100" id="btn-send-notify-stock">Enviar</div>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="btn btn-black w-100 btn-popup-close">Cerrar</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="popup-notify-stock-info" class="popup">
+                <div class="content">
+                    <div class="title">Aviso de Stock</div>
+                    <div class="texto">Su solicitud ha sido registrada con éxito. Le enviaremos un correo electrónico cuando tengamos stock disponible para este producto.</div>
+                    <div class="text-center">
+                        <div class="btn btn-black btn-popup-close">Cerrar</div>
+                    </div>
+                </div>
+            </div>
             <section>
                 <div class="container">
                     <div class="row content-product">
                         <input type="hidden" id="input-id-product" value="<?= $data['product']['id_product']; ?>">
                         <input type="hidden" id="input-id-product-related" value="">
+                        <input type="hidden" id="input-id-category" value="<?= $data['product']['id_category']; ?>">
                         <div class="col-12 col-sm-8">
                             <div class="row content-images"></div>
                         </div>
                         <div class="col-12 col-sm-4">
-                            <div class="product-name pb-5"><?= $data['product']['name']; ?></div>
-                            <div class="product-price pb-5" id="label-product-price">-</div>
+                            <div class="product-name"><?= $data['product']['name']; ?></div>
+                            <div class="category-name"><?= $data['product']['category_name']; ?></div>
+                            <div id="label-product-price">-</div>
                             <div class="pb-5 content-attributes"><?php
                                 if(!empty($data['product']['attributes'])) {
                                     foreach($data['product']['attributes'] as $value) {   
@@ -45,11 +78,17 @@
                                 }
                             ?></div>
                             <div class="pb-5">
-                                <div class="btn btn-black w-100" id="btn-add-to-cart">Add to Cart</div>
-                                <div class="btn btn-black w-100 hidden" id="btn-notify-stock">Notify me when in stock</div>
-                                <div class="box hidden" id="label-discontinued">This product is discontinued</div>
+                                <div class="btn btn-black w-100" id="btn-add-to-cart">Añadir a la cesta</div>
+                                <div class="btn btn-black w-100 hidden" id="btn-notify-stock">Notificarme cuando haya stock</div>
+                                <div class="box hidden" id="label-discontinued">Este producto esta descatalogado</div>
                             </div>
-                            <div><?= $data['product']['description']; ?></div>
+                            <div class="content-share">
+                                <span>Compartir</span>
+                                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#"><i class="fa-solid fa-envelope"></i></a>
+                            </div>
+                            <div class="pt-20 lh-24"><?= $data['product']['description']; ?></div>
                         </div>
                     </div>
                 </div>

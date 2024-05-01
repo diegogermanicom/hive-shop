@@ -4,14 +4,20 @@
      * Author: Diego Martin
      * Copyright: Hive®
      * Version: 1.0
-     * Last Update: 2023
+     * Last Update: 2024
      */
 
     class Route extends Model {
 
         public $root = PUBLIC_ROUTE;
+        // I save all the routes that have been configured in this array
+        public $routesGet = array();
 
-        public function scan_route($route) {
+        public function setRoot($route = '') {
+            $this->root = PUBLIC_ROUTE.$route;
+        }
+
+        public function scan_route($route): array {
             // Is dynamic
             if(strpos($route, '$') !== false) {
                 $args = [];
@@ -66,12 +72,18 @@
             } 
         }
 
-        public function get($route, $function) {
+        public function get($route, $function, $public = true) {
             if(is_array($route)) {
                 foreach($route AS $r) {
+                    if($public == true) {
+                        array_push($this->routesGet, $this->root.$r);
+                    }
                     $this->call(__FUNCTION__, $this->root.$r, $function);
                 }
             } else {
+                if($public == true) {
+                    array_push($this->routesGet, $this->root.$route);
+                }
                 $this->call(__FUNCTION__, $this->root.$route, $function);
             }
         }
@@ -126,6 +138,10 @@
 
         public function deleteAdmin($route, $function) {
             $this->call('delete', ADMIN_PATH.$route, $function);
+        }
+
+        public function createSiteMap() {
+
         }
 
         public function empty() {
