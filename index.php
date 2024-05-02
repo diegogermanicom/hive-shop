@@ -4,7 +4,7 @@
      * Author: Diego Martin
      * Copyright: Hive®
      * Version: 1.0
-     * Last Update: 2023
+     * Last Update: 2024
      */
 
     // Load config file
@@ -13,11 +13,11 @@
     include __DIR__.'/app/config/init.php';
 
     // Load model objects
-    include SERVER_PATH.'/app/models/autoload.php';
+    include MODELS_PATH.'/autoload.php';
     // Load controler objects
-    include SERVER_PATH.'/app/controllers/autoload.php';    
+    include CONTROLLERS_PATH.'/autoload.php';   
     // Load routes list
-    include SERVER_PATH.'/app/routes/autoload.php';
+    include ROUTES_PATH.'/autoload.php';
 
     // Have fun!
 

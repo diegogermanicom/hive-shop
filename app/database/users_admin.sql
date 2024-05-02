@@ -2,7 +2,7 @@ CREATE TABLE `users_admin` (
   `id_admin` tinyint(3) UNSIGNED NOT NULL,
   `email` varchar(90) NOT NULL,
   `pass` varchar(90) NOT NULL,
-  `name` varchar(90) NOT NULL,
+  `name` varchar(90) NOT NULL DEFAULT '',
   `remember_code` varchar(50) NOT NULL DEFAULT '',
   `id_admin_type` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Privilege level',
   `last_access` datetime DEFAULT NULL,

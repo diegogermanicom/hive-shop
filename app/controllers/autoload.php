@@ -1,22 +1,44 @@
 <?php
 
+    $classBefore = get_declared_classes();
+
     // Files of the folder to ignore
-    $ignore_controllers = array(
+    $ignoreFile = array(
         'index.html',
         'autoload.php'
     );
-    // I add classes that are prioritized in order
-    $priority_controllers = array(
+    // I add files that are prioritized in order
+    $priorityFiles = array(
         'controller.php'
     );
-    foreach($priority_controllers as $value) {
-        include SERVER_PATH.'/app/controllers/'.$value;
+    foreach($priorityFiles as $value) {
+        include CONTROLLERS_PATH.'/'.$value;
     }
     // I automatically include each controller
-    $scandir = scandir(SERVER_PATH.'/app/controllers');
-    $files = array_diff($scandir, array('.', '..'), $ignore_controllers, $priority_controllers);
+    $scandir = scandir(CONTROLLERS_PATH);
+    $files = array_diff($scandir, array('.', '..'), $ignoreFile, $priorityFiles);
     foreach($files as $value) {
-        include SERVER_PATH.'/app/controllers/'.$value;
+        include CONTROLLERS_PATH.'/'.$value;
     }
+
+    //I ignore system controllers
+    $ignoreControllers = array(
+        'Err',
+        'Controller'
+    );
+    foreach($ignoreControllers as $value) {
+        array_push($classBefore, $value);
+    }
+    $classAfter = get_declared_classes();
+    // I save the name of all the created controllers
+    $arrayControllers = array_values(array_diff($classAfter, $classBefore));
+    // Now I save the functions of each controller
+    foreach($arrayControllers as $index => $value) {
+        $arrayControllers[$index] = array(
+            'name' => $value,
+            'functions' => get_class_methods($value)
+        );
+    }
+    define('CONTROLLERS', $arrayControllers);
 
 ?>

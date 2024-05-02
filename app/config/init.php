@@ -17,6 +17,9 @@
     define('EMAILS_PATH', SERVER_PATH.'/app/emails');
     define('LANG_PATH', SERVER_PATH.'/app/langs');
     define('IMG_PATH', SERVER_PATH.'/img');
+    define('CONTROLLERS_PATH', SERVER_PATH.'/app/controllers');
+    define('MODELS_PATH', SERVER_PATH.'/app/models');
+    define('ROUTES_PATH', SERVER_PATH.'/app/routes');
     define('VIEWS_ADMIN', SERVER_PATH.'/app/views/admin');
 
     // Server config
