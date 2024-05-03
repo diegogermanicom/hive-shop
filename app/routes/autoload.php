@@ -11,6 +11,7 @@
     $scandir = scandir(SERVER_PATH.'/app/routes');
     $files = array_diff($scandir, array('.', '..'), $ignore_routes);
     foreach($files as $value) {
+        $R->reset();
         include SERVER_PATH.'/app/routes/'.$value;
     }
     // No route found

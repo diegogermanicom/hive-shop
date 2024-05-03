@@ -10,11 +10,21 @@
     class Route extends Model {
 
         public $root = PUBLIC_ROUTE;
+        public $controller = null;
         // I save all the routes that have been configured in this array
         public $routesGet = array();
 
-        public function setRoot($route = '') {
-            $this->root = PUBLIC_ROUTE.$route;
+        public function reset() {
+            $this->root = PUBLIC_ROUTE;
+            $this->controller = null;
+        }
+
+        public function setRoot($root = '') {
+            $this->root = PUBLIC_ROUTE.$root;
+        }
+        
+        public function setController($controller = null) {
+            $this->controller = $controller;
         }
 
         public function scan_route($route): array {
@@ -56,8 +66,15 @@
                     $function($args);
                     exit;
                 } else {
+                    // I save the name of the function
                     $args['_function'] = $function;
-                    list($controller, $function_controller) = explode("#", $function);
+                    // I check if a default controller has been selected
+                    if($this->controller == null) {
+                        list($controller, $function_controller) = explode("#", $function);
+                    } else {
+                        $controller = $this->controller;
+                        $function_controller = $function;
+                    }
                     // If the object exists
                     $class_exist = class_exists($controller);
                     if($class_exist == true) {

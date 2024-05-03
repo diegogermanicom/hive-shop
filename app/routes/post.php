@@ -8,31 +8,32 @@
      */
 
     // App Post
-    $R->post('/set-cookies'                         , 'CAppAjax#set_cookies');
-    $R->post('/save-newsletter'                     , 'CAppAjax#save_newsletter');
-    $R->post('/login-send'                          , 'CAppAjax#login_send');
-    $R->post('/register-send'                       , 'CAppAjax#register_send');
-    $R->post('/choose-language'                     , 'CAppAjax#choose_language');
-    $R->post('/choose-color-mode'                   , 'CAppAjax#choose_color_mode');
-    $R->post('/get-product-related'                 , 'CAppAjax#get_product_related');
-    $R->post('/add-cart'                            , 'CAppAjax#add_cart');
-    $R->post('/notify-stock'                        , 'CAppAjax#notify_stock');
-    $R->post('/send-notify-stock'                   , 'CAppAjax#send_notify_stock');
-    $R->post('/get-popup-cart'                      , 'CAppAjax#get_popup_cart');
-    $R->post('/remove-cart-product'                 , 'CAppAjax#remove_cart_product');
-    $R->post('/change-product-amount'               , 'CAppAjax#change_product_amount');
-    $R->post('/get-addresses'                       , 'CAppAjax#get_addresses');
-    $R->post('/save-new-address'                    , 'CAppAjax#save_new_address');
-    $R->post('/get-address'                         , 'CAppAjax#get_address');
-    $R->post('/delete-address'                      , 'CAppAjax#delete_address');
-    $R->post('/save-edit-address'                   , 'CAppAjax#save_edit_address');
-    $R->post('/get-billing-addresses'               , 'CAppAjax#get_billing_addresses');
-    $R->post('/save-new-billing-address'            , 'CAppAjax#save_new_billing_address');
-    $R->post('/get-billing-address'                 , 'CAppAjax#get_billing_address');
-    $R->post('/delete-billing-address'              , 'CAppAjax#delete_billing_address');
-    $R->post('/save-edit-billing-address'           , 'CAppAjax#save_edit_billing_address');    
-    $R->post('/save-order'                          , 'CAppAjax#save_order');
-    $R->post('/get-countries-list'                  , 'CAppAjax#get_countries_list');
-    $R->post('/get-provinces-list'                  , 'CAppAjax#get_provinces_list');
+    $R->setController('CAppAjax');
+    $R->post('/set-cookies'                         , 'set_cookies');
+    $R->post('/save-newsletter'                     , 'save_newsletter');
+    $R->post('/login-send'                          , 'login_send');
+    $R->post('/register-send'                       , 'register_send');
+    $R->post('/choose-language'                     , 'choose_language');
+    $R->post('/choose-color-mode'                   , 'choose_color_mode');
+    $R->post('/get-product-related'                 , 'get_product_related');
+    $R->post('/add-cart'                            , 'add_cart');
+    $R->post('/notify-stock'                        , 'notify_stock');
+    $R->post('/send-notify-stock'                   , 'send_notify_stock');
+    $R->post('/get-popup-cart'                      , 'get_popup_cart');
+    $R->post('/remove-cart-product'                 , 'remove_cart_product');
+    $R->post('/change-product-amount'               , 'change_product_amount');
+    $R->post('/get-addresses'                       , 'get_addresses');
+    $R->post('/save-new-address'                    , 'save_new_address');
+    $R->post('/get-address'                         , 'get_address');
+    $R->post('/delete-address'                      , 'delete_address');
+    $R->post('/save-edit-address'                   , 'save_edit_address');
+    $R->post('/get-billing-addresses'               , 'get_billing_addresses');
+    $R->post('/save-new-billing-address'            , 'save_new_billing_address');
+    $R->post('/get-billing-address'                 , 'get_billing_address');
+    $R->post('/delete-billing-address'              , 'delete_billing_address');
+    $R->post('/save-edit-billing-address'           , 'save_edit_billing_address');    
+    $R->post('/save-order'                          , 'save_order');
+    $R->post('/get-countries-list'                  , 'get_countries_list');
+    $R->post('/get-provinces-list'                  , 'get_provinces_list');
     
 ?>

@@ -8,30 +8,31 @@
      */
 
     // App Get
-    $R->get(''                                      , 'CApp#root');
-    $R->get('/'                                     , 'CApp#root');
-    $R->get('/404'                                  , 'CApp#page_404', false);
+    $R->setController('CApp');
+    $R->get(''                                      , 'root');
+    $R->get('/'                                     , 'root');
+    $R->get('/404'                                  , 'page_404', false);
 
     if(LANG == 'en') {
-        $R->get('/home'                                 , 'CApp#home');
-        $R->get('/privacy-policy'                       , 'CApp#privacy_policy');
-        $R->get('/access'                               , 'CApp#access');
-        $R->get('/register'                             , 'CApp#register');
-        $R->get('/cart'                                 , 'CApp#cart');
-        $R->get('/checkout'                             , 'CApp#checkout');
-        $R->get('/service-down'                         , 'CApp#service_down', false);
-        $R->get('/validate-email'                       , 'CApp#validate_email', false);
-        $R->get('/logout'                               , 'CApp#logout', false);
+        $R->get('/home'                                 , 'home');
+        $R->get('/privacy-policy'                       , 'privacy_policy');
+        $R->get('/access'                               , 'access');
+        $R->get('/register'                             , 'register');
+        $R->get('/cart'                                 , 'cart');
+        $R->get('/checkout'                             , 'checkout');
+        $R->get('/service-down'                         , 'service_down', false);
+        $R->get('/validate-email'                       , 'validate_email', false);
+        $R->get('/logout'                               , 'logout', false);
     } else if(LANG == 'es') {
-        $R->get('/inicio'                               , 'CApp#home');
-        $R->get('/politica-de-privacidad'               , 'CApp#privacy_policy');
-        $R->get('/acceso'                               , 'CApp#access');
-        $R->get('/registro'                             , 'CApp#register');
-        $R->get('/carrito'                              , 'CApp#cart');
-        $R->get('/tramitar-pedido'                      , 'CApp#checkout');
-        $R->get('/servicio-caido'                       , 'CApp#service_down', false);
-        $R->get('/validar-email'                        , 'CApp#validate_email', false);
-        $R->get('/desconectar'                          , 'CApp#logout', false);
+        $R->get('/inicio'                               , 'home');
+        $R->get('/politica-de-privacidad'               , 'privacy_policy');
+        $R->get('/acceso'                               , 'access');
+        $R->get('/registro'                             , 'register');
+        $R->get('/carrito'                              , 'cart');
+        $R->get('/tramitar-pedido'                      , 'checkout');
+        $R->get('/servicio-caido'                       , 'service_down', false);
+        $R->get('/validar-email'                        , 'validate_email', false);
+        $R->get('/desconectar'                          , 'logout', false);
     }
 
     $R->get_categories();
