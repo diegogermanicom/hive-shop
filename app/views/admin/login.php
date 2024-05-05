@@ -27,7 +27,7 @@
                         }
                     ?>
                     <div class="text-center pt-20">
-                        <a href="<?= PUBLIC_ROUTE ?>/inicio" class="btn btn-black btn-md"><i class="fa-solid fa-house"></i> Back to Public Home</a>
+                        <a href="<?= PUBLIC_ROUTE ?>" class="btn btn-black btn-md"><i class="fa-solid fa-house"></i> Back to Public Home</a>
                     </div>
                 </div>
             </section>

@@ -58,16 +58,15 @@
 
         public function call($type, $route, $function) {
             list($scan_route, $args) = $this->scan_route($route);
-            $args['_type'] = $type;
-            $args['_route'] = $route;
             if(METHOD == $type && ROUTE == $scan_route) {
+                // I save the call details
+                $args['_route'] = $route;
+                $args['_function'] = $function;
                 // If i pass a function
                 if(is_callable($function)) {
                     $function($args);
                     exit;
                 } else {
-                    // I save the name of the function
-                    $args['_function'] = $function;
                     // I check if a default controller has been selected
                     if($this->controller == null) {
                         list($controller, $function_controller) = explode("#", $function);
