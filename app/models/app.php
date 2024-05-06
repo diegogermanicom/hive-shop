@@ -74,11 +74,6 @@
             }
         }
 
-        public function set_cookies() {
-            setcookie("acepto_cookies", 'accepted cookies', time() + (60 * 60 * 24 * 30 * 4), PUBLIC_PATH.'/'); // 4 meses
-            $_COOKIE["acepto_cookies"] = 'accepted cookies';
-        }
-
         public function login_remember() {
 			if(isset($_COOKIE["user_remember"])) {
                 if(!isset($_SESSION['user'])) {

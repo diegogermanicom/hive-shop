@@ -14,20 +14,34 @@
         }
 
         public function setTitle($title) {
-            return $title.' | Hive';
+            return $title.' | Hive Shop';
         }
 
         public function security_app_logout() {
             if(isset($_SESSION['user'])) {
-                header('Location: '.PUBLIC_ROUTE.'/');
-                exit;
+                if(METHOD == 'get') {
+                    header('Location: '.PUBLIC_ROUTE.'/');
+                    exit;
+                } else {
+                    return json_encode(array(
+                        'response' => 'error',
+                        'mensaje' => 'You do not have permissions to perform this action.'
+                    ));
+                }
             }
         }
 
         public function security_app_login() {
             if(!isset($_SESSION['user'])) {
-                header('Location: '.PUBLIC_ROUTE.'/');
-                exit;
+                if(METHOD == 'get') {
+                    header('Location: '.PUBLIC_ROUTE.'/');
+                    exit;
+                } else {
+                    return json_encode(array(
+                        'response' => 'error',
+                        'mensaje' => 'You do not have permissions to perform this action.'
+                    ));
+                }
             }
         }
 

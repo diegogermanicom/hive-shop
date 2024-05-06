@@ -26,16 +26,30 @@
         public function security_admin_logout() {
             // I make sure that the admin user is logged out
             if(isset($_SESSION['admin']['id_admin'])) {
-                header('Location: '.ADMIN_PATH.'/home');
-                exit;
+                if(METHOD == 'get') {
+                    header('Location: '.ADMIN_PATH.'/home');
+                    exit;
+                } else {
+                    return json_encode(array(
+                        'response' => 'error',
+                        'mensaje' => 'You do not have permissions to perform this action.'
+                    ));
+                }
             }
         }
 
         public function security_admin_login() {
             // I make sure that the admin user is logged in
             if(!(isset($_SESSION['admin']['id_admin']))) {
-                header('Location: '.ADMIN_PATH.'/login');
-                exit;
+                if(METHOD == 'get') {
+                    header('Location: '.ADMIN_PATH.'/login');
+                    exit;
+                } else {
+                    return json_encode(array(
+                        'response' => 'error',
+                        'mensaje' => 'You do not have permissions to perform this action.'
+                    ));
+                }                
             }
         }
 

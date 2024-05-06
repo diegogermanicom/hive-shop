@@ -14,6 +14,13 @@
         function __construct($name_page = 'default-page') {
             parent::__construct();
             $this->name_page = $name_page;
+            $this->check_maintenance();
+        }
+
+        public function set_cookies() {
+            setcookie("acepto_cookies", 'accepted cookies', time() + (60 * 60 * 24 * 30 * 4), PUBLIC_PATH.'/'); // 4 meses
+            $_COOKIE["acepto_cookies"] = 'accepted cookies';
+            return array('response' => 'ok');
         }
 
         public function save_newsletter($email) {

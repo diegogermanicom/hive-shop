@@ -12,12 +12,9 @@
         // App ajax services ------------------------------------------------
         
         public function set_cookies($args) {
-            $app = new App();
-            $app->set_cookies();
+            $app = new AppAjax();
             $result = [];
-            $result['cookie'] = array(
-                'response' => 'ok'
-            );
+            $result['cookie'] = $app->set_cookies();
             echo json_encode($result);
         }
 
@@ -30,6 +27,7 @@
 
         public function login_send($args) {
             $app = new AppAjax();
+            $app->security_app_logout();
             $result = [];
             $result['login'] = $app->login($_POST['email'], md5($_POST['pass']), $_POST['remember']);
             echo json_encode($result);
@@ -37,6 +35,7 @@
 
         public function register_send($args) {
             $app = new AppAjax();
+            $app->security_app_logout();
             $result = [];
             $result['register'] = $app->register($_POST['email'], $_POST['name'], $_POST['lastname'], $_POST['pass1'], $_POST['newsletter']);
             echo json_encode($result);
