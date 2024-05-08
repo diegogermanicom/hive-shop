@@ -476,9 +476,14 @@ footer {
         border-bottom: 2px solid $black;
     }
 }
-.texto-container {
+.text-container {
     line-height: 24px;
     padding-bottom: 10px;
+    &.underline {
+        padding: 0px 0px 5px 0px;
+        margin: 0px 0px 25px 0px;
+        border-bottom: 2px solid $black;
+    }
     p {
         padding-bottom: 20px;
     }

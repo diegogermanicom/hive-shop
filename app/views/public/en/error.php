@@ -15,7 +15,7 @@
                         <img src="<?= PUBLIC_PATH.'/img/hive-logo.png'; ?>" alt="Hive Framework" width="60">
                     </div>
                     <div class="title-container underline text-left pt-30"><?= $data['error_title']; ?></div>
-                    <div class="texto-container pb-100"><?= $data['error_description']; ?></div>
+                    <div class="text-container pb-100"><?= $data['error_description']; ?></div>
                 </div>
             </section>
         </div>
