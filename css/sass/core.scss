@@ -88,6 +88,12 @@ $font3: 'Inter';
     }
 }
 
+@for $i from 0 through 20 {
+    .w-#{($i * 5)} {
+        width: #{($i * 5)} + '%';
+    }
+}
+
 @for $i from 0 through 100 {
     .p-#{$i} {
         padding: #{$i}px !important;
@@ -540,9 +546,6 @@ footer {
 }
 .text-underline {
     text-decoration: underline !important;
-}
-.w-100 {
-    width: 100%;
 }
 .dots {
     text-overflow: ellipsis;
@@ -1100,7 +1103,7 @@ footer {
     &:hover:not(.disabled) {
         opacity: .9;
     }
-    &:active:not(.disabled) {
+    &:active:not(.disabled, .btn-ok) {
         @media (min-width: $lg + px) {
             @include transform(scale(0.98));
             opacity: .8;
@@ -1112,10 +1115,6 @@ footer {
     }
     &.btn-md {
         padding: 5px 19px 5px 19px;        
-    }
-    &.disabled {
-        cursor: default;
-        opacity: .6;
     }
     &.btn-black {
         color: white;
@@ -1138,13 +1137,23 @@ footer {
     }
     &.btn-yellow {
         color: white;
-        background-color: #e0e24e;
-        border: 1px solid #e0e24e;
+        background-color: #d5c83b;
+        border: 1px solid #d5c83b;
+    }
+    &.btn-yellow {
+        color: white;
+        background-color: #d5c83b;
+        border: 1px solid #d5c83b;
+    }
+    &.disabled {
+        cursor: default !important;
+        opacity: .6 !important;
     }
     &.btn-ok {
-        color: white;
-        background-color: #7a9651;
-        border: 1px solid #7a9651;
+        cursor: default !important;
+        color: white !important;
+        background-color: #7a9651 !important;
+        border: 1px solid #7a9651 !important;
     }
 }
 
