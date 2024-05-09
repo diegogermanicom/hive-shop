@@ -505,14 +505,17 @@ footer {
         -webkit-text-fill-color: transparent;
     }
 }
+.margin-auto {
+    margin: auto auto;
+}
 .text-center {
-    text-align: center;
+    text-align: center !important;
 }
 .text-left {
-    text-align: left;
+    text-align: left !important;
 }
 .text-right {
-    text-align: right;
+    text-align: right !important;
 }
 .text-sm-center {
     @media (max-width: ($sm - 1) + px) {
