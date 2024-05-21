@@ -18,6 +18,8 @@ var HIVE = {
         this.colorModeEvent();
         this.scrollEvent();        
         this.customCollapse();
+        this.customList();
+        this.getCustomListValues();
     },
     // Functions
     initAjax: function() {
@@ -39,7 +41,7 @@ var HIVE = {
     },
     showInfo: function(title, text) {
         $('#popup-info .title').html(title);
-        $('#popup-info .texto').html(text);
+        $('#popup-info .text').html(text);
         this.showPopup('#popup-info')
     },
     showPopup: function(name) {
@@ -228,6 +230,37 @@ var HIVE = {
                 }    
             }
         });
+    },
+    customList: function() {
+        $('.custom-list[selectable] > *').each(function() {
+            $(this).off().on('click', function() {
+                var parent = $(this).parent();
+                var max = parent.attr('max-select');
+                if(parent.attr('multiple') == undefined) {
+                    parent.children().removeClass('active');
+                }
+                // I activate the element
+                if($(this).hasClass('active')) {
+                    $(this).removeClass('active');
+                } else {
+                    if(parent.attr('max-select') != undefined) {
+                        var num = parent.children('.active').length;
+                        if(num >= parent.attr('max-select')) {
+                            return false;
+                        }
+                    }
+                    $(this).addClass('active');
+                }
+            });
+        });
+    },
+    getCustomListValues: function(element) {
+        var values = new Array();
+        $(element).children('.active').each(function() {
+            let value = $(this).attr('value');
+            values.push(value);
+        });
+        return values;
     }
 }
 

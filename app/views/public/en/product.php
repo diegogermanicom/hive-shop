@@ -10,7 +10,7 @@
             <div id="popup-notify-stock" class="popup">
                 <div class="content">
                     <div class="title">Aviso de Stock</div>
-                    <div class="texto">Rellena los datos para que podamos contactarte cuando el producto esté disponible.</div>
+                    <div class="text">Rellena los datos para que podamos contactarte cuando el producto esté disponible.</div>
                     <div class="pb-10"><b>Nombre</b></div>
                     <div class="pb-10">
                         <input type="text" class="w-100" id="input-notify-stock-name" maxlength="90">
@@ -32,7 +32,7 @@
             <div id="popup-notify-stock-info" class="popup">
                 <div class="content">
                     <div class="title">Aviso de Stock</div>
-                    <div class="texto">Su solicitud ha sido registrada con éxito. Le enviaremos un correo electrónico cuando tengamos stock disponible para este producto.</div>
+                    <div class="text">Su solicitud ha sido registrada con éxito. Le enviaremos un correo electrónico cuando tengamos stock disponible para este producto.</div>
                     <div class="text-center">
                         <div class="btn btn-black btn-popup-close">Cerrar</div>
                     </div>

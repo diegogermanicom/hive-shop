@@ -10,7 +10,7 @@
             <div id="popup-delete-image" class="popup">
                 <div class="content">
                     <div class="title">DELETE IMAGE</div>
-                    <div class="texto">Do you want to remove the image only from the product and its related products or from all products, related products and the server?</div>
+                    <div class="text">Do you want to remove the image only from the product and its related products or from all products, related products and the server?</div>
                     <div class="row">
                         <div class="col-12 col-sm-4 pr-5 pr-sm-0">
                             <div id="btn-delete-from-server-image" class="btn btn-red w-100">From Server</div>
@@ -27,7 +27,7 @@
             <div id="popup-add-image" class="popup">
                 <div class="content content-md">
                     <div class="title">ADD IMAGE</div>
-                    <div class="texto">Select the images you want to add from the server.</div>
+                    <div class="text">Select the images you want to add from the server.</div>
                     <div class="content-images pb-20"></div>
                     <div class="row">
                         <div class="col-12 col-sm-6 pr-5 pr-sm-0">

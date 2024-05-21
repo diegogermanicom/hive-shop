@@ -20,7 +20,7 @@ $velocidad: .6s;
 
 $black: #333333;
 $gray: #b5b5b5;
-$light-gray: #f3f3f3;
+$light-gray: #e9e9e9;
 $hive-color: #f59f1e;
 
 $font1: 'Bebas Neue';
@@ -38,6 +38,7 @@ $font3: 'Inter';
 @mixin transition-delay($val) {
     -webkit-transition-delay: $val;
     -moz-transition-delay: $val;
+    -ms-transition-delay: $val;
     -o-transition-delay: $val;
     transition-delay: $val;
 }
@@ -45,7 +46,17 @@ $font3: 'Inter';
 @mixin box-sizing($val) {
     -webkit-box-sizing: $val;
     -moz-box-sizing: $val;
+    -ms-box-sizing: $val;
+    -o-box-sizing: $val;
     box-sizing: $val;
+}
+
+@mixin user-select($val) {
+    -webkit-user-select: $val;
+    -moz-user-select: $val;
+    -ms-user-select: $val;
+    -o-user-select: $val;
+    user-select: $val; 
 }
 
 @for $i from 1 through 100 {
@@ -249,7 +260,7 @@ $font3: 'Inter';
     align-items: stretch;
     flex-wrap: wrap;
     width: 100%;
-    .col-x {
+    .col, .col-x {
         flex-grow: 1;
     }
     @for $i from 0 through 12 {
@@ -751,6 +762,7 @@ footer {
     }
 }
 .custom-list {
+    background-color: white;
     border: 2px solid #bfbfbf;
     padding: 8px 8px 8px 8px;
     border-radius: 2px;
@@ -815,6 +827,7 @@ footer {
         border: 2px solid #bfbfbf;
         margin-top: -2px;
         padding: 20px 20px 20px 20px;
+        background-color: white;
         & > div {
             display: none;
             &.active {
@@ -1020,7 +1033,7 @@ footer {
                 margin-bottom: 15px;
             }
         }
-        .texto {
+        .text {
             line-height: 24px;
             padding-bottom: 20px;
         }
@@ -1084,6 +1097,7 @@ footer {
 }
 
 .btn {
+    @include user-select(none);
     display: inline-block;
     font-family: $font1;
     font-size: 20px;
@@ -1096,10 +1110,6 @@ footer {
     background-color: white;
     cursor: pointer;
     color: $black;
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none; 
     -webkit-transition: -webkit-transform .2s, opacity .2s;
     transition: transform .2s, opacity .2s;
     opacity: 1;
@@ -1228,6 +1238,20 @@ body.dark-mode {
     #back-top {
         background-color: #2e2e2e;
     }
+    .custom-list {
+        background-color: #1a1a1a;
+        border: 2px solid #4b4b4b;
+        & > * {
+            background-color: $black;
+            &:not(.no-hover):not(.active):hover {
+                background-color: #2b2b2b;
+            }
+            &.active {
+                background-color: #232222;
+                color: white;
+            }
+        }
+    }
     .custom-collapse {
         border: 1px solid $black;
         & > li {
@@ -1246,6 +1270,24 @@ body.dark-mode {
                     }
                 }
             }
+        }
+    }
+    .custom-tab {
+        .menu {
+            & > div {
+                background-color: #232323;
+                border: 2px solid #4b4b4b;
+                &.active{
+                    background-color: #1a1a1a;
+                    &::before {
+                        background-color: #1a1a1a;
+                    }
+                }
+            }
+        }
+        .content {
+            background-color: #1a1a1a;
+            border: 2px solid #4b4b4b;
         }
     }
 }

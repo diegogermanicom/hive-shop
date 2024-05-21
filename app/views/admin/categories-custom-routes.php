@@ -10,7 +10,7 @@
             <div id="popup-new-category-custom-route" class="popup">
                 <div class="content">
                     <div class="title">New category custom route</div>
-                    <div class="texto">If you leave the route field of a language blank, the custom route will not be created.</div>
+                    <div class="text">If you leave the route field of a language blank, the custom route will not be created.</div>
                     <div class="pb-20">
                         <select id="categories-list" class="w-100">
                             <option value="0">Select a category...</option>

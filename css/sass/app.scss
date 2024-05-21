@@ -10,22 +10,6 @@
 .app {
     padding-top: 100px;
 }
-nav {
-    & > * {
-        border-bottom: 1px solid #ddd;
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-    }
-    & > *:first-child {
-        border-top: 1px solid #ddd;
-    }
-    & > a {
-        &:hover {
-            background-color: $black;
-            color: white;
-        }
-    }
-}
 header {
     position: fixed;
     top: 0px;

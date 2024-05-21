@@ -7,7 +7,7 @@
     <div id="popup-info" class="popup">
         <div class="content">
             <div class="title"></div>
-            <div class="texto"></div>
+            <div class="text"></div>
             <div class="text-right">
                 <div class="btn btn-black w-100 btn-popup-close">Aceptar</div>
             </div>
