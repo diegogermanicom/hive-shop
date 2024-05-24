@@ -14,7 +14,7 @@
                 include VIEWS_PUBLIC.'/partials/popup-edit-billing-address.php';
             ?>
             <section>
-                <div class="container container-xl">
+                <div class="container-xl">
                     <div class="row">
                         <div class="col-12 col-sm-8">
                             <div class="title-container text-left">Dirección de envío</div>

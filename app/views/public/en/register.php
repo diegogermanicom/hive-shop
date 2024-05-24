@@ -8,7 +8,7 @@
         <div class="app">
             <?php include VIEWS_PUBLIC.'/header.php'; ?>
             <section>
-                <div class="container container-sm">
+                <div class="container-sm">
                     <div class="text-center pt-50">
                         <a href="<?= PUBLIC_ROUTE ?>/home"><img src="<?= PUBLIC_PATH.'/img/hive-logo.png'; ?>" width="60" alt="Hive Framework"></a>
                     </div>

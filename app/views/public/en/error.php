@@ -10,7 +10,7 @@
     <body id="<?= $data['app']['name_page']; ?>" class="<?= $_COOKIE['color-mode']; ?>">
         <div class="app">
             <section>
-                <div class="container container-lg">
+                <div class="container-lg">
                     <div class="text-center pt-50">
                         <img src="<?= PUBLIC_PATH.'/img/hive-logo.png'; ?>" alt="Hive Framework" width="60">
                     </div>

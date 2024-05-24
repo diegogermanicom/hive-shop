@@ -34,7 +34,6 @@ $font3: 'Inter';
     -o-transform: $val;
     transform: $val;
 }
-
 @mixin transition-delay($val) {
     -webkit-transition-delay: $val;
     -moz-transition-delay: $val;
@@ -42,7 +41,6 @@ $font3: 'Inter';
     -o-transition-delay: $val;
     transition-delay: $val;
 }
-
 @mixin box-sizing($val) {
     -webkit-box-sizing: $val;
     -moz-box-sizing: $val;
@@ -50,13 +48,19 @@ $font3: 'Inter';
     -o-box-sizing: $val;
     box-sizing: $val;
 }
-
 @mixin user-select($val) {
     -webkit-user-select: $val;
     -moz-user-select: $val;
     -ms-user-select: $val;
     -o-user-select: $val;
     user-select: $val; 
+}
+@mixin appearance($val) {
+    -webkit-appearance: $val;
+    -moz-appearance: $val;
+    -ms-appearance: $val;
+    -o-appearance: $val;
+    appearance: $val; 
 }
 
 @for $i from 1 through 100 {
@@ -402,8 +406,8 @@ textarea {
     line-height: 22px;
 }
 select {
+    @include appearance(none);
     cursor: pointer;
-    -webkit-appearance: none;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%2842, 42, 42%29'></polygon></svg>");
     background-repeat: no-repeat;
     background-size: 9px 6px;
@@ -447,7 +451,7 @@ footer {
     -webkit-transition: background-color $velocidad ease-out;
     transition: background-color $velocidad ease-out;
 }
-.container {
+.container, .container-full, .container-sm, .container-md, .container-lg, .container-xl {
     position: relative;
     margin: auto auto;
     max-width: $max-width + px;
@@ -461,23 +465,22 @@ footer {
         padding-left: 20px;
         padding-right: 20px;
     }
-    &.container-xl {
-        max-width: $xl + px;        
-    }
-    &.container-lg {
-        max-width: $lg + px;        
-    }
-    &.container-md {
-        max-width: $md + px;        
-    }
-    &.container-sm {
-        max-width: $sm + px;        
-    }
-    &.container-full {
-        max-width: 100%;
-    }
 }
-
+.container-xl {
+    max-width: $xl + px;        
+}
+.container-lg {
+    max-width: $lg + px;        
+}
+.container-md {
+    max-width: $md + px;        
+}
+.container-sm {
+    max-width: $sm + px;        
+}
+.container-full {
+    max-width: 100%;
+}
 .title-container {
     text-align: center;
     font-size: 25px;
@@ -652,14 +655,13 @@ footer {
 // Checkbox y radio buttons
 .checkbox, .radio {
     // <label class="checkbox"><input type="checkbox"><span class="checkmark"></span></label>
+    @include user-select(none);
     display: inline-block;
     position: relative;
     padding: 1px 0px 0px 28px;
     cursor: pointer;
     min-height: 24px;
     min-width: 24px;
-    -webkit-user-select: none;
-    user-select: none;
     @media (max-width: ($sm - 1) + px) {
         padding: 3px 0px 0px 30px;
     }
@@ -839,6 +841,7 @@ footer {
 .custom-collapse {
     border: 1px solid #ddd;
     padding: 5px 0px 5px 0px;
+    background-color: white;
     & > li {
         .label {
             cursor: pointer;
@@ -1235,6 +1238,17 @@ body.dark-mode {
             border: 1px solid #5f5f5f;
         }
     }
+    table {
+        tbody {
+            border: 1px solid #333;
+            tr {
+                border-top: 1px solid $black;
+                &:nth-child(even) {
+                    background-color: #212121;
+                }
+            }
+        }
+    }
     #back-top {
         background-color: #2e2e2e;
     }
@@ -1254,6 +1268,7 @@ body.dark-mode {
     }
     .custom-collapse {
         border: 1px solid $black;
+        background-color: #1a1a1a;
         & > li {
             .options {
                 background-color: #232323;

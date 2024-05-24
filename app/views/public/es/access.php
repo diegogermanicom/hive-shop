@@ -8,7 +8,7 @@
         <div class="app">
             <?php include VIEWS_PUBLIC.'/header.php'; ?>
             <section>
-                <div class="container container-sm">
+                <div class="container-sm">
                     <div class="box login-content">
                         <?php
                             if(isset($_GET['checkout'])) {

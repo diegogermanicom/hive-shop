@@ -15,7 +15,7 @@
                     </div>
                 </section>
                 <section>
-                    <div class="container container-sm">
+                    <div class="container-sm">
                         <div class="text-center">Welcome <b><?= $_SESSION['admin']['email']; ?></b></div>
                     </div>
                 </section>

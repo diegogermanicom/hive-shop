@@ -7,7 +7,7 @@
         <div class="app">
             <?php include VIEWS_ADMIN.'/header.php'; ?>
             <section>
-                <div class="container container-sm">
+                <div class="container-sm">
                     <?php if(HAS_DDBB == true) { ?>
                     <div class="login-content pt-50">
                         <div class="title-container">Restricted access</div>
