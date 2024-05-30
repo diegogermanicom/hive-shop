@@ -82,6 +82,20 @@ $font3: 'Inter';
         }
     }
 }
+@for $i from 1 through 100 {
+    @media (max-width: ($lg - 1) + px) {
+        .font-lg-#{$i} {
+            font-size: #{$i}px !important;
+        }
+    }
+}
+@for $i from 1 through 100 {
+    @media (max-width: ($xl - 1) + px) {
+        .font-xl-#{$i} {
+            font-size: #{$i}px !important;
+        }
+    }
+}
 
 @for $i from 1 through 100 {
     .lh-#{$i} {
@@ -98,6 +112,20 @@ $font3: 'Inter';
 @for $i from 0 through 100 {
     @media (max-width: ($md - 1) + px) {
         .lh-md-#{$i} {
+            line-height: #{$i}px !important;
+        }
+    }
+}
+@for $i from 0 through 100 {
+    @media (max-width: ($lg - 1) + px) {
+        .lh-lg-#{$i} {
+            line-height: #{$i}px !important;
+        }
+    }
+}
+@for $i from 0 through 100 {
+    @media (max-width: ($xl - 1) + px) {
+        .lh-xl-#{$i} {
             line-height: #{$i}px !important;
         }
     }
@@ -351,36 +379,47 @@ table {
     tbody {
         border: 1px solid #dee2e6;
         tr {
-            border-top: 1px solid #dee2e6;
             &:nth-child(even) {
-                background-color: #f9f9f9;
+                background-color: rgb(0 0 0 / 5%);
             }
             &.no-border {
                 border-top: transparent;
             }
         }
         td {
+            border-top: 1px solid #dee2e6;
             padding: 10px 10px 10px 10px;
         }
     }
     &.no-even {
         tbody {
             tr:nth-child(even) {
-                background-color: transparent;
+                background-color: transparent !important;
             }
         }
     }
     &.no-border {
         thead {
-            border: 0px;
+            border: 0px solid transparent !important;
         }
         tbody {
-            border: 0px;
+            border: 0px solid transparent !important;
         }
     }
     &.no-tr-border {
-        tr {
-            border-top: transparent;
+        td {
+            border-top: 0px solid transparent !important;
+        }
+    }
+    &.color-first {
+        tbody {
+            tr {
+                td:first-child {
+                    border: 1px solid #4f4f4f;
+                    background-color: #4f4f4f;
+                    color: white;
+                }
+            }
         }
     }
 }
@@ -390,8 +429,8 @@ input, textarea, select {
     font-size: 16px;
     color: $black;
     border: 2px solid #bfbfbf;
-    padding: 8px 15px 8px 15px;
-    border-radius: 2px;
+    padding: 8px 14px 8px 14px;
+    border-radius: 4px;
     line-height: 19px;
     &.error {
         border: 2px solid #ff6363;
@@ -400,6 +439,21 @@ input, textarea, select {
     &.input-sm {
         padding: 2px 6px 2px 6px;
         font-size: 14px;
+    }
+    &.input-md {
+        padding: 14px 22px 14px 22px;
+        font-size: 18px;
+    }
+    &.input-lg {
+        padding: 20px 28px 20px 28px;
+        font-size: 22px;
+        border-radius: 5px;
+    }
+    &:focus {
+        border: 2px solid #949494;
+    }
+    &:active {
+        border: 2px solid #777777;
     }
 }
 textarea {
@@ -558,6 +612,36 @@ footer {
 }
 .text-md-right {
     @media (max-width: ($md - 1) + px) {
+        text-align: right;
+    }
+}
+.text-lg-center {
+    @media (max-width: ($lg - 1) + px) {
+        text-align: center;
+    }
+}
+.text-lg-left {
+    @media (max-width: ($lg - 1) + px) {
+        text-align: left;
+    }
+}
+.text-lg-right {
+    @media (max-width: ($lg - 1) + px) {
+        text-align: right;
+    }
+}
+.text-xl-center {
+    @media (max-width: ($xl - 1) + px) {
+        text-align: center;
+    }
+}
+.text-xl-left {
+    @media (max-width: ($xl - 1) + px) {
+        text-align: left;
+    }
+}
+.text-xl-right {
+    @media (max-width: ($xl - 1) + px) {
         text-align: right;
     }
 }
@@ -1132,6 +1216,12 @@ footer {
     &.btn-md {
         padding: 5px 19px 5px 19px;        
     }
+    &.btn-lg {
+        padding: 17px 21px 17px 21px;        
+    }
+    &.btn-xl {
+        padding: 21px 23px 21px 23px;        
+    }
     &.btn-black {
         color: white;
         background-color: $black;
@@ -1173,20 +1263,12 @@ footer {
     }
 }
 
-.box {
+.box, .box-sm, .box-md, .box-lg, .box-xl {
     padding: 20px 30px 20px 30px;
     background-color: $light-gray;
     border-radius: 6px;
     -webkit-transition: background-color $velocidad ease-out;
     transition: background-color $velocidad ease-out;
-    &.box-sm {
-        padding: 10px 15px 10px 15px;
-        border-radius: 6px;
-    }
-    &.box-md {
-        padding: 15px 20px 15px 20px;
-        border-radius: 6px;
-    }
     &.box-yellow {
         background-color: #ffeba9;
         color: #594f2f;    
@@ -1199,6 +1281,26 @@ footer {
         background-color: #b8dcf9;
         color: #325775;        
     }
+    &.box-green {
+        background-color: #cff197;
+        color: #536d2a;        
+    }
+}
+.box-sm {
+    padding: 10px 15px 10px 15px;
+    border-radius: 5px;
+}
+.box-md {
+    padding: 15px 20px 15px 20px;
+    border-radius: 6px;
+}
+.box-lg {
+    padding: 30px 40px 30px 40px;
+    border-radius: 7px;
+}
+.box-xl {
+    padding: 50px 70px 50px 70px;
+    border-radius: 8px;
 }
 
 .hive-color {
@@ -1223,8 +1325,24 @@ body.dark-mode {
         background-color: #272727;
         border-top: 1px solid #272727;
     }
-    .box {
+    .box, .box-sm, .box-md, .box-lg, .box-xl {
         background-color: #2e2e2e;
+        &.box-yellow {
+            background-color: #efd785;
+            color: #51410e;
+        }
+        &.box-blue {
+            background-color: #93bfe3;
+            color: #173e5d;
+        }
+        &.box-red {
+            background-color: #cd7575;
+            color: #3f1010;
+        }
+        &.box-green {
+            background-color: #b1d575;
+            color: #354b13;
+        }
     }
     .popup {
         .content {
@@ -1242,9 +1360,21 @@ body.dark-mode {
         tbody {
             border: 1px solid #333;
             tr {
-                border-top: 1px solid $black;
                 &:nth-child(even) {
-                    background-color: #212121;
+                    background-color: rgb(255 255 255 / 3%);
+                }
+                td {
+                    border-top: 1px solid $black;
+                }
+            }
+        }
+        &.color-first {
+            tbody {
+                tr {
+                    td:first-child {
+                        background-color: #3f3f3f;
+                        border: 1px solid #3f3f3f;
+                    }
                 }
             }
         }

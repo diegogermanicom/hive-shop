@@ -8,7 +8,7 @@
         <div class="content">
             <div class="title"></div>
             <div class="text"></div>
-            <div class="text-right">
+            <div>
                 <div class="btn btn-black w-100 btn-popup-close">Aceptar</div>
             </div>
         </div>
