@@ -91,7 +91,7 @@
                     ORDER BY p.priority, -p.id_product';
             $result = $this->query($sql);
             if($result->num_rows > 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/products', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -201,7 +201,7 @@
                 $result = $this->query($sql, array($id_parent));
             }
             if($result->num_rows > 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/categories', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -278,7 +278,7 @@
                     ORDER BY a.id_attribute';
             $result = $this->query($sql);
             if($result->num_rows > 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/attributes', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -337,7 +337,7 @@
                     ORDER BY -i.id_image';
             $result = $this->query($sql);
             if($result->num_rows > 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/images', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -380,7 +380,7 @@
             $sql = 'SELECT * FROM '.DDBB_PREFIX.'codes ORDER BY -id_code';
             $result = $this->query($sql);
             if($result->num_rows > 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/codes', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -390,7 +390,7 @@
                 $html .=        '<th class="text-left">Code</th>';
                 $html .=        '<th style="width: 100px;">Type</th>';
                 $html .=        '<th style="width: 100px;">Amount</th>';
-                $html .=        '<th style="width: 120px;">Times Used</th>';
+                $html .=        '<th style="width: 120px;">Available</th>';
                 $html .=        '<th style="width: 120px;">Status</th>';
                 $html .=        '<th style="width: 200px;"></th>';
                 $html .=    '</tr>';
@@ -404,7 +404,7 @@
                     $html .=    '<td>'.$row['code'].'</td>';
                     $html .=    '<td class="text-center">'.$row['type'].'</td>';
                     $html .=    '<td class="text-center">'.$row['amount'].'</td>';
-                    $html .=    '<td class="text-center">'.$row['times_used'].'</td>';
+                    $html .=    '<td class="text-center">'.$row['available'].'</td>';
                     $html .=    '<td class="text-center">'.$active.'</td>';
                     $html .=    '<td class="text-center">';
                     $html .=        '<a href="edit-code?id_code='.$row['id_code'].'"class="btn btn-black btn-sm mr-5">Edit</a>';
@@ -428,6 +428,8 @@
             $result = $this->query($sql, array($id_code));
             if($result->num_rows != 0) {
                 $row = $result->fetch_assoc();
+                $row['amount'] = $this->parse_float_price_back($row['amount']);
+                $row['minimum'] = $this->parse_float_price_back($row['minimum']);
                 return $row;
             } else {
                 return 'error';
@@ -438,7 +440,7 @@
             $sql = 'SELECT * FROM '.DDBB_PREFIX.'ct_languages';
             $result = $this->query($sql);
             if($result->num_rows > 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/languages', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -483,7 +485,7 @@
             $sql = 'SELECT * FROM '.DDBB_PREFIX.'users ORDER BY -id_user';
             $result = $this->query($sql);
             if($result->num_rows > 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/users', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -539,7 +541,7 @@
             $sql = 'SELECT * FROM '.DDBB_PREFIX.'users_admin ORDER BY -id_admin';
             $result = $this->query($sql);
             if($result->num_rows > 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/users-admin', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -847,7 +849,7 @@
                     ORDER BY -r.id_product_custom_route';
             $result = $this->query($sql);
             if($result->num_rows != 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/products-custom-routes', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -892,7 +894,7 @@
                     ORDER BY -r.id_category_custom_route';
             $result = $this->query($sql);
             if($result->num_rows != 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/categories-custom-routes', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -975,7 +977,7 @@
                     GROUP BY c.id_cart ORDER BY -c.id';
             $result = $this->query($sql);
             if($result->num_rows != 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/carts', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -1026,10 +1028,10 @@
         public function get_cart($id_cart) {
             // I paint the list of products in the cart
             $sql = 'SELECT c.*, p.price, p.alias AS alias_product, i.url AS url_image
-                    FROM carts_products AS c
-                        INNER JOIN products AS p ON p.id_product = c.id_product
-                        INNER JOIN products_images AS ip ON ip.id_product_image = p.main_image
-                        INNER JOIN images AS i ON i.id_image = ip.id_image
+                    FROM '.DDBB_PREFIX.'carts_products AS c
+                        INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
+                        INNER JOIN '.DDBB_PREFIX.'products_images AS ip ON ip.id_product_image = p.main_image
+                        INNER JOIN '.DDBB_PREFIX.'images AS i ON i.id_image = ip.id_image
                     WHERE c.id_cart = ?';
             $result = $this->query($sql, array($id_cart));
             if($result->num_rows != 0) {
@@ -1052,10 +1054,10 @@
         }
 
         public function get_orders($page = 1, $per_page = 20) {
-            $sql = 'SELECT * FROM orders ORDER BY -id_order';
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'orders ORDER BY -id_order';
             $result = $this->query($sql);
             if($result->num_rows != 0) {
-                $pager = $this->pager($result, ADMIN_PATH.'/orders', $page, $per_page);
+                $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
                 $html .= '<thead>';
@@ -1086,7 +1088,7 @@
         }
 
         public function get_order($id_order) {
-            $sql = 'SELECT * FROM orders WHERE id_order = ?';
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'orders WHERE id_order = ?';
             $result = $this->query($sql, array($id_order));
             if($result->num_rows != 0) {
                 return 1;                

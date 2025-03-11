@@ -17,6 +17,9 @@
                         <div class="pt-10">
                             <input type="password" id="input-pass" name="input-pass" class="w-100" placeholder="Pass">
                         </div>
+                        <div class="pt-10">
+                            <label class="checkbox"><input type="checkbox" id="checkbox-admin-remember" value="1"><span class="checkmark"></span>Remember me.</label>
+                        </div>
                         <div class="pt-20">
                             <div id="btn-send-login" class="btn btn-black w-100"><i class="fa-solid fa-right-to-bracket"></i> Login</div>
                         </div>

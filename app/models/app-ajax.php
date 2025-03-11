@@ -101,8 +101,13 @@
                     $result_attr = $this->query($sql, array($row['id_product_related']));
                     if($result_attr->num_rows == count($_POST['id_attribute_values'])) {
                         $related = $row;
+                        // If you have an offer and it is within the deadline
+                        $offer = 0;
+                        if($row['offer'] != 0 && date('Y-m-d') > $row['offer_start_date'] && date('Y-m-d') < $row['offer_end_date']) {
+                            $offer = $row['offer'];
+                        }
                         // I adjust the price if there is a variant or offer
-                        $related['price'] += $related['price_change'];
+                        $related['price'] += $related['price_change'] - $offer;
                         $related['price'] = number_format(floatval($related['price']), 2, ',', '.');
                         $related['price'] .= ' €';
                         // I check if they use the same images so as not to reload them
@@ -186,11 +191,11 @@
                         WHERE id_user = ? AND id_product = ? AND id_product_related = ? LIMIT 1';
                 $result = $this->query($sql, array($_SESSION['user']['id_user'], $_POST['id_product'], $_POST['id_product_related']));
                 if($result->num_rows == 0) {
-                    $sql = 'INSERT INTO '.DDBB_PREFIX.'stock_notices (id_product, id_product_related, `name`, email, id_user)
-                            VALUES (?, ?, ?, ?, ?)';
+                    $sql = 'INSERT INTO '.DDBB_PREFIX.'stock_notices (id_product, id_product_related, id_category, `name`, email, id_user)
+                            VALUES (?, ?, ?, ?, ?, ?)';
                     $this->query($sql, array(
-                        $_POST['id_product'], $_POST['id_product_related'], $_SESSION['user']['name'],
-                        $_SESSION['user']['email'], $_SESSION['user']['id_user']
+                        $_POST['id_product'], $_POST['id_product_related'], $_POST['id_category']
+                        , $_SESSION['user']['name'], $_SESSION['user']['email'], $_SESSION['user']['id_user']
                     ));
                 }
                 $popup = false;
@@ -207,9 +212,12 @@
                     WHERE email = ? AND id_product = ? AND id_product_related = ? LIMIT 1';
             $result = $this->query($sql, array($_POST['email'], $_POST['id_product'], $_POST['id_product_related']));
             if($result->num_rows == 0) {
-                $sql = 'INSERT INTO '.DDBB_PREFIX.'stock_notices (id_product, id_product_related, `name`, email)
-                VALUES (?, ?, ?, ?)';
-                $this->query($sql, array($_POST['id_product'], $_POST['id_product_related'], $_POST['name'], $_POST['email']));
+                $sql = 'INSERT INTO '.DDBB_PREFIX.'stock_notices (id_product, id_product_related, id_category, `name`, email)
+                VALUES (?, ?, ?, ?, ?)';
+                $this->query($sql, array(
+                    $_POST['id_product'], $_POST['id_product_related'], $_POST['id_category'],
+                    $_POST['name'], $_POST['email']
+                ));
             }
             return array(
                 'response' => 'ok',
@@ -241,7 +249,7 @@
                     $html .=    '<div class="btn-remove-cart-product" title="'.LANGTXT['delete-from-cart'].'">';
                     $html .=        '<i class="fa-solid fa-trash-can"></i>';
                     $html .=    '</div>';
-                    $html .=    '<div class="col-4">';
+                    $html .=    '<div class="col-4 pr-20">';
                     $html .=        '<a href="'.$value['url'].'" class="image" style="background-image: url('.$value['image'].');"></a>';
                     $html .=    '</div>';
                     $html .=    '<div class="col-8">';
@@ -263,17 +271,32 @@
                     $html .=            '</div>';
                     $html .=        '</div>';
                     $html .=    '</div>';
-                    $html .= '</div>';    
+                    $html .= '</div>';
+                }
+                // I check if you have discount codes
+                $sql = 'SELECT c.id_code, o.code FROM carts_codes AS c
+                            INNER JOIN codes AS o ON o.id_code = c.id_code
+                        WHERE c.id_cart = ?';
+                $result = $this->query($sql, array($_COOKIE['id_cart']));
+                $html_codes = '';
+                if($result->num_rows != 0) {
+                    $html_codes = '';
+                    while($row = $result->fetch_assoc()) {
+                        $html_codes .= '<div>Código: '.$row['code'];
+                        $html_codes .= '</div>';
+                    }
                 }
             } else {
                 $buttons = false;
                 $total = '';
                 $html = '<div class="pt-20">'.LANGTXT['cart-empty'].'</div>';
+                $html_codes = '';
             }
             return array(
                 'response' => 'ok',
                 'total' => $total,
                 'html' => $html,
+                'html_codes' => $html_codes,
                 'button_display' => $buttons,
                 'button_url' => $button_url
             );
@@ -486,7 +509,7 @@
                 $sql = 'UPDATE '.DDBB_PREFIX.'users_billing_addresses SET main_address = 0 WHERE id_user = ?';
                 $this->query($sql, array($_SESSION['user']['id_user']));
                 $sql = 'UPDATE '.DDBB_PREFIX.'users_billing_addresses SET main_address = 1 WHERE id_user = ? AND id_user_billing_address = ? LIMIT 1';
-                $this->query($sql, array($_SESSION['user']['id_user'], $_POST['id_user_address']));
+                $this->query($sql, array($_SESSION['user']['id_user'], $_POST['id_user_billing_address']));
             }
             $sql = 'UPDATE '.DDBB_PREFIX.'users_billing_addresses SET name = ?, lastname = ?, id_continent = ?,
                         id_country = ?, id_province = ?, location = ?, address = ?, postal_code = ?, telephone = ?, update_date = NOW()
@@ -521,6 +544,15 @@
             );
             $this->query($sql, $values);
             return array('response' => 'ok');
+        }
+
+        public function apply_code($code, $id_cart) {
+            $result = $this->check_code($code, $id_cart);
+            if($result['response'] == 'ok') {
+                $sql = 'INSERT INTO '.DDBB_PREFIX.'carts_codes (id_cart, id_code) VALUES (?, ?)';
+                $this->query($sql, array($_COOKIE["id_cart"], $result['id_code']));
+            }
+            return $result;
         }
 
         public function save_order() {

@@ -23,7 +23,15 @@
         <link href="<?= PUBLIC_PATH; ?>/css/vendor/balloon.css" rel="stylesheet">
         <link href="<?= PUBLIC_PATH; ?>/css/vendor/slick.css" rel="stylesheet">
         <link href="<?= PUBLIC_PATH; ?>/css/vendor/slick-theme.css" rel="stylesheet">
-        <link href="<?= PUBLIC_PATH; ?>/css/app.css?<?= uniqid(); ?>" rel="stylesheet">
+        <?php
+            if(ENVIRONMENT == 'PRE') {
+                echo '<link href="'.PUBLIC_PATH.'/css/core.css?'.uniqid().'" rel="stylesheet">';
+                echo '<link href="'.PUBLIC_PATH.'/css/app.css?'.uniqid().'" rel="stylesheet">';
+            } else {
+                echo '<link href="'.PUBLIC_PATH.'/css/core.css" rel="stylesheet">';
+                echo '<link href="'.PUBLIC_PATH.'/css/app.css" rel="stylesheet">';
+            }
+        ?>
         <script src="<?= PUBLIC_PATH; ?>/js/vendor/jquery-3.3.1.min.js"></script>
         <script src="<?= PUBLIC_PATH; ?>/js/vendor/slick.min.js"></script>
         <script>

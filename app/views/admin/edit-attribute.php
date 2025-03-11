@@ -6,7 +6,7 @@
     <body id="<?= $data['admin']['name_page']; ?>">
         <div class="app">
             <?php include VIEWS_ADMIN.'/header.php'; ?>
-            <?php include VIEWS_ADMIN.'/menu-left.php'; ?>
+            <?php include VIEWS_ADMIN.'/partials/menu-left.php'; ?>
             <div id="popup-attribute-value-properties" class="popup">
                 <div class="content">
                     <div class="title">EDIT VALUE PROPERTIES</div>

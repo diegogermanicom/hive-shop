@@ -4,7 +4,7 @@
      * Author: Diego Martin
      * Copyright: Hive®
      * Version: 1.0
-     * Last Update: 2023
+     * Last Update: 2024
      */   
 
     class App extends AppModel {
@@ -278,7 +278,7 @@
                 foreach($cart['products'] as $value) {
                     // Draw html
                     $html .= '<div class="row item">';
-                    $html .=    '<div class="col-4">';
+                    $html .=    '<div class="col-4 pr-20">';
                     $html .=        '<a href="'.$value['url'].'" class="image" style="background-image: url('.$value['image'].');"></a>';
                     $html .=    '</div>';
                     $html .=    '<div class="col-8">';
@@ -290,7 +290,7 @@
                         }
                         $html .= '</div>';
                     }
-                    $html .=        '<div class="amount">Cantidad: '.$value['row']['amount'].' a <span class="price">'.$value['price_string'].'</span></div>';
+                    $html .=        '<div class="amount">Cantidad: '.$value['row']['amount'].' x <span class="price">'.$value['price_string'].'</span></div>';
                     $html .=    '</div>';
                     $html .= '</div>';    
                 }

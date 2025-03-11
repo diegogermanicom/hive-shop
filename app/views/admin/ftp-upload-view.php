@@ -74,7 +74,7 @@
                     </div>                
                 </div>
             </div>
-            <?php include VIEWS_ADMIN.'/menu-left.php'; ?>
+            <?php include VIEWS_ADMIN.'/partials/menu-left.php'; ?>
             <div id="container-admin">
                 <section>
                     <div class="container-md">

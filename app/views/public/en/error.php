@@ -5,7 +5,15 @@
         <title><?= $data['meta']['title']; ?></title>
         <meta name="robots" content="noindex, nofollow">
         <link rel="icon" href="<?= PUBLIC_PATH; ?>/icono.png" type="image/png">
-        <link href="<?= PUBLIC_PATH; ?>/css/app.css?<?= uniqid(); ?>" rel="stylesheet">
+        <?php
+            if(ENVIRONMENT == 'PRE') {
+                echo '<link href="'.PUBLIC_PATH.'/css/core.css?'.uniqid().'" rel="stylesheet">';
+                echo '<link href="'.PUBLIC_PATH.'/css/app.css?'.uniqid().'" rel="stylesheet">';
+            } else {
+                echo '<link href="'.PUBLIC_PATH.'/css/core.css" rel="stylesheet">';
+                echo '<link href="'.PUBLIC_PATH.'/css/app.css" rel="stylesheet">';
+            }
+        ?>
     </head>
     <body id="<?= $data['app']['name_page']; ?>" class="<?= $_COOKIE['color-mode']; ?>">
         <div class="app">

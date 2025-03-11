@@ -37,7 +37,7 @@ var ADMIN = {
         $('.btn-delete-related').off().on("click", function() {
             var btn = $(this);
             var obj = {
-                id_product_related: btn.attr('id-product-related')
+                id_product_related: parseInt(btn.attr('id-product-related'))
             }
             if(!btn.hasClass('disabled')) {
                 btn.addClass('disabled');
@@ -56,8 +56,9 @@ var ADMIN = {
                                 btn.closest('tr').remove();
                             }
                         } else {
-                            btn.removeClass('disabled');
+                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                         }
+                        btn.removeClass('disabled');
                     }
                 });
             }
@@ -66,7 +67,7 @@ var ADMIN = {
         $('.btn-edit-related').on("click", function() {
             var btn = $(this);
             var obj = {
-                id_product_related: btn.attr('id-product-related')
+                id_product_related: parseInt(btn.attr('id-product-related'))
             }
             if(!btn.hasClass('disabled')) {
                 btn.addClass('disabled');
@@ -203,7 +204,7 @@ var ADMIN = {
                         let parent = $(this).closest('.item-image');            
                         var obj = {
                             id_product: id_product,
-                            id_product_image: parent.attr('id-product-image')
+                            id_product_image: parseInt(parent.attr('id-product-image'))
                         }
                         if(!btn.hasClass('disabled')) {
                             // I disable all buttons of this type
@@ -226,7 +227,7 @@ var ADMIN = {
                         let parent = $(this).closest('.item-image');            
                         var obj = {
                             id_product: id_product,
-                            id_product_image: parent.attr('id-product-image')
+                            id_product_image: parseInt(parent.attr('id-product-image'))
                         }
                         if(!btn.hasClass('disabled')) {
                             $('#upload-images .btn-item-image-hover').addClass('disabled');
@@ -315,7 +316,7 @@ var ADMIN = {
                     $('.btn-edit-user-address').on("click", function() {
                         var btn = $(this);
                         var obj = {
-                            id_user_address: btn.attr('id-user-address')
+                            id_user_address: parseInt(btn.attr('id-user-address'))
                         };
                         if(!btn.hasClass('disabled')) {
                             btn.addClass('disabled');
@@ -325,7 +326,7 @@ var ADMIN = {
                                 data: obj,
                                 success: function(data) {
                                     if(data.get_user_address.response == 'ok') {
-                                        var address = data.get_user_address.address;
+                                        let address = data.get_user_address.address;
                                         $('#btn-save-edit-address').attr('id-user-address', address.id_user_address);
                                         $('#input-edit-address-continent').val(address.id_continent);
                                         $('#input-edit-address-country').html(data.get_user_address.countries_html);
@@ -343,7 +344,7 @@ var ADMIN = {
                     });
                     $('#input-edit-address-continent').on('change', function() {
                         var obj = {
-                            id_continent: $(this).val()
+                            id_continent: parseInt($(this).val())
                         };
                         $('#input-edit-address-country').html('');
                         $.ajax({
@@ -358,7 +359,7 @@ var ADMIN = {
                     });
                     $('#input-edit-address-country').on('change', function() {
                         var obj = {
-                            id_country: $(this).val()
+                            id_country: parseInt($(this).val())
                         };
                         $('#input-edit-address-province').html('');
                         $.ajax({
@@ -374,7 +375,7 @@ var ADMIN = {
                     $('.btn-delete-user-address').on("click", function() {
                         var btn = $(this);
                         var obj = {
-                            id_user_address: btn.attr('id-user-address')
+                            id_user_address: parseInt(btn.attr('id-user-address'))
                         };
                         if(!btn.hasClass('disabled')) {
                             btn.addClass('disabled');
@@ -385,8 +386,9 @@ var ADMIN = {
                                     if(data.delete_user_address.response == 'ok') {
                                         btn.closest('tr').remove();
                                     } else {
-                                        btn.removeClass('disabled');
+                                        HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                                     }
+                                    btn.removeClass('disabled');
                                 }
                             });
                         }
@@ -398,7 +400,7 @@ var ADMIN = {
     refreshCategoryList: function(id_main) {
         var html = '';
         $('#category-list-2 .list-item.active').each(function() {
-            let id_category = $(this).attr('value');
+            let id_category = parseInt($(this).attr('value'));
             if(id_category == id_main) {
                 checked = ' checked';
             } else {
@@ -506,9 +508,9 @@ var ADMIN = {
         var obj = {
             id_category: null,
             alias: $('#input-alias').val().trim(),
-            id_parent: $('#select-id-parent').val(),
-            id_view: $('#select-view').val(),
-            id_state: $('#select-state').val(),
+            id_parent: parseInt($('#select-id-parent').val()),
+            id_view: parseInt($('#select-view').val()),
+            id_state: parseInt($('#select-state').val()),
             properties: [],
             meta_data: []
         }
@@ -540,8 +542,8 @@ var ADMIN = {
         var obj = {
             id_attribute: null,
             alias: $('#input-alias').val().trim(),
-            type: $('#select-type').val(),
-            view: $('#select-view').val(),
+            type: parseInt($('#select-type').val()),
+            view: parseInt($('#select-view').val()),
             properties: [],
             values: []
         }
@@ -558,7 +560,7 @@ var ADMIN = {
         var value_priority = 1;
         $('#attribute-values-list > div.list-item').each(function() {
             let data = {
-                id_attribute_value: $(this).attr('id-attribute-value'),
+                id_attribute_value: parseInt($(this).attr('id-attribute-value')),
                 alias: $(this).attr('value'),
                 value: '',
                 image_name: '',
@@ -583,6 +585,7 @@ var ADMIN = {
             name: $('#input-name').val().trim(),
             code: $('#input-code').val().trim(),
             available: $('#input-available').val().trim(),
+            per_user: $('#input-per-user').val().trim(),
             id_state: parseInt($('#select-state').val()),
             type: parseInt($('#select-type').val()),
             amount: $('#input-amount').val().trim(),
@@ -590,10 +593,12 @@ var ADMIN = {
             exclude: parseInt($('#select-exclude').val()),
             minimum: $('#input-minimum').val().trim(),
             start_date: $('#input-start-date').val().trim(),
-            end_date: $('#input-end-date').val().trim()
+            end_date: $('#input-end-date').val().trim(),
+            compatible: parseInt($('#select-compatible').val()),
+            free_shipping: parseInt($('#select-free-shipping').val())
         }
         $('.content-save-code *').removeClass('error');
-        if(!HIVE.validate('product', obj.name)) {
+        if(!HIVE.validate('min-char-3', obj.name)) {
             $('#input-name').addClass('error');
         }
         if(!HIVE.validate('code', obj.code)) {
@@ -603,6 +608,11 @@ var ADMIN = {
             $('#input-available').addClass('error');
         } else {
             obj.available = parseInt(obj.available);
+        }
+        if(!HIVE.validate('number', obj.per_user)) {
+            $('#input-per-user').addClass('error');
+        } else {
+            obj.per_user = parseInt(obj.per_user);
         }
         if(!HIVE.validate('price', obj.amount)) {
             $('#input-amount').addClass('error');
@@ -639,7 +649,8 @@ var ADMIN = {
                 var btn = $(this);
                 var obj = {
                     email: $('#input-email').val().trim(),
-                    pass: $('#input-pass').val().trim()
+                    pass: $('#input-pass').val().trim(),
+                    remember: ($('#checkbox-admin-remember:checked').val() == undefined) ? 0 : 1
                 }
                 $('.login-content *').removeClass('error');
                 if(obj.email == '') {
@@ -672,7 +683,7 @@ var ADMIN = {
             $('.btn-delete-product').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_product: btn.attr('id-product')
+                    id_product: parseInt(btn.attr('id-product'))
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -688,8 +699,9 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                btn.removeClass('disabled');
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -709,7 +721,7 @@ var ADMIN = {
             $('#products-list').on("change", function() {
                 var btn = $(this);
                 var obj = {
-                    id_product: $('#products-list').val()
+                    id_product: parseInt($('#products-list').val())
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -735,18 +747,18 @@ var ADMIN = {
             $('#btn-save-new-product-custom-route').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_product: $('#products-list').val(),
-                    id_category: $('#categories-list').val(),
+                    id_product: parseInt($('#products-list').val()),
+                    id_category: parseInt($('#categories-list').val()),
                     routes: []
                 }
                 $('#popup-new-product-custom-route *').removeClass('error');
                 $('#languages-content .item').each(function() {
                     let temp = {
-                        id_language: $(this).attr('id-language'),
+                        id_language: parseInt($(this).attr('id-language')),
                         route: $(this).find('input').val().trim()
                     };
                     // If the route is empty, I don't validate it
-                    if(!HIVE.validate('slug', temp.route) && temp.route != '') {
+                    if(!HIVE.validate('slug', temp.route) || temp.route == '') {
                         $(this).find('input').addClass('error');
                     }
                     obj.routes.push(temp);
@@ -776,7 +788,7 @@ var ADMIN = {
             $('.btn-delete-product-custom-route').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_product_custom_route: btn.attr('id-product-custom-route')
+                    id_product_custom_route: parseInt(btn.attr('id-product-custom-route'))
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -792,8 +804,9 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                btn.removeClass('disabled');
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -819,7 +832,7 @@ var ADMIN = {
                 } else {
                     $(this).addClass('active');
                 }
-                let id_main = $('input[name="radio-category-list-1"]:checked').val();
+                let id_main = parseInt($('input[name="radio-category-list-1"]:checked').val());
                 ADMIN.refreshCategoryList(id_main);
             });
             $("#attribute-list-2 .list-item").on("click", function() {
@@ -854,7 +867,7 @@ var ADMIN = {
                 var obj = ADMIN.objSaveEditProduct();
                 // Validation
                 $('.content-new-product *').removeClass('error');
-                if(!HIVE.validate('product', obj.alias)) {
+                if(!HIVE.validate('min-char-3', obj.alias)) {
                     $('#input-name').addClass('error');
                 }
                 if(!HIVE.validate('price', obj.price) || obj.price == 0) {
@@ -902,7 +915,7 @@ var ADMIN = {
                 ghostClass: 'ghost'
             });            
             // I paint the list of product categories
-            let id_main = $('#category-list-2 .list-item.main').attr('value');
+            let id_main = parseInt($('#category-list-2 .list-item.main').attr('value'));
             $('#category-list-2 .list-item.main').removeClass('main');
             ADMIN.refreshCategoryList(id_main);
             $("#category-list-2 .list-item").on("click", function() {
@@ -911,11 +924,11 @@ var ADMIN = {
                 } else {
                     $(this).addClass('active');
                 }
-                let id_main = $('input[name="radio-category-list-1"]:checked').val();
+                let id_main = parseInt($('input[name="radio-category-list-1"]:checked').val());
                 ADMIN.refreshCategoryList(id_main);
             });
             $("#attribute-list-2 .list-item").on("click", function() {
-                let id_attibute = $(this).attr('value');
+                let id_attibute = parseInt($(this).attr('value'));
                 if($(this).hasClass('active')) {
                     $(this).removeClass('active');
                     $('#attribute-list-1 .list-item[value="' + id_attibute + '"]').remove();
@@ -928,7 +941,7 @@ var ADMIN = {
             $('#btn-delete-from-server-image').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_image: btn.closest('.popup').attr('id-image'),
+                    id_image: parseInt(btn.closest('.popup').attr('id-image')),
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.closest('.popup').find('.btn').addClass('disabled');
@@ -937,7 +950,8 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.delete_server_image.response == 'ok') {
-                                ADMIN.getProductImages(parseInt($('#input-id-product').val()));
+                                let id_product = parseInt($('#input-id-product').val())
+                                ADMIN.getProductImages(id_product);
                                 HIVE.closePopup('#popup-delete-image');
                             } else {
                                 HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
@@ -950,7 +964,7 @@ var ADMIN = {
             $('#btn-delete-just-product-image').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_product_image: btn.closest('.popup').attr('id-product-image'),
+                    id_product_image: parseInt(btn.closest('.popup').attr('id-product-image')),
                     id_product: parseInt($('#input-id-product').val())
                 }
                 if(!btn.hasClass('disabled')) {
@@ -1005,7 +1019,8 @@ var ADMIN = {
                 if($('#popup-add-image .item-image.selected').length != 0) {
                     var html = '';
                     $('#popup-add-image .item-image.selected').each(function() {
-                        html += '<div class="item-image new-image" style="background-image: url(' + $(this).attr('url') + ');" id-image="' + $(this).attr('id-image') + '">';
+                        let id_image = parseInt($(this).attr('id-image'));
+                        html += '<div class="item-image new-image" style="background-image: url(' + $(this).attr('url') + ');" id-image="' + id_image + '">';
                         html +=     '<div class="item-image-buttons">';
                         html +=         '<div class="btn-item-image-delete"><i class="fa-solid fa-trash-can"></i> Delete</div>';
                         html +=     '</div>';
@@ -1068,7 +1083,7 @@ var ADMIN = {
                 var obj = {
                     id_product: parseInt($('#input-id-product').val()),
                     attributes: [],
-                    stock: parseInt($('#input-add-related-stock').val().trim()),
+                    stock: $('#input-add-related-stock').val().trim(),
                     price_change: $('#input-add-related-price-change').val().trim(),
                     id_state: parseInt($('#select-add-related-state').val()),
                     images: []
@@ -1083,6 +1098,14 @@ var ADMIN = {
                 $('#popup-add-related .content-images .item-image.selected').each(function() {
                     obj.images.push($(this).attr('id-product-image'));
                 });
+                if(!HIVE.validate('number', obj.stock)) {
+                    $('#input-add-related-stock').addClass('error');
+                } else {
+                    obj.stock = parseInt(obj.stock);
+                }
+                if(!HIVE.validate('price-negative', obj.price_change)) {
+                    $('#input-add-related-price-change').addClass('error');
+                }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -1109,15 +1132,38 @@ var ADMIN = {
                 var btn = $(this);
                 var obj = {
                     id_product_related: parseInt(btn.attr('id-product-related')),
-                    stock: parseInt($('#input-edit-related-stock').val().trim()),
+                    stock: $('#input-edit-related-stock').val().trim(),
                     price_change: $('#input-edit-related-price-change').val().trim(),
                     id_state: parseInt($('#select-edit-related-state').val()),
+                    offer: $('#input-edit-related-offer').val().trim(),
+                    offer_start: $('#input-edit-related-offer-start-date').val().trim(),
+                    offer_end: $('#input-edit-related-offer-end-date').val().trim(),
                     images: []
                 }
                 $('#popup-edit-related .content-images .item-image.selected').each(function() {
                     obj.images.push($(this).attr('id-product-image'));
                 });
-                if(!btn.hasClass('disabled')) {
+                $('#popup-edit-related *').removeClass('error');
+                if(!HIVE.validate('number', obj.stock)) {
+                    $('#input-edit-related-stock').addClass('error');
+                } else {
+                    obj.stock = parseInt(obj.stock);
+                }
+                if(!HIVE.validate('price-negative', obj.price_change)) {
+                    $('#input-edit-related-price-change').addClass('error');
+                }
+                if(!HIVE.validate('price', obj.offer)) {
+                    $('#input-edit-related-offer').addClass('error');
+                }
+                if(obj.offer != 0) {
+                    if(!HIVE.validate('date', obj.offer_start)) {
+                        $('#input-edit-related-offer-start-date').addClass('error');
+                    }
+                    if(!HIVE.validate('date', obj.offer_end)) {
+                        $('#input-edit-related-offer-end-date').addClass('error');                        
+                    }
+                }
+                if(!btn.hasClass('disabled') && $('#popup-edit-related .error').length == 0) {
                     btn.addClass('disabled');
                     $.ajax({
                         url: ADMIN_PATH + '/save-related',
@@ -1136,13 +1182,13 @@ var ADMIN = {
             $('#btn-save-product').on("click", function() {
                 var btn = $(this);
                 var obj = ADMIN.objSaveEditProduct();
-                obj.id_product = $('#input-id-product').val();
+                obj.id_product = parseInt($('#input-id-product').val());
                 if($('input[name="input-related-main"]:checked').val() != undefined) {
-                    obj.id_related_main = $('input[name="input-related-main"]:checked').val();
+                    obj.id_related_main = parseInt($('input[name="input-related-main"]:checked').val());
                 }
                 // Validation
                 $('.content-edit-product *').removeClass('error');
-                if(!HIVE.validate('product', obj.alias)) {
+                if(!HIVE.validate('min-char-3', obj.alias)) {
                     $('#input-name').addClass('error');
                 }
                 if(!HIVE.validate('price', obj.price) || obj.price == 0) {
@@ -1162,7 +1208,8 @@ var ADMIN = {
                         success: function(data) {
                             if(data.save_edit_product.response == 'ok') {
                                 HIVE.showInfo('Correct!', data.save_edit_product.mensaje);
-                                ADMIN.getProductImages(parseInt($('#input-id-product').val()));
+                                let id_product = parseInt($('#input-id-product').val());
+                                ADMIN.getProductImages(id_product);
                             } else {
                                 HIVE.showInfo('Error', data.save_edit_product.mensaje);
                             }
@@ -1178,7 +1225,7 @@ var ADMIN = {
             $('.btn-delete-category').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_category: btn.attr('id-category')
+                    id_category: parseInt(btn.attr('id-category'))
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1194,8 +1241,9 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                btn.removeClass('disabled');
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -1216,17 +1264,17 @@ var ADMIN = {
             $('#btn-save-new-category-custom-route').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_category: $('#categories-list').val(),
+                    id_category: parseInt($('#categories-list').val()),
                     routes: []
                 }
                 $('#popup-new-category-custom-route *').removeClass('error');
                 $('#languages-content .item').each(function() {
                     let temp = {
-                        id_language: $(this).attr('id-language'),
+                        id_language: parseInt($(this).attr('id-language')),
                         route: $(this).find('input').val().trim()
                     };
                     // If the route is empty, I don't validate it
-                    if(!HIVE.validate('slug', temp.route) && temp.route != '') {
+                    if(!HIVE.validate('slug', temp.route) || temp.route == '') {
                         $(this).find('input').addClass('error');
                     }
                     obj.routes.push(temp);
@@ -1253,7 +1301,7 @@ var ADMIN = {
             $('.btn-delete-category-custom-route').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_category_custom_route: btn.attr('id-category-custom-route')
+                    id_category_custom_route: parseInt(btn.attr('id-category-custom-route'))
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1269,8 +1317,9 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                btn.removeClass('disabled');
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -1283,7 +1332,7 @@ var ADMIN = {
                 var btn = $(this);
                 var obj = ADMIN.objSaveEditCategory();
                 $('.content-new-category *').removeClass('error');
-                if(!HIVE.validate('product', obj.alias)) {
+                if(!HIVE.validate('min-char-3', obj.alias)) {
                     $('#input-alias').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-new-category .error').length == 0) {
@@ -1310,9 +1359,9 @@ var ADMIN = {
             $('#btn-save-category').on("click", function() {
                 var btn = $(this);
                 var obj = ADMIN.objSaveEditCategory();
-                obj.id_category = $('#input-id-category').val();
+                obj.id_category = parseInt($('#input-id-category').val());
                 $('.content-edit-category *').removeClass('error');
-                if(!HIVE.validate('product', obj.alias)) {
+                if(!HIVE.validate('min-char-3', obj.alias)) {
                     $('#input-alias').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-edit-category .error').length == 0) {
@@ -1338,7 +1387,7 @@ var ADMIN = {
             $('.btn-delete-attribute').off().on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_attribute: btn.attr('id-attribute')
+                    id_attribute: parseInt(btn.attr('id-attribute'))
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1354,8 +1403,9 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                btn.removeClass('disabled');
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -1369,7 +1419,7 @@ var ADMIN = {
                 var btn = $(this);
                 var obj = ADMIN.objSaveEditAttribute();
                 $('.content-new-attribute *').removeClass('error');
-                if(!HIVE.validate('product', obj.alias)) {
+                if(!HIVE.validate('min-char-3', obj.alias)) {
                     $('#input-alias').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-new-attribute .error').length == 0) {
@@ -1392,16 +1442,17 @@ var ADMIN = {
     },
     editAttributeEvents: function() {
         if($('body#admin-edit-attribute-page').length == 1) {
-            ADMIN.getAttributeValues($('#input-id-attribute').val());
+            let id_attribute = parseInt($('#input-id-attribute').val())
+            ADMIN.getAttributeValues(id_attribute);
             ADMIN.newEditAttributeEvents();
             // According to the type of attribute, I show the corresponding add value box
             $('#select-type').trigger('change');
             $('#btn-save-attribute').on("click", function() {
                 var btn = $(this);
                 var obj = ADMIN.objSaveEditAttribute();
-                obj.id_attribute = $('#input-id-attribute').val();
+                obj.id_attribute = parseInt($('#input-id-attribute').val());
                 $('.content-edit-attribute *').removeClass('error');
-                if(!HIVE.validate('product', obj.alias)) {
+                if(!HIVE.validate('min-char-3', obj.alias)) {
                     $('#input-alias').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-edit-attribute .error').length == 0) {
@@ -1411,7 +1462,7 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_attribute.response == 'ok') {
-                                ADMIN.getAttributeValues($('#input-id-attribute').val());
+                                ADMIN.getAttributeValues(obj.id_attribute);
                                 HIVE.showInfo('Correct!', data.save_edit_attribute.mensaje);
                             }
                             btn.removeClass('disabled');
@@ -1422,7 +1473,7 @@ var ADMIN = {
             $('#btn-save-edit-attribute-value').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_attribute_value: $('#popup-attribute-value-properties').attr('id-attribute-value'),
+                    id_attribute_value: parseInt($('#popup-attribute-value-properties').attr('id-attribute-value')),
                     alias: $('#input-edit-value-alias').val().trim(),
                     properties: []
                 }
@@ -1443,7 +1494,8 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_attribute_value_properties.response == 'ok') {
-                                ADMIN.getAttributeValues($('#input-id-attribute').val());
+                                let id_attribute = parseInt($('#input-id-attribute').val())
+                                ADMIN.getAttributeValues(id_attribute);
                                 HIVE.closePopup('#popup-attribute-value-properties');
                                 HIVE.showInfo('Correct!', data.save_attribute_value_properties.mensaje);
                             }
@@ -1459,7 +1511,7 @@ var ADMIN = {
             $('.btn-delete-image').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_image: $(this).attr('id-image')
+                    id_image: parseInt($(this).attr('id-image'))
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1471,8 +1523,8 @@ var ADMIN = {
                                 btn.closest('tr').remove();
                             } else {
                                 HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
-                                btn.removeClass('disabled');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -1484,7 +1536,7 @@ var ADMIN = {
             $('.btn-delete-code').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_code: btn.attr('id-code')
+                    id_code: parseInt(btn.attr('id-code'))
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1495,8 +1547,9 @@ var ADMIN = {
                             if(data.delete_code.response == 'ok') {
                                 btn.closest('tr').remove();
                             } else {
-                                btn.removeClass('disabled');
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -1537,12 +1590,69 @@ var ADMIN = {
             });
         }    
     },
+    editCodeRuleEvents: function() {
+        $('.btn-delete-code-rule').off().on("click", function() {
+            var btn = $(this);
+            var obj = {
+                id_code_rule: parseInt(btn.attr('id-code-rule'))
+            }
+            if(!btn.hasClass('disabled')) {
+                btn.addClass('disabled');
+                $.ajax({
+                    url: ADMIN_PATH + '/delete-code-rule',
+                    data: obj,
+                    success: function(data) {
+                        if(data.delete_code_rule.response == 'ok') {
+                            // If it is the last related, I delete the table
+                            if($('#code-rules tbody > tr').length == 1) {
+                                $('#code-rules').html('No code rules');
+                            } else {
+                                btn.closest('tr').remove();
+                            }                            
+                        } else {
+                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                        }
+                        btn.removeClass('disabled');
+                    }
+                });
+            }
+        });
+        $('.btn-edit-code-rule').off().on("click", function() {
+            var btn = $(this);
+            var obj = {
+                id_code_rule: parseInt(btn.attr('id-code-rule'))
+            }
+            if(!btn.hasClass('disabled')) {
+                btn.addClass('disabled');
+                $.ajax({
+                    url: ADMIN_PATH + '/get-code-rule',
+                    data: obj,
+                    success: function(data) {
+                        if(data.get_code_rule.response == 'ok') {
+                            $('#btn-save-code-rule').attr('id-code-rule', data.get_code_rule.rule.id_code_rule);
+                            $('#select-edit-code-rule-type').val(data.get_code_rule.rule.id_code_rule_type);
+                            $('#select-edit-code-rule-add-type').val(data.get_code_rule.rule.id_code_rule_add_type);
+                            $('#edit-code-rule-elements-list').html(data.get_code_rule.html_elements);
+                            $('#edit-code-rule-elements-added').html(data.get_code_rule.html_selected);
+                            ADMIN.editCodeRuleElementsEvent();
+                            HIVE.showPopup('#popup-edit-code-rule');
+                        } else {
+                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                        }
+                        btn.removeClass('disabled');
+                    }
+                });
+            }
+        });
+    },
     editCodeEvent: function() {
         if($('body#admin-edit-code-page').length == 1) {
+            let id_code = parseInt($('#input-id-code').val());
+            ADMIN.getCodeRules(id_code);
             $('#btn-save-edit-code').on("click", function() {
                 var btn = $(this);
                 var obj = ADMIN.objSaveValidCode();
-                obj.id_code = $('#input-id-code').val();
+                obj.id_code = id_code;
                 if(!btn.hasClass('disabled') && $('.content-save-code .error').length == 0) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -1557,14 +1667,179 @@ var ADMIN = {
                     });
                 }
             });
+            $('#btn-open-popup-new-code-rule').on("click", function() {
+                $('#select-add-code-rule-type').val(1);
+                $('#select-add-code-rule-add-type').val(1);
+                $('#add-code-rule-elements-list').html('');
+                $('#add-code-rule-elements-added').html('');
+                $('#select-add-code-rule-type').trigger("change");
+                HIVE.showPopup('#popup-add-code-rule');
+            });
+            $('#select-add-code-rule-type').on("change", function() {
+                var select = $(this);
+                var obj = {
+                    id_code_rule_type: parseInt(select.val())
+                }
+                select.prop("disabled", true);
+                $('#add-code-rule-elements-list').html('');
+                $('#add-code-rule-elements-added').html('');
+                $.ajax({
+                    url: ADMIN_PATH + '/get-code-rule-elements-list',
+                    data: obj,
+                    async: false,
+                    success: function(data) {
+                        if(data.get_code_rule_elements_list.response == 'ok') {
+                            $('#add-code-rule-elements-list').html(data.get_code_rule_elements_list.html);
+                            $('#add-code-rule-elements-list .list-item').off().on('click', function() {
+                                let id_element = $(this).attr('value');
+                                if($(this).hasClass('active')) {
+                                    $(this).removeClass('active');
+                                    $('#add-code-rule-elements-added .list-item[value="' + id_element + '"]').remove();
+                                } else {
+                                    let html = '<div class="list-item no-hover" value="' + id_element + '">' + $(this).html() + '</div>';
+                                    $('#add-code-rule-elements-added').append(html);
+                                    $(this).addClass('active');
+                                }                
+                            });
+                        } else {
+                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                        }
+                        select.prop("disabled", false);
+                    }
+                });
+            });
+            $('#btn-add-code-rule').on("click", function() {
+                var btn = $(this);
+                var obj = {
+                    id_code: id_code,
+                    id_rule_type: parseInt($('#select-add-code-rule-type').val()),
+                    id_rule_add_type: parseInt($('#select-add-code-rule-add-type').val()),
+                    elements: []
+                }
+                $('#add-code-rule-elements-added .list-item').each(function() {
+                    let id_element = $(this).attr('value');
+                    obj.elements.push(id_element);
+                });
+                $('#popup-add-code-rule *').removeClass('error');
+                // If there are no elements
+                if(obj.elements.length == 0) {
+                    $('#add-code-rule-elements-added').addClass('error');
+                }
+                if(!btn.hasClass('disabled') && $('#popup-add-code-rule .error').length == 0) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: ADMIN_PATH + '/add-code-rule',
+                        data: obj,
+                        success: function(data) {
+                            if(data.add_code_rule.response == 'ok') {
+                                if($('#code-rules table').length != 0) {
+                                    $('#code-rules tbody').append(data.add_code_rule.html);
+                                } else {
+                                    $('#code-rules').html(data.add_code_rule.html);
+                                }
+                                ADMIN.editCodeRuleEvents();
+                                HIVE.closePopup('#popup-add-code-rule');
+                            } else {
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            }
+                            btn.removeClass('disabled');
+                        }
+                    });
+                }
+            });
+            $('#select-edit-code-rule-type').on("change", function() {
+                var select = $(this);
+                var obj = {
+                    id_code_rule_type: parseInt(select.val())
+                }
+                select.prop("disabled", true);
+                $('#edit-code-rule-elements-list').html('');
+                $('#edit-code-rule-elements-added').html('');
+                $.ajax({
+                    url: ADMIN_PATH + '/get-code-rule-elements-list',
+                    data: obj,
+                    async: false,
+                    success: function(data) {
+                        if(data.get_code_rule_elements_list.response == 'ok') {
+                            $('#edit-code-rule-elements-list').html(data.get_code_rule_elements_list.html);
+                            ADMIN.editCodeRuleElementsEvent();
+                        } else {
+                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                        }
+                        select.prop("disabled", false);
+                    }
+                });
+            });
+            $('#btn-save-code-rule').on("click", function() {
+                var btn = $(this);
+                var obj = {
+                    id_code_rule: btn.attr('id-code-rule'),
+                    id_rule_type: parseInt($('#select-edit-code-rule-type').val()),
+                    id_rule_add_type: parseInt($('#select-edit-code-rule-add-type').val()),
+                    elements: []
+                }
+                $('#edit-code-rule-elements-added .list-item').each(function() {
+                    let id_element = $(this).attr('value');
+                    obj.elements.push(id_element);
+                });
+                $('#popup-edit-code-rule *').removeClass('error');
+                // If there are no elements
+                if(obj.elements.length == 0) {
+                    $('#edit-code-rule-elements-added').addClass('error');
+                }
+                if(!btn.hasClass('disabled') && $('#popup-edit-code-rule .error').length == 0) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: ADMIN_PATH + '/save-code-rule',
+                        data: obj,
+                        success: function(data) {
+                            if(data.save_code_rule.response == 'ok') {
+                                ADMIN.getCodeRules(id_code);
+                                HIVE.showInfo('Correct!', data.save_code_rule.mensaje);
+                            } else {
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            }
+                            btn.removeClass('disabled');
+                        }
+                    });
+                }
+            });
         }    
+    },
+    getCodeRules: function(id_code) {
+        var obj = {
+            id_code: id_code
+        }
+        $.ajax({
+            url: ADMIN_PATH + '/get-code-rules',
+            data: obj,
+            success: function(data) {
+                if(data.get_code_rules.response == 'ok') {
+                    $('#code-rules').html(data.get_code_rules.html);
+                    ADMIN.editCodeRuleEvents();
+                }
+            }
+        });    
+    },
+    editCodeRuleElementsEvent: function() {
+        $('#edit-code-rule-elements-list .list-item').off().on('click', function() {
+            let id_element = $(this).attr('value');
+            if($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                $('#edit-code-rule-elements-added .list-item[value="' + id_element + '"]').remove();
+            } else {
+                let html = '<div class="list-item no-hover" value="' + id_element + '">' + $(this).html() + '</div>';
+                $('#edit-code-rule-elements-added').append(html);
+                $(this).addClass('active');
+            }                
+        });
     },
     usersEvent: function() {
         if($('body#admin-users-page').length == 1) {
             $('.btn-delete-user').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_user: btn.attr('id-user')
+                    id_user: parseInt(btn.attr('id-user'))
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1575,8 +1850,9 @@ var ADMIN = {
                             if(data.delete_user.response == 'ok') {
                                 btn.closest('tr').remove();
                             } else {
-                                btn.removeClass('disabled');
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -1590,7 +1866,7 @@ var ADMIN = {
             $('#btn-save-edit-address').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_user_address: btn.attr('id-user-address'),
+                    id_user_address: parseInt(btn.attr('id-user-address')),
                     id_continent: parseInt($('#input-edit-address-continent').val()),
                     id_country: parseInt($('#input-edit-address-country').val()),
                     id_province: parseInt($('#input-edit-address-province').val()),
@@ -1606,10 +1882,10 @@ var ADMIN = {
                 if(obj.location == '') {
                     $('#input-edit-address-location').addClass('error');
                 }
-                if(obj.postal_code == '') {
+                if(!HIVE.validate('cp', obj.postal_code)) {
                     $('#input-edit-address-postal-code').addClass('error');
                 }
-                if(obj.telephone == '') {
+                if(!HIVE.validate('telephone', obj.telephone)) {
                     $('#input-edit-address-telephone').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-edit-address .error').length == 0) {
@@ -1629,7 +1905,7 @@ var ADMIN = {
             $('#btn-close-user-sessions').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_user: $('#input-id-user').val().trim()
+                    id_user: parseInt($('#input-id-user').val().trim())
                 };
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1648,7 +1924,7 @@ var ADMIN = {
             $('#btn-resend-validation-email').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_user: $('#input-id-user').val().trim()
+                    id_user: parseInt($('#input-id-user').val().trim())
                 };
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1669,15 +1945,15 @@ var ADMIN = {
             $('#btn-save-edit-user').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_user: $('#input-id-user').val().trim(),
+                    id_user: parseInt($('#input-id-user').val().trim()),
                     name: $('#input-name').val().trim(),
                     lastname: $('#input-last-name').val().trim(),
                     email: $('#input-email').val().trim(),
-                    id_state: $('#select-state').val()
+                    id_state: parseInt($('#select-state').val())
                 };
                 // I pick up the main address
                 if($('input[name="input-address-main"]:checked').val() != undefined) {
-                    obj.id_address_main = $('input[name="input-address-main"]:checked').val();
+                    obj.id_address_main = parseInt($('input[name="input-address-main"]:checked').val());
                 }
                 $('.content-edit-user *').removeClass('error');
                 if(!HIVE.validate('name', obj.name)) {
@@ -1710,7 +1986,7 @@ var ADMIN = {
             $('.btn-delete-admin').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_admin: btn.attr('id-admin')
+                    id_admin: parseInt(btn.attr('id-admin'))
                 };
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1721,8 +1997,9 @@ var ADMIN = {
                             if(data.delete_admin_user.response == 'ok') {
                                 btn.closest('tr').remove();
                             } else {
-                                btn.removeClass('disabled');
+                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
+                            btn.removeClass('disabled');
                         }
                     });
                 }
@@ -1739,7 +2016,7 @@ var ADMIN = {
                     email: $('#input-email').val().trim(),
                     pass1: $('#input-password-1').val().trim(),
                     pass2: $('#input-password-2').val().trim(),
-                    id_admin_type: $('#select-admin-type').val()
+                    id_admin_type: parseInt($('#select-admin-type').val())
                 };
                 $('.content-new-admin-user *').removeClass('error');
                 if(!HIVE.validate('name', obj.name)) {
@@ -1781,13 +2058,14 @@ var ADMIN = {
     },
     editAdminUserEvents: function() {
         if($('body#admin-edit-user-admin-page').length == 1) {
+            // To remove autocomplete from the browser
             setTimeout(function() {
                 $('#input-password-1').val('');
             }, 1000);
             $('#btn-close-admin-user-sessions').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_admin: $('#input-id-admin').val()
+                    id_admin: parseInt($('#input-id-admin').val())
                 };
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -1806,14 +2084,14 @@ var ADMIN = {
             $('#btn-save-edit-admin-user').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_admin: $('#input-id-admin').val(),
+                    id_admin: parseInt($('#input-id-admin').val()),
                     name: $('#input-name').val().trim(),
                     lastname: $('#input-last-name').val().trim(),
                     email: $('#input-email').val().trim(),
                     pass1: $('#input-password-1').val().trim(),
                     pass2: $('#input-password-2').val().trim(),
-                    id_admin_type: $('#select-admin-type').val(),
-                    id_state: $('#select-state').val()
+                    id_admin_type: parseInt($('#select-admin-type').val()),
+                    id_state: parseInt($('#select-state').val())
                 };
                 $('.content-edit-admin-user *').removeClass('error');
                 if(!HIVE.validate('name', obj.name)) {

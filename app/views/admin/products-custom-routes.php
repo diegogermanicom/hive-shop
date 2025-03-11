@@ -6,7 +6,7 @@
     <body id="<?= $data['admin']['name_page']; ?>">
         <div class="app">
             <?php include VIEWS_ADMIN.'/header.php'; ?>
-            <?php include VIEWS_ADMIN.'/menu-left.php'; ?>
+            <?php include VIEWS_ADMIN.'/partials/menu-left.php'; ?>
             <div id="popup-new-product-custom-route" class="popup">
                 <div class="content">
                     <div class="title">New product custom route</div>

@@ -23,7 +23,7 @@
                                 <div class="btn btn-black btn-sm" id="btn-popup-new-address">Crear nueva dirección</div>
                             </div>
                             <div class="text-center pb-20">
-                                <label class="checkbox" id="btn-billing-address"><input type="checkbox" id="input-check-billing" checked><span class="checkmark"></span> La dirección de facturación es la misma que la de envío.</label>
+                                <label class="checkbox" id="btn-billing-address"><input type="checkbox" id="input-check-billing" value="1" checked><span class="checkmark"></span> La dirección de facturación es la misma que la de envío.</label>
                             </div>
                             <div class="hidden" id="billing-content">
                                 <div class="title-container">Dirección de facturación</div>
@@ -34,7 +34,7 @@
                             </div>
                             <div class="title-container text-left pt-40">¿Tienes un código de descuento?</div>
                             <div>
-                                <label class="checkbox" id="btn-checkout-code"><input type="checkbox" id="input-checkout-code"><span class="checkmark"></span> Sí, tengo un código y me gustaría canjearlo.</label>
+                                <label class="checkbox" id="btn-checkout-code"><input type="checkbox" id="input-checkout-code" value="1"><span class="checkmark"></span> Sí, tengo un código y me gustaría canjearlo.</label>
                             </div>
                             <div id="code-content" class="hidden pt-10">
                                 <div class="row">

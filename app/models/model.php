@@ -54,7 +54,9 @@
                     'string' => 's', 'boolean' => 'b'
                 );
                 foreach($params as $value) {
-                    if(isset($types[gettype($value)])) {
+                    if($value == NULL) {
+                        $type .= 's';
+                    } else if(isset($types[gettype($value)])) {
                         $type .= $types[gettype($value)];
                     }
                 }    
@@ -160,7 +162,7 @@
             return $html;
         }
 
-        public function pager($result, $link, $page = 1, $per_page = 20) {
+        public function pager($result, $page = 1, $per_page = 20, $link = null) {
             if($result->num_rows != 0) {
                 $result->data_seek(($page - 1) * $per_page);
                 $rows = array();
@@ -173,8 +175,19 @@
                         $row_count++;
                     }
                 }
-                // I check if the link already has values by get
-                $symbol = (substr_count($link, '?') == 0) ? '?' : '&';
+                // I check if the link is personalized
+                if($link == null) {
+                    $gets = '';
+                    foreach($_GET as $index => $value) {
+                        if($index != 'page') {
+                            $gets .= $index.'='.$value.'&';                        
+                        }
+                    }
+                    $link = ROUTE.'?'.$gets;
+                } else {
+                    $symbol = (substr_count($link, '?') == 0) ? '?' : '&';
+                    $link .= $symbol;
+                }
                 // Total number of pages
                 $total_pages = ceil($result->num_rows / $per_page);
                 if($page > $total_pages) {
@@ -192,8 +205,8 @@
                 // I paint the buttons
                 $html .= '<div>';
                 if($page > 1) {
-                    $html .= '<a href="'.$link.$symbol.'page=1" class="btn btn-blank btn-sm"><i class="fa-solid fa-angles-left"></i></a>';
-                    $html .= '<a href="'.$link.$symbol.'page='.($page - 1).'" class="btn btn-blank btn-sm"><i class="fa-solid fa-chevron-left"></i> Last</a>';
+                    $html .= '<a href="'.$link.'page=1" class="btn btn-trans btn-sm"><i class="fa-solid fa-angles-left"></i></a>';
+                    $html .= '<a href="'.$link.'page='.($page - 1).'" class="btn btn-trans btn-sm"><i class="fa-solid fa-chevron-left"></i> Last</a>';
                 }
                 $min = ($page - 2);
                 if($min < 1) {
@@ -209,15 +222,16 @@
                         $link_temp = '#';
                     } else {
                         $class = 'btn-white';
-                        $link_temp = $link.$symbol.'page='.$i;
+                        $link_temp = $link.'page='.$i;
                     }
                     $html .= '<a href="'.$link_temp.'" class="btn btn-sm '.$class.'">'.$i.'</a>';
                 }
                 if($result->num_rows > ($page * $per_page)) {
-                    $html .= '<a href="'.$link.$symbol.'page='.($page + 1).'" class="btn btn-blank btn-sm">Next <i class="fa-solid fa-angle-right"></i></a>';
-                    $html .= '<a href="'.$link.$symbol.'page='.$total_pages.'" class="btn btn-blank btn-sm"><i class="fa-solid fa-angles-right"></i></a>';
+                    $html .= '<a href="'.$link.'page='.($page + 1).'" class="btn btn-trans btn-sm">Next <i class="fa-solid fa-angle-right"></i></a>';
+                    $html .= '<a href="'.$link.'page='.$total_pages.'" class="btn btn-trans btn-sm"><i class="fa-solid fa-angles-right"></i></a>';
                 }
                 $html .= '</div>';
+                $result->data_seek(0);
                 return array(
                     'result' => $rows,
                     'pager' => $html

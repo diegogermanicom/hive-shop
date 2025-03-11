@@ -6,11 +6,11 @@
     <body id="<?= $data['admin']['name_page']; ?>">
         <div class="app">
             <?php include VIEWS_ADMIN.'/header.php'; ?>
-            <?php include VIEWS_ADMIN.'/menu-left.php'; ?>
+            <?php include VIEWS_ADMIN.'/partials/menu-left.php'; ?>
             <div id="container-admin">
                 <section>
                     <div class="container pt-50 pb-40">
-                        <div class="text-center pt-10 mega-title">Welcome to<br><span class="accent">Hive Administrator</span></div>
+                        <div class="text-center pt-10 mega-title">Welcome to<br>Hive Administrator</div>
                         <div class="text-center pt-10">Easily manage your application</div>
                     </div>
                 </section>

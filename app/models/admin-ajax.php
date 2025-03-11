@@ -587,7 +587,7 @@
             $html .= '</div>';
             $html .= '<div class="row pb-20">';
             $html .=    '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
-            $html .=        '<input type="text" id="input-add-related-stock" class="w-100" value="0">';
+            $html .=        '<input type="number" id="input-add-related-stock" class="w-100" value="0">';
             $html .=    '</div>';
             $html .=    '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
             $html .=        '<input type="text" id="input-add-related-price-change" class="w-100" value="0">';
@@ -627,13 +627,29 @@
             $html .= '</div>';
             $html .= '<div class="row pb-20">';
             $html .=    '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
-            $html .=        '<input type="text" id="input-edit-related-stock" class="w-100" value="'.$row['stock'].'">';
+            $html .=        '<input type="number" id="input-edit-related-stock" class="w-100" value="'.$row['stock'].'">';
             $html .=    '</div>';
             $html .=    '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
             $html .=        '<input type="text" id="input-edit-related-price-change" class="w-100" value="'.$this->parse_float_price_back($row['price_change']).'">';
             $html .=    '</div>';
             $html .=    '<div class="col-12 col-sm-4">';
             $html .=        '<select id="select-edit-related-state" class="w-100">'.$this->get_states_list($row['id_state']).'</select>';
+            $html .=    '</div>';
+            $html .= '</div>';
+            $html .= '<div class="row pb-10">';
+            $html .=    '<div class="col-12 col-sm-4"><b>Offer</b></div>';
+            $html .=    '<div class="col-12 col-sm-4"><b>Offer start</b></div>';
+            $html .=    '<div class="col-12 col-sm-4"><b>Offer end</b></div>';
+            $html .= '</div>';
+            $html .= '<div class="row pb-20">';
+            $html .=    '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
+            $html .=        '<input type="text" id="input-edit-related-offer" class="w-100" value="'.$this->parse_float_price_back($row['offer']).'">';
+            $html .=    '</div>';
+            $html .=    '<div class="col-12 col-sm-4 pr-10 pr-sm-0">';
+            $html .=        '<input type="date" id="input-edit-related-offer-start-date" class="w-100" value="'.$row['offer_start_date'].'" min="'.date('Y-m-d').'">';
+            $html .=    '</div>';
+            $html .=    '<div class="col-12 col-sm-4">';
+            $html .=        '<input type="date" id="input-edit-related-offer-end-date" class="w-100" value="'.$row['offer_end_date'].'" min="'.date('Y-m-d').'">';
             $html .=    '</div>';
             $html .= '</div>';
             $sql = 'SELECT p.*, i.name AS image_name,
@@ -659,10 +675,17 @@
         }
 
         public function save_related() {
-            $price = $this->parse_float_price($_POST['price_change']);
-            $sql = 'UPDATE '.DDBB_PREFIX.'products_related SET stock = '.$_POST['stock'].', price_change = '.$price.', id_state = '.$_POST['id_state'].'
+            $price_change = $this->parse_float_price($_POST['price_change']);
+            $offer = $this->parse_float_price($_POST['offer']);
+            if($_POST['offer_start'] == '' || $_POST['offer_end'] == '') {
+                $_POST['offer_start'] = NULL;
+                $_POST['offer_end'] = NULL;
+            }
+            $sql = 'UPDATE '.DDBB_PREFIX.'products_related SET stock = ?, price_change = ?, id_state = ?,
+                        offer = ?, offer_start_date = ?, offer_end_date = ?
                     WHERE id_product_related = ? LIMIT 1';
-            $this->query($sql, array($_POST['id_product_related']));
+            $this->query($sql, array($_POST['stock'], $price_change, $_POST['id_state'],
+                $offer, $_POST['offer_start'], $_POST['offer_end'], $_POST['id_product_related']));
             // I save the images
             $sql = 'DELETE FROM products_related_images WHERE id_product_related = ?';
             $this->query($sql, array($_POST['id_product_related']));
@@ -1276,21 +1299,28 @@
         }
 
         public function save_new_code() {
-            $sql = 'INSERT INTO '.DDBB_PREFIX.'codes (`name`, code, `type`, amount, available, registered, exclude_sales, minimum, `start_date`, end_date, id_state)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            $amount = $this->parse_float_price($_POST['amount']);
+            $minimum = $this->parse_float_price($_POST['minimum']);
+            $sql = 'INSERT INTO '.DDBB_PREFIX.'codes
+                        (`name`, code, `type`, amount, available, registered, exclude_sales, minimum, per_user, compatible, free_shipping, `start_date`, end_date, id_state)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
             $this->query($sql, array(
-                $_POST['name'], $_POST['code'], $_POST['type'], $_POST['amount'], $_POST['available'], $_POST['registered'], $_POST['exclude'],
-                $_POST['minimum'], $_POST['start_date'], $_POST['end_date'], $_POST['id_state']
+                $_POST['name'], $_POST['code'], $_POST['type'], $amount, $_POST['available'], $_POST['registered'], $_POST['exclude'],
+                $minimum, $_POST['per_user'], $_POST['compatible'], $_POST['free_shipping'], $_POST['start_date'], $_POST['end_date'], $_POST['id_state']
             ));
             return array('response' => 'ok');
         }
 
         public function save_edit_code() {
+            $amount = $this->parse_float_price($_POST['amount']);
+            $minimum = $this->parse_float_price($_POST['minimum']);
             $sql = 'UPDATE '.DDBB_PREFIX.'codes SET `name` = ?, code = ?, `type` = ?, amount = ?, available = ?, registered = ?,
-                        exclude_sales = ?, minimum = ?, `start_date` = ?, end_date = ?, id_state = ? WHERE id_code = ?';
+                        exclude_sales = ?, minimum = ?, per_user = ?, compatible = ?, free_shipping = ?, `start_date` = ?, end_date = ?, id_state = ?
+                    WHERE id_code = ?';
             $this->query($sql, array(
-                $_POST['name'], $_POST['code'], $_POST['type'], $_POST['amount'], $_POST['available'], $_POST['registered'], $_POST['exclude'],
-                $_POST['minimum'], $_POST['start_date'], $_POST['end_date'], $_POST['id_state'], $_POST['id_code']
+                $_POST['name'], $_POST['code'], $_POST['type'], $amount, $_POST['available'], $_POST['registered'], $_POST['exclude'],
+                $minimum, $_POST['per_user'], $_POST['compatible'], $_POST['free_shipping'], $_POST['start_date'],
+                $_POST['end_date'], $_POST['id_state'], $_POST['id_code']
             ));
             return array(
                 'response' => 'ok',
@@ -1302,6 +1332,185 @@
             $sql = 'DELETE FROM '.DDBB_PREFIX.'codes WHERE id_code = ? LIMIT 1';
             $this->query($sql, array($id_code));
             return array('response' => 'ok');
+        }
+
+        public function add_code_rule() {
+            $sql = 'SELECT id_code_rule FROM '.DDBB_PREFIX.'codes_rules WHERE id_code = ?';
+            $result = $this->query($sql, array($_POST['id_code']));
+            $sql = 'INSERT INTO '.DDBB_PREFIX.'codes_rules (id_code, id_code_rule_type, id_code_rule_add_type) VALUES (?, ?, ?)';
+            $this->query($sql, array($_POST['id_code'], $_POST['id_rule_type'], $_POST['id_rule_add_type']));
+            $id_code_rule = $this->db->insert_id;
+            foreach($_POST['elements'] as $value) {
+                $sql = 'INSERT INTO '.DDBB_PREFIX.'codes_rules_elements (id_code_rule, id_element) VALUES (?, ?)';
+                $this->query($sql, array($id_code_rule, $value));
+            }
+            $sql = 'SELECT `name` FROM '.DDBB_PREFIX.'ct_codes_rules_type WHERE id_code_rule_type  = ?';
+            $result_type = $this->query($sql, array($_POST['id_rule_type']));
+            $row_type = $result_type->fetch_assoc();
+            $sql = 'SELECT `name` FROM '.DDBB_PREFIX.'ct_codes_rules_add_type WHERE id_code_rule_add_type = ?';
+            $result_add_type = $this->query($sql, array($_POST['id_rule_add_type']));
+            $row_add_type = $result_add_type->fetch_assoc();
+            $html = '';
+            if($result->num_rows == 0) {
+                $html .= '<table>';
+                $html .= '<thead>';
+                $html .=    '<tr>';
+                $html .=        '<th style="width: 150px;">Id rule</th>';
+                $html .=        '<th class="text-left" style="width: 200px;">Rule type</th>';
+                $html .=        '<th class="text-left">Add type</th>';
+                $html .=        '<th style="width: 100px;">Elements</th>';
+                $html .=        '<th style="width: 200px;"></th>';
+                $html .=    '</tr>';
+                $html .= '</thead>';
+                $html .= '<tbody>';
+            }
+            $html .= '<tr>';
+            $html .=    '<td class="text-center">'.$id_code_rule.'</td>';
+            $html .=    '<td>'.$row_type['name'].'</td>';
+            $html .=    '<td>'.$row_add_type['name'].'</td>';
+            $html .=    '<td class="text-center">'.count($_POST['elements']).'</td>';
+            $html .=    '<td class="text-center">';
+            $html .=        '<div class="btn btn-black btn-sm mr-5 btn-edit-code-rule" id-code-rule="'.$id_code_rule.'">Edit</div>';
+            $html .=        '<div class="btn btn-black btn-sm btn-delete-code-rule" id-code-rule="'.$id_code_rule.'">Delete</div>';
+            $html .=    '</td>';
+            $html .= '</tr>';
+            if($result->num_rows == 0) {
+                $html .= '</tbody>';
+                $html .= '</table>';
+            }
+            return array(
+                'response' => 'ok',
+                'html' => $html
+            );
+        }
+
+        public function save_code_rule() {
+            $sql = 'UPDATE '.DDBB_PREFIX.'codes_rules SET id_code_rule_type = ?, id_code_rule_add_type = ?
+                    WHERE id_code_rule = ?';
+            $this->query($sql, array($_POST['id_rule_type'], $_POST['id_rule_add_type'], $_POST['id_code_rule']));
+            // Empty all items
+            $sql = 'DELETE FROM '.DDBB_PREFIX.'codes_rules_elements WHERE id_code_rule = ?';
+            $this->query($sql, array($_POST['id_code_rule']));
+            // I reinsert all the new ones
+            foreach($_POST['elements'] as $value) {
+                $sql = 'INSERT INTO '.DDBB_PREFIX.'codes_rules_elements (id_code_rule, id_element) VALUES (?, ?)';
+                $this->query($sql, array($_POST['id_code_rule'], $value));
+            }
+            return array(
+                'response' => 'ok',
+                'mensaje' => 'The rule has been successfully updated!'
+            );
+        }
+
+        public function delete_code_rule($id_code_rule) {
+            $sql = 'DELETE FROM '.DDBB_PREFIX.'codes_rules WHERE id_code_rule = ?';
+            $this->query($sql, array($id_code_rule));
+            $sql = 'DELETE FROM '.DDBB_PREFIX.'codes_rules_elements WHERE id_code_rule = ?';
+            $this->query($sql, array($id_code_rule));
+            return array('response' => 'ok');
+        }
+
+        public function get_code_rule($id_code_rule) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'codes_rules WHERE id_code_rule = ?';
+            $result = $this->query($sql, array($id_code_rule));
+            if($result->num_rows != 0) {
+                $row = $result->fetch_assoc();
+                $selected = array();
+                $html_selected = '';
+                if($row['id_code_rule_type'] == 1) {
+                    $sql = 'SELECT e.*, p.alias FROM codes_rules_elements AS e
+                                INNER JOIN products AS p ON p.id_product = e.id_element
+                            WHERE e.id_code_rule = ?';
+                } else if($row['id_code_rule_type'] == 2){
+                    $sql = 'SELECT e.*, c.alias FROM codes_rules_elements AS e
+                                INNER JOIN categories AS c ON c.id_category = e.id_element
+                            WHERE e.id_code_rule = ?';
+                }
+                $result_elements = $this->query($sql, array($row['id_code_rule']));
+                while($row_element = $result_elements->fetch_assoc()) {
+                    array_push($selected, $row_element['id_element']);
+                    $html_selected .= '<div class="list-item" value="'.$row_element['id_element'].'">'.$row_element['alias'].'</div>';
+                }
+                $result_elements = $this->get_code_rule_elements_list($row['id_code_rule_type'], $selected);
+                return array(
+                    'response' => 'ok',
+                    'rule' => $row,
+                    'html_elements' => $result_elements['html'],
+                    'html_selected' => $html_selected
+                );
+            } else {
+                return array('response' => 'error');
+            }
+        }
+
+        public function get_code_rules($id_code) {
+            // Drawing the list of related products
+            $sql = 'SELECT r.*, t.name AS rule_type, a.name AS add_type FROM '.DDBB_PREFIX.'codes_rules AS r
+                        INNER JOIN '.DDBB_PREFIX.'ct_codes_rules_type AS t ON t.id_code_rule_type = r.id_code_rule_type
+                        INNER JOIN '.DDBB_PREFIX.'ct_codes_rules_add_type AS a ON a.id_code_rule_add_type = r.id_code_rule_add_type
+                    WHERE r.id_code = ?';
+            $result = $this->query($sql, array($id_code));
+            $html = '';
+            if($result->num_rows != 0) {
+                $html = '<table>';
+                $html .= '<thead>';
+                $html .=    '<tr>';
+                $html .=        '<th style="width: 150px;">Id rule</th>';
+                $html .=        '<th class="text-left" style="width: 200px;">Rule type</th>';
+                $html .=        '<th class="text-left">Add type</th>';
+                $html .=        '<th style="width: 100px;">Elements</th>';
+                $html .=        '<th style="width: 200px;"></th>';
+                $html .=    '</tr>';
+                $html .= '</thead>';
+                $html .= '<tbody>';
+                while($row = $result->fetch_assoc()) {
+                    $sql = 'SELECT id_code_rule_element FROM '.DDBB_PREFIX.'codes_rules_elements WHERE id_code_rule = ?';
+                    $result_elements = $this->query($sql, array($row['id_code_rule']));
+                    $html .= '<tr>';
+                    $html .=    '<td class="text-center">'.$row['id_code_rule'].'</td>';
+                    $html .=    '<td>'.$row['rule_type'].'</td>';
+                    $html .=    '<td>'.$row['add_type'].'</td>';
+                    $html .=    '<td class="text-center">'.$result_elements->num_rows.'</td>';
+                    $html .=    '<td class="text-center">';
+                    $html .=        '<div class="btn btn-black btn-sm mr-5 btn-edit-code-rule" id-code-rule="'.$row['id_code_rule'].'">Edit</div>';
+                    $html .=        '<div class="btn btn-black btn-sm btn-delete-code-rule" id-code-rule="'.$row['id_code_rule'].'">Delete</div>';
+                    $html .=    '</td>';
+                    $html .= '</tr>';
+                }
+                $html .= '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No code rules';
+            }
+            return array(
+                'response' => 'ok',
+                'html' => $html
+            );
+        }
+
+        public function get_code_rule_elements_list($id_rule_type, $selected = array()) {
+            if($id_rule_type == 1) {
+                $sql = 'SELECT alias, id_product AS id_element FROM '.DDBB_PREFIX.'products';
+            } else if($id_rule_type == 2) {
+                $sql = 'SELECT alias, id_category AS id_element FROM '.DDBB_PREFIX.'categories';
+            }
+            $result = $this->query($sql);
+            $html = '';
+            if($result->num_rows != 0) {
+                while($row = $result->fetch_assoc()) {
+                    $active = '';
+                    foreach($selected as $value) {
+                        if($row['id_element'] == $value) {
+                            $active = ' active';
+                        }
+                    }
+                    $html .= '<div class="list-item'.$active.'" value="'.$row['id_element'].'">'.$row['alias'].'</div>';
+                }
+            }
+            return array(
+                'response' => 'ok',
+                'html' => $html
+            );
         }
 
         public function save_edit_user() {

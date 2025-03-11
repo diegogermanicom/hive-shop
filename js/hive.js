@@ -64,11 +64,16 @@ var HIVE = {
     validate: function(type, value) {
         // Returns false if the data is not valid and true if it is valid
         var filter = null;
-        value = value.toUpperCase();
+        if(typeof value !== 'string' && typeof value !== 'number') {
+            return false;
+        }
+        if(typeof value === 'string') {
+            value = value.toUpperCase();
+        }
         switch(type) {
             case 'name':
             case 'lastname':
-                filter = /^[A-ZÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÑªºç .\-]{2,50}$/;
+                filter = /^[A-ZÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÑçªº .\-]{2,50}$/;
                 break;
             case 'telephone':
                 filter = /^(6[0-9]|7[0-9])\d{7}$/;
@@ -85,6 +90,9 @@ var HIVE = {
                 break;
             case 'price':
                 filter = /^([0-9]{1,9})$|^([0-9]+\,+[0-9]{1,2})$/;
+                break;
+            case 'price-negative':
+                filter = /^-?([0-9]{1,9}|[0-9]+[.,][0-9]{1,2})$/;
                 break;
             case 'priceES':
                 filter = /^([0-9]{1,9})$|^([0-9]+\.+[0-9]{1,2})$/;
@@ -105,7 +113,10 @@ var HIVE = {
                 filter = /^[0-9]+$/;
                 break;
             case 'code':
-                filtro = /^[0-9A-Z]{1,20}$/;
+                filter = /^[0-9A-Z]{1,20}$/;
+                break;
+            case 'min-char-3':
+                filter = /^.{3,}$/;
                 break;
         }
         if(filter == null) {

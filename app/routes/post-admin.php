@@ -42,6 +42,12 @@
     $R->postAdmin('/save-new-code'                      , 'save_new_code');
     $R->postAdmin('/save-edit-code'                     , 'save_edit_code');
     $R->postAdmin('/delete-code'                        , 'delete_code');
+    $R->postAdmin('/add-code-rule'                      , 'add_code_rule');
+    $R->postAdmin('/save-code-rule'                     , 'save_code_rule');
+    $R->postAdmin('/delete-code-rule'                   , 'delete_code_rule');
+    $R->postAdmin('/get-code-rule'                      , 'get_code_rule');
+    $R->postAdmin('/get-code-rules'                     , 'get_code_rules');
+    $R->postAdmin('/get-code-rule-elements-list'        , 'get_code_rule_elements_list');
     $R->postAdmin('/save-edit-user'                     , 'save_edit_user');
     $R->postAdmin('/get-user-addresses'                 , 'get_user_addresses');
     $R->postAdmin('/get-user-address'                   , 'get_user_address');

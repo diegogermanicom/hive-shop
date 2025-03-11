@@ -71,6 +71,7 @@ var APP = {
             success: function(data) {
                 if(data.get_popup_cart.response == 'ok') {
                     $('#label-popup-cart-total').html(data.get_popup_cart.total);
+                    $('.content-codes').html(data.get_popup_cart.html_codes);
                     $('.content-cart').html(data.get_popup_cart.html);
                     $('.btn-popup-cart-continue').attr('href', data.get_popup_cart.button_url);
                     if(data.get_popup_cart.button_display == true) {
@@ -207,7 +208,9 @@ var APP = {
                     $('#billing-list').html(data.get_billing_addresses.html);
                     $('#billing-list .btn-select-address').on('click', function() {
                         $('#billing-list .item').removeClass('active');
+                        $('#billing-list .item .btn-select-address').removeClass('hidden');
                         $(this).closest('.item').addClass('active');
+                        $(this).closest('.item .btn-select-address').addClass('hidden');
                     });
                     $('#billing-list .btn-edit-address').on('click', function() {
                         var btn = $(this);
@@ -477,7 +480,8 @@ var APP = {
                 var btn = $(this);
                 var obj = {
                     id_product: $('#input-id-product').val(),
-                    id_product_related: $('#input-id-product-related').val()
+                    id_product_related: $('#input-id-product-related').val(),
+                    id_category: $('#input-id-category').val()
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
@@ -505,6 +509,7 @@ var APP = {
                 var obj = {
                     id_product: $('#input-id-product').val(),
                     id_product_related: $('#input-id-product-related').val(),
+                    id_category: $('#input-id-category').val(),
                     name: $('#input-notify-stock-name').val().trim(),
                     email: $('#input-notify-stock-email').val().trim()
                 }
@@ -724,7 +729,7 @@ var APP = {
                 }
             });
             $('#input-check-billing').on('click', function() {
-                var check = ($('#input-check-billing:checked').val() == undefined) ? false : true;
+                let check = ($('#input-check-billing:checked').val() == undefined) ? false : true;
                 if(check == true) {
                     $('#billing-content').addClass('hidden');
                 } else {
@@ -733,17 +738,60 @@ var APP = {
                 }
             });
             $('#input-checkout-code').on('click', function() {
-                var check = ($('#input-checkout-code:checked').val() == undefined) ? false : true;
+                let check = ($('#input-checkout-code:checked').val() == undefined) ? false : true;
                 if(check == true) {
                     $('#code-content').removeClass('hidden');
                 } else {
                     $('#code-content').addClass('hidden');
                 }
             });
+            $('#btn-apply-code').on('click', function() {
+                var btn = $(this);
+                var obj = {
+                    code: $('#input-code').val().trim()
+                }
+                if(!btn.hasClass('disabled')) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: PUBLIC_PATH + '/apply-code',
+                        data: obj,
+                        success: function(data) {
+                            if(data.apply_code.response == 'ok') {
+                            }
+                            HIVE.showInfo(data.apply_code.title, data.apply_code.description);
+                            btn.removeClass('disabled');
+                        }
+                    });
+                }
+            });
             $('#btn-checkout-payment').on('click', function() {
                 var btn = $(this);
                 var obj = {
+                    id_user_address: null,
+                    id_user_billing_address: null,
+                    code: null,
+                    comment: $('#textarea-comment').val().trim()
                 }
+                // I check that you have an address selected
+                if($('#address-list .item.active').length == 1) {
+                    obj.id_user_address = parseInt($('#address-list .item.active').attr('id-user-address'));
+                } else {
+
+                }
+                let check_billing = ($('#input-check-billing').val() == undefined) ? false : true;
+                if(check_billing == true) {
+                    // I check that you have an billing address selected
+                    if($('#billing-list .item.active').length == 1) {
+                        obj.id_user_billing_address = parseInt($('#billing-list .item.active').attr('id-user-billing-address'));
+                    } else {
+
+                    }
+                }
+                let check_code = ($('#input-checkout-code:checked').val() == undefined) ? false : true;
+                if(check_code == true) {
+                    obj.code = $('#input-code').val().trim();
+                }
+                console.log(obj);
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
                     $.ajax({

@@ -15,7 +15,7 @@
             $admin = new AdminAjax('ajax-admin-login');
             $admin->security_admin_logout();
             $result = [];
-            $result['login'] = $admin->login($_POST['email'], md5($_POST['pass']));
+            $result['login'] = $admin->login($_POST['email'], md5($_POST['pass']), $_POST['remember']);
             echo json_encode($result);
         }
 
@@ -266,12 +266,60 @@
             $result['save_edit_code'] = $admin->save_edit_code();
             echo json_encode($result);
         }
-        
+
         public function delete_code() {
             $admin = new AdminAjax('ajax-delete-code');
             $admin->security_admin_login();
             $result = [];
             $result['delete_code'] = $admin->delete_code($_POST['id_code']);
+            echo json_encode($result);
+        }
+
+        public function add_code_rule() {
+            $admin = new AdminAjax('ajax-add-code-rule');
+            $admin->security_admin_login();
+            $result = [];
+            $result['add_code_rule'] = $admin->add_code_rule();
+            echo json_encode($result);
+        }
+
+        public function save_code_rule() {
+            $admin = new AdminAjax('ajax-save-code-rule');
+            $admin->security_admin_login();
+            $result = [];
+            $result['save_code_rule'] = $admin->save_code_rule();
+            echo json_encode($result);
+        }
+
+        public function delete_code_rule() {
+            $admin = new AdminAjax('ajax-delete-code-rule');
+            $admin->security_admin_login();
+            $result = [];
+            $result['delete_code_rule'] = $admin->delete_code_rule($_POST['id_code_rule']);
+            echo json_encode($result);
+        }
+
+        public function get_code_rule() {
+            $admin = new AdminAjax('ajax-get-code-rule');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_code_rule'] = $admin->get_code_rule($_POST['id_code_rule']);
+            echo json_encode($result);
+        }
+
+        public function get_code_rules() {
+            $admin = new AdminAjax('ajax-get-code-rules');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_code_rules'] = $admin->get_code_rules($_POST['id_code']);
+            echo json_encode($result);
+        }
+
+        public function get_code_rule_elements_list() {
+            $admin = new AdminAjax('ajax-get-code-rule-elements-list');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_code_rule_elements_list'] = $admin->get_code_rule_elements_list($_POST['id_code_rule_type']);
             echo json_encode($result);
         }
 

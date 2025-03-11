@@ -45,7 +45,7 @@
             }
         }
 
-        public function login($email, $pass, $remember) {
+        public function login($email, $pass, $remember = 0) {
             // Pass must come in md5
             $sql = 'SELECT * FROM '.DDBB_PREFIX.'users WHERE email = ? AND pass = ? LIMIT 1';
             $result = $this->query($sql, array($email, $pass));
@@ -156,9 +156,35 @@
             }
         }
 
+        public function get_cart_total_price($id_cart) {
+            $sql = 'SELECT c.*, p.price, r.price_change, r.stock, r.offer, r.offer_start_date, r.offer_end_date
+                    FROM '.DDBB_PREFIX.'carts_products AS c
+                        INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
+                        INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
+                    WHERE c.id_cart = ? ORDER BY c.id';
+            $result = $this->query($sql, array($id_cart));
+            if($result->num_rows != 0) {
+                $total = 0;
+                while($row = $result->fetch_assoc()) {
+                    if($row['stock'] > 0) {
+                        // If you have an offer and it is within the deadline
+                        $offer = 0;
+                        if($row['offer'] != 0 && date('Y-m-d') > $row['offer_start_date'] && date('Y-m-d') < $row['offer_end_date']) {
+                            $offer = $row['offer'];
+                        }
+                        $price = $row['price'] + $row['price_change'] - $offer;
+                        $total += $price;
+                    }
+                }
+                return $total;
+            } else {
+                return 0;
+            }
+        }
+
         public function get_cart_array($id_cart) {
             // I get the product and cart data
-            $sql = 'SELECT c.*, p.price, pl.name AS product_name, r.price_change, r.stock
+            $sql = 'SELECT c.*, p.price, pl.name AS product_name, r.price_change, r.stock, r.offer, r.offer_start_date, r.offer_end_date
                     FROM '.DDBB_PREFIX.'carts_products AS c
                         INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
                         INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
@@ -170,9 +196,10 @@
                 $cart = array(
                     'total' => 0,
                     'total_string' => '',
-                    'products' => array()
+                    'free_shipping' => false,
+                    'products' => array(),
+                    'codes' => $this->get_cart_codes_array($id_cart)
                 );
-                $total = 0;
                 while($row = $result->fetch_assoc()) {
                     if($row['stock'] > 0) {
                         // Get attributes
@@ -198,15 +225,70 @@
                             $this->query($sql, array($row['stock'], $row['id']));
                             $row['amount'] = $row['stock'];
                         }
+                        // If you have an offer and it is within the deadline
+                        $offer = 0;
+                        if($row['offer'] != 0 && date('Y-m-d') > $row['offer_start_date'] && date('Y-m-d') < $row['offer_end_date']) {
+                            $offer = $row['offer'];
+                        }
+                        $price = $row['price'] + $row['price_change'] - $offer;
+                        // I check if there are discount codes for this product
+                        foreach($cart['codes'] as $code) {
+                            if($code['exclude_sales'] == 1 && $offer != 0) {
+                                // The code is not compatible with products on sale
+                            } else {
+                                // If you have rules
+                                $discount = false;
+                                if(count($code['rules']) > 0) {
+                                    foreach($code['rules'] as $rule) {
+                                        // Product
+                                        if($rule['id_code_rule_type'] == 1) {
+                                            foreach($rule['elements'] as $element) {
+                                                if($element == $row['id_product']) {
+                                                    $discount = true;
+                                                    break;
+                                                }
+                                            }
+                                        } else if($rule['id_code_rule_type'] == 2) {
+                                            // I check if any of the categories match the rule
+                                            $sql = 'SELECT id_category FROM '.DDBB_PREFIX.'products_categories WHERE id_product = ?';
+                                            $result_categories = $this->query($sql, array($row['id_product']));
+                                            while($row_categories = $result_categories->fetch_assoc()) {
+                                                foreach($rule['elements'] as $element) {
+                                                    if($element == $row_categories['id_category']) {
+                                                        $discount = true;
+                                                        break 2;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    $discount = true;
+                                }    
+                                if($discount == true) {
+                                    // Free shipping
+                                    if($code['free_shipping'] == 1) {
+                                        $cart['free_shipping'] = true;
+                                    }
+                                    // Percentage
+                                    $percentage_price = ($price * $code['amount']) / 100;
+                                    if($code['type'] == 1 && $percentage_price < $price) {
+                                        $price -= $percentage_price;
+                                    } else if($code['type'] == 2 && $code['amount'] < $price) {
+                                        $price -= $code['amount'];
+                                    }
+                                }
+                            }
+                        }
                         // Product object
                         $product = array(
                             'row' => $row,
                             'attributes' => $attributes,
                             'url' => $product_url,
                             'image' => $image_url,
-                            'price' => $row['price'] + $row['price_change']
+                            'price' => $price
                         );
-                        // I adjust the price if there is a variant or offer
+                        // I create the price in text string
                         $product['price_string'] = number_format(floatval($product['price']), 2, ',', '.');
                         $product['price_string'] .= ' €';
                         $cart['total'] += ($product['price'] * $row['amount']);
@@ -222,6 +304,162 @@
                 $cart = null;
             }
             return $cart;
+        }
+
+        public function get_cart_codes_array($id_cart) {
+            // I collect the discount codes and create an array
+            $sql = 'SELECT o.* FROM '.DDBB_PREFIX.'carts_codes AS c
+                        INNER JOIN '.DDBB_PREFIX.'codes AS o ON c.id_code = o.id_code
+                    WHERE id_cart = ?';
+            $result_codes = $this->query($sql, array($id_cart));
+            $codes = array();
+            if($result_codes->num_rows != 0) {
+                while($row_code = $result_codes->fetch_assoc()) {
+                    $result_code = $this->check_code($row_code['code'], $id_cart);
+                    // If the code returns an error or it is not compatible with other codes I delete it
+                    if($result_code['response'] = 'error' && $result_code['type'] != 1) {
+                        $sql = 'DELETE FROM carts_codes WHERE id_code = ? AND id_cart = ? LIMIT 1';
+                        $this->query($sql, array($row_code['id_code'], $id_cart));
+                    } else {
+                        // I collect the rules of the code if it has
+                        $sql = 'SELECT * FROM '.DDBB_PREFIX.'codes_rules WHERE id_code = ?';
+                        $result_rules = $this->query($sql, array($row_code['id_code']));
+                        $rules = array();
+                        if($result_rules->num_rows != 0) {
+                            while($row_rule = $result_rules->fetch_assoc()) {
+                                // I collect the ids of the rule elements
+                                $sql = 'SELECT * FROM '.DDBB_PREFIX.'codes_rules_elements WHERE id_code_rule = ?';
+                                $result_elements = $this->query($sql, array($row_rule['id_code_rule']));
+                                $elements = array();
+                                while($row_element = $result_elements->fetch_assoc()) {
+                                    array_push($elements, $row_element['id_element']);
+                                }
+                                $row_rule['elements'] = $elements;
+                                array_push($rules, $row_rule);
+                            }
+                        }
+                        $row_code['rules'] = $rules;
+                        array_push($codes, $row_code);
+                    }
+                }
+            }
+            return $codes;
+        }
+
+        public function check_code($code, $id_cart) {
+            $cart_total = $this->get_cart_total_price($id_cart);
+            // If you have products in your cart
+            if($cart_total != 0) {
+                $code = strtoupper($code);
+                $sql = 'SELECT * FROM '.DDBB_PREFIX.'codes WHERE code = ? AND id_state = 2 LIMIT 1';
+                $result = $this->query($sql, array($code));
+                // If the code exists and is active
+                if($result->num_rows != 0) {
+                    $row = $result->fetch_assoc();
+                    // I check if it is already added
+                    $sql= 'SELECT id_cart_code FROM '.DDBB_PREFIX.'carts_codes WHERE id_code = ?';
+                    $result_cart_code = $this->query($sql, array($row['id_code']));
+                    if($result_cart_code->num_rows != 0) {
+                        return array(
+                            'response' => 'error',
+                            'type' => 1,
+                            'title' => LANGTXT['code-have-it-title'],
+                            'description' => LANGTXT['code-have-it-description']
+                        );    
+                    }
+                    // I'll check if it's still available
+                    if($row['available'] <= 0) {
+                        return array(
+                            'response' => 'error',
+                            'type' => 2,
+                            'title' => LANGTXT['code-no-available-title'],
+                            'description' => LANGTXT['code-no-available-description']
+                        );    
+                    }
+                    // If it is out of date
+                    if($row['start_date'] > date('Y-m-d')) {
+                        return array(
+                            'response' => 'error',
+                            'type' => 3,
+                            'title' => LANGTXT['code-soon-title'],
+                            'description' => LANGTXT['code-soon-description']
+                        );    
+                    }
+                    if($row['end_date'] < date('Y-m-d')) {
+                        return array(
+                            'response' => 'error',
+                            'type' => 4,
+                            'title' => LANGTXT['code-expired-title'],
+                            'description' => LANGTXT['code-expired-description']
+                        );    
+                    }
+                    // If there is a limit of uses per user
+                    if(isset($_SESSION['user']) && $row['per_user'] != 0) {
+                        $sql = 'SELECT id_order FROM '.DDBB_PREFIX.'orders WHERE id_code = ? AND id_user = ?';
+                        $result_num_codes = $this->query($sql, array($row['id_code'], $_SESSION['user']['id_user']));
+                        if($row['per_user'] <= $result_num_codes->num_rows) {
+                            return array(
+                                'response' => 'error',
+                                'type' => 5,
+                                'title' => LANGTXT['code-per-user-title'],
+                                'description' => LANGTXT['code-per-user-description']
+                            );    
+                        }
+                    }
+                    // If the cart value does not exceed the discount code minimum
+                    if($cart_total < $row['minimum']) {
+                        return array(
+                            'response' => 'error',
+                            'type' => 6,
+                            'title' => LANGTXT['code-minimum-title'],
+                            'description' => LANGTXT['code-minimum-description'].$row['minimum'].'€.'
+                        );    
+                    }
+                    // I check if it is compatible with other codes of the cart
+                    if($row['compatible'] == 0) {
+                        $sql = 'SELECT id_cart_code FROM '.DDBB_PREFIX.'carts_codes WHERE id_cart = ?';
+                        $result_compatible = $this->query($sql, array($id_cart));
+                        if($result_compatible->num_rows != 0) {
+                            return array(
+                                'response' => 'error',
+                                'type' => 7,
+                                'title' => LANGTXT['code-compatible-title'],
+                                'description' => LANGTXT['code-compatible-description']
+                            );
+                        }
+                    }
+                    if($row['registered'] == 1 && !isset($_SESSION['user'])) {
+                        return array(
+                            'response' => 'ok',
+                            'type' => 11,
+                            'id_code' => $row['id_code'],
+                            'title' => LANGTXT['code-registered-title'],
+                            'description' => LANGTXT['code-registered-description']
+                        );    
+                    }
+                    return array(
+                        'response' => 'ok',
+                        'type' => 8,
+                        'id_code' => $row['id_code'],
+                        'title' => LANGTXT['apply-code-ok-title'],
+                        'description' => LANGTXT['apply-code-ok-description']
+                    );
+                } else {
+                    return array(
+                        'response' => 'error',
+                        'type' => 9,
+                        'title' => LANGTXT['apply-code-ko-title'],
+                        'description' => LANGTXT['apply-code-ko-description']
+                    );
+                }
+            } else {
+                return array(
+                    'response' => 'error',
+                    'type' => 10,
+                    'title' => LANGTXT['code-empty-cart-title'],
+                    'description' => LANGTXT['code-empty-cart-description']
+                );
+            }
         }
 
     }

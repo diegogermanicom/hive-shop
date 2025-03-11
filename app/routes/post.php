@@ -32,6 +32,7 @@
     $R->post('/get-billing-address'                 , 'get_billing_address');
     $R->post('/delete-billing-address'              , 'delete_billing_address');
     $R->post('/save-edit-billing-address'           , 'save_edit_billing_address');    
+    $R->post('/apply-code'                          , 'apply_code');
     $R->post('/save-order'                          , 'save_order');
     $R->post('/get-countries-list'                  , 'get_countries_list');
     $R->post('/get-provinces-list'                  , 'get_provinces_list');

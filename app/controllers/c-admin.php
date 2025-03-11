@@ -257,6 +257,8 @@
             }            
             $data['code_states'] = $admin->get_states_list($data['code']['id_state']);
             $data['type'] = $admin->get_code_types_list($data['code']['type']);
+            $data['codes_rules_type'] = $admin->get_codes_rules_type_list();
+            $data['codes_rules_add_type'] = $admin->get_codes_rules_add_type_list();
             $this->viewAdmin('/edit-code', $data);
         }
 

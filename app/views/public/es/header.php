@@ -24,6 +24,7 @@
     <div id="popup-cart">
         <div id="btn-close-cart"><i class="fa-solid fa-xmark"></i></div>
         <div class="title">Mi cesta</div>
+        <div class="content-codes"></div>
         <div class="content-cart"></div>
         <div class="row pb-20">
             <div class="col-6 pt-8">Total (IVA incluido)</div>

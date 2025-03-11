@@ -1,11 +1,11 @@
 /*
  * Hive
- * Copyright 2022 Diego Martin
+ * Copyright 2025 Diego Martin
  * npm install -g sass
  * sass --watch css/sass:css --style compressed
  */
 
-@import 'core.scss';
+@import '_vars.scss';
 
 .app {
     padding-top: 100px;
@@ -166,6 +166,15 @@ header {
         border-bottom: 1px solid #dedede;
         padding-bottom: 15px;
     }
+    .content-codes {
+        & > div {
+            padding: 5px 10px 5px 10px;
+            background-color: #f1f1f1;
+            border-radius: 2px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    }
     .content-cart {
         padding-bottom: 15px;
         .item {
@@ -182,9 +191,12 @@ header {
                 display: block;
                 width: 100%;
                 height: 100%;
-                background-size: contain;
+                min-height: 80px;
+                max-height: 120px;
+                background-size: cover;
                 background-repeat: no-repeat;
-                background-position: top center;
+                background-position: center center;
+                border: 1px solid #dedede;
             }
             .name {
                 font-family: $font1;
@@ -229,7 +241,7 @@ body#product-page {
             padding: 0px 40px 0px 0px;
             .item {
                 position: relative;
-                background-color: #dadada;
+                background-color: #f7f7f7;
                 margin: 0px 6px 12px 6px;             
                 img {
                     width: 100%;
@@ -268,17 +280,17 @@ body#product-page {
                     cursor: pointer;
                     font-size: 14px;
                     border: 1px solid #b7b7b7;
-                    min-height: 30px;
-                    min-width: 30px;
+                    min-height: 40px;
+                    min-width: 50px;
                     margin: 0px 6px 6px 0px;
                     text-align: center;
-                    padding: 4px 12px 1px 12px;
+                    padding: 9px 15px 1px 15px;
                     &:hover {
                         border: 1px solid $black;
                     }
                     &.active {
                         border: 2px solid #656565;
-                        padding: 3px 11px 0px 11px;
+                        padding: 8px 15px 0px 15px;
                         background-color: #ededed;
                         font-weight: bold;
                         cursor: default;
@@ -316,9 +328,12 @@ body#checkout-page {
                 display: block;
                 width: 100%;
                 height: 100%;
-                background-size: contain;
+                min-height: 75px;
+                max-height: 115px;
+                background-size: cover;
                 background-repeat: no-repeat;
-                background-position: top center;
+                background-position: center center;
+                border: 1px solid #dedede;
             }
             .name {
                 font-family: $font1;
@@ -337,5 +352,14 @@ body#checkout-page {
                 font-size: 18px;
             }
         }
+    }
+}
+
+.mega-title {
+    .accent {
+        background: -webkit-linear-gradient(315deg, #ffc164 25%, #e34c4c);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 }

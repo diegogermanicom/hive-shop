@@ -193,6 +193,13 @@
             echo json_encode($result);
         }
 
+        public function apply_code($args) {
+            $app = new AppAjax('ajax-apply-code');
+            $result = [];
+            $result['apply_code'] = $app->apply_code($_POST['code'], $_COOKIE['id_cart']);
+            echo json_encode($result);
+        }
+
         public function save_order($args) {
             $app = new AppAjax('ajax-save-order');
             $result = [];
