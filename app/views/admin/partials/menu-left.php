@@ -3,7 +3,7 @@
     <div id="btn-show-menu-left"><i class="fa-solid fa-angles-right"></i></div>
     <div class="content">
         <div class="text-center pt-40 pb-20">
-            <a href="<?= ADMIN_PATH ?>/home"><img src="<?= PUBLIC_PATH.'/img/hive-logo.png'; ?>" width="60" alt="Hive Framework"></a>
+            <a href="<?= ADMIN_PATH ?>/home"><img src="<?= PUBLIC_PATH.'/img/website-logo.png'; ?>" width="60" alt="Hive Framework"></a>
         </div>
         <nav>
             <a href="<?= ADMIN_PATH ?>/home"<?php if(in_array($data['admin']['name_page'], $data['menu']['home'])) echo ' class="active"'; ?>><i class="fa-solid fa-house"></i>&nbsp;&nbsp;Home</a>

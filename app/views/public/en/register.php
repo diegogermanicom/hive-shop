@@ -10,7 +10,7 @@
             <section>
                 <div class="container-sm">
                     <div class="text-center pt-50">
-                        <a href="<?= PUBLIC_ROUTE ?>/home"><img src="<?= PUBLIC_PATH.'/img/hive-logo.png'; ?>" width="60" alt="Hive Framework"></a>
+                        <a href="<?= PUBLIC_ROUTE ?>/home"><img src="<?= PUBLIC_PATH.'/img/website-logo.png'; ?>" width="60" alt="Hive Framework"></a>
                     </div>
                     <!-- You can move this code where you want to put your newsletter -->
                     <div class="box register-content mt-50">

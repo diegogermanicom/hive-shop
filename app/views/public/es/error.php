@@ -20,7 +20,7 @@
             <section>
                 <div class="container-lg">
                     <div class="text-center pt-50">
-                        <img src="<?= PUBLIC_PATH.'/img/hive-logo.png'; ?>" alt="Hive Framework" width="60">
+                        <img src="<?= PUBLIC_PATH.'/img/website-logo.png'; ?>" alt="Hive Framework" width="60">
                     </div>
                     <div class="title-container underline text-left pt-30"><?= $data['error_title']; ?></div>
                     <div class="text-container pb-100"><?= $data['error_description']; ?></div>

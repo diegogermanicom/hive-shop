@@ -23,7 +23,7 @@
     </div>
     <header>
         <div class="logo-header">
-            <img src="<?= PUBLIC_PATH.'/img/hive-logo.png'; ?>" height="100%" alt="Hive Framework">
+            <img src="<?= PUBLIC_PATH.'/img/website-logo.png'; ?>" height="100%" alt="Hive Framework">
         </div>
         <ul class="menu animate animate-opacity">
             <li>

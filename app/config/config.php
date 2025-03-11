@@ -48,7 +48,7 @@
     define('OG_SITE_NAME', 'hiveframework.com');
     define('OG_TYPE', 'product');
     define('OG_URL', 'http://hiveframework.com');
-    define('OG_IMAGE', 'http://hiveframework.com/img/hive-logo.png');
+    define('OG_IMAGE', 'http://hiveframework.com/img/website-logo.png');
     define('OG_APP_ID', '112651260921384');
 
     // I define Stripe tokens

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="<?= LANG; ?>">
     <head>
-        <?php include VIEWS_ADMIN.'/head.php'; ?>
+        <?php include VIEWS_ADMIN.'/partials/head.php'; ?>
     </head>
     <body id="<?= $data['admin']['name_page']; ?>">
         <div class="app">
-            <?php include VIEWS_ADMIN.'/header.php'; ?>
+            <?php include VIEWS_ADMIN.'/partials/header.php'; ?>
             <?php include VIEWS_ADMIN.'/partials/menu-left.php'; ?>
             <div id="popup-new-product-custom-route" class="popup">
                 <div class="content">
@@ -50,7 +50,7 @@
                         <div class="pager text-center pt-20"><?= $data['routes']['pager']; ?></div>
                     </div>
                 </section>
-                <?php include VIEWS_ADMIN.'/footer.php'; ?>
+                <?php include VIEWS_ADMIN.'/partials/footer.php'; ?>
             </div>
         </div>
     </body>

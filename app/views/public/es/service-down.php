@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="<?= LANG; ?>">
     <head>
-        <?php include VIEWS_PUBLIC.'/head.php'; ?>
+        <?php include VIEWS_PUBLIC.'/partials/head.php'; ?>
     </head>
     <body id="<?= $data['app']['name_page']; ?>" class="<?= $_COOKIE['color-mode']; ?>">
         <div class="app">
