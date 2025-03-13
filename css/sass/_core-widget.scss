@@ -366,8 +366,6 @@ body.dark-mode {
 // Works with javascript code
 .custom-collapse {
     border: 1px solid #ddd;
-    padding: 5px 0px 5px 0px;
-    background-color: white;
     & > li {
         .label {
             cursor: pointer;
@@ -437,7 +435,6 @@ body.dark-mode {
 body.dark-mode {
     .custom-collapse {
         border: 1px solid $black;
-        background-color: #1a1a1a;
         & > li {
             .options {
                 background-color: #232323;

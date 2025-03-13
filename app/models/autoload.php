@@ -1,8 +1,14 @@
 <?php
 
+    /*
+     * Author: Diego Martin
+     * Copyright: Hive®
+     * Version: 1.0
+     * Last Update: 2025
+     */   
+
     // Files of the folder to ignore
     $ignore_models = array(
-        'index.html',
         'autoload.php',
         'ddbb.php'
     );

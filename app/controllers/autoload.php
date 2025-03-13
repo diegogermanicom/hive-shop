@@ -1,10 +1,16 @@
 <?php
 
+    /*
+     * Author: Diego Martin
+     * Copyright: Hive®
+     * Version: 1.0
+     * Last Update: 2025
+     */   
+
     $classBefore = get_declared_classes();
 
     // Files of the folder to ignore
     $ignoreFile = array(
-        'index.html',
         'autoload.php'
     );
     // I add files that are prioritized in order

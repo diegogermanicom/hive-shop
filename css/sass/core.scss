@@ -12,68 +12,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap');
 
-@for $i from 1 through 100 {
+@for $i from 1 through 50 {
     .font-#{$i} {
         font-size: #{$i}px !important;
     }
 }
 @media (max-width: ($sm - 1) + px) {
-    @for $i from 1 through 100 {
+    @for $i from 1 through 50 {
         .font-sm-#{$i} {
             font-size: #{$i}px !important;
         }
     }
 }
 @media (max-width: ($md - 1) + px) {
-    @for $i from 1 through 100 {
+    @for $i from 1 through 50 {
         .font-md-#{$i} {
             font-size: #{$i}px !important;
         }
     }
 }
 @media (max-width: ($lg - 1) + px) {
-    @for $i from 1 through 100 {
+    @for $i from 1 through 50 {
         .font-lg-#{$i} {
             font-size: #{$i}px !important;
         }
     }
 }
 @media (max-width: ($xl - 1) + px) {
-    @for $i from 1 through 100 {
+    @for $i from 1 through 50 {
         .font-xl-#{$i} {
             font-size: #{$i}px !important;
         }
     }
 }
 
-@for $i from 1 through 100 {
+@for $i from 1 through 60 {
     .lh-#{$i} {
         line-height: #{$i}px !important;
     }
 }
 @media (max-width: ($sm - 1) + px) {
-    @for $i from 0 through 100 {
+    @for $i from 0 through 60 {
         .lh-sm-#{$i} {
             line-height: #{$i}px !important;
         }
     }
 }
 @media (max-width: ($md - 1) + px) {
-    @for $i from 0 through 100 {
+    @for $i from 0 through 60 {
         .lh-md-#{$i} {
             line-height: #{$i}px !important;
         }
     }
 }
 @media (max-width: ($lg - 1) + px) {
-    @for $i from 0 through 100 {
+    @for $i from 0 through 60 {
         .lh-lg-#{$i} {
             line-height: #{$i}px !important;
         }
     }
 }
 @media (max-width: ($xl - 1) + px) {
-    @for $i from 0 through 100 {
+    @for $i from 0 through 60 {
         .lh-xl-#{$i} {
             line-height: #{$i}px !important;
         }
@@ -81,18 +81,6 @@
 }
 
 @for $i from 0 through 100 {
-    .w-#{$i} {
-        width: #{$i} + '%';
-    }
-}
-
-@for $i from 0 through 200 {
-    .h-#{$i * 5} {
-        height: #{$i * 5}px;
-    }
-}
-
-@for $i from 0 through 200 {
     .p-#{$i} {
         padding: #{$i}px !important;
     }
@@ -142,7 +130,7 @@
 }
 
 @media (max-width: ($sm - 1) + px) {
-    @for $i from 0 through 200 {
+    @for $i from 0 through 100 {
         .p-sm-#{$i} {
             padding: #{$i}px !important;
         }
@@ -192,7 +180,7 @@
     }
 }
 @media (max-width: ($md - 1) + px) {
-    @for $i from 0 through 200 {
+    @for $i from 0 through 100 {
         .p-md-#{$i} {
             padding: #{$i}px !important;
         }
@@ -242,6 +230,69 @@
     }
 }
 
+@media (max-width: ($lg - 1) + px) {
+    @for $i from 0 through 100 {
+        .p-lg-#{$i} {
+            padding: #{$i}px !important;
+        }
+        .pt-lg-#{$i} {
+            padding-top: #{$i}px !important;
+        }
+        .pb-lg-#{$i} {
+            padding-bottom: #{$i}px !important;
+        }
+        .pl-lg-#{$i} {
+            padding-left: #{$i}px !important;
+        }
+        .pr-lg-#{$i} {
+            padding-right: #{$i}px !important;
+        }
+        .px-lg-#{$i} {
+            padding-left: #{$i}px !important;
+            padding-right: #{$i}px !important;
+        }
+        .py-lg-#{$i} {
+            padding-top: #{$i}px !important;
+            padding-bottom: #{$i}px !important;
+        }
+        .m-lg-#{$i} {
+            margin: #{$i}px !important;
+        }
+        .mt-lg-#{$i} {
+            margin-top: #{$i}px !important;
+        }
+        .mb-lg-#{$i} {
+            margin-bottom: #{$i}px !important;
+        }
+        .ml-lg-#{$i} {
+            margin-left: #{$i}px !important;
+        }
+        .mr-lg-#{$i} {
+            margin-right: #{$i}px !important;
+        }
+        .mx-lg-#{$i} {
+            margin-left: #{$i}px !important;
+            margin-right: #{$i}px !important;
+        }
+        .my-lg-#{$i} {
+            margin-top: #{$i}px !important;
+            margin-bottom: #{$i}px !important;
+        }
+    }
+}
+
+@for $i from 0 through 20 {
+    .w-#{$i * 5} {
+        width: #{$i * 5} + '%';
+    }
+}
+
+@for $i from 0 through 50 {
+    .h-#{$i * 10} {
+        height: #{$i * 10}px;
+    }
+}
+
 .row {
     display: flex;
     align-items: stretch;
@@ -283,6 +334,166 @@
             }
         }
     }
+}
+
+.margin-auto {
+    margin: auto auto;
+}
+
+.text-center {
+    text-align: center !important;
+}
+.text-left {
+    text-align: left !important;
+}
+.text-right {
+    text-align: right !important;
+}
+
+.text-sm-center {
+    @media (max-width: ($sm - 1) + px) {
+        text-align: center;
+    }
+}
+.text-sm-left {
+    @media (max-width: ($sm - 1) + px) {
+        text-align: left;
+    }
+}
+.text-sm-right {
+    @media (max-width: ($sm - 1) + px) {
+        text-align: right;
+    }
+}
+.text-md-center {
+    @media (max-width: ($md - 1) + px) {
+        text-align: center;
+    }
+}
+.text-md-left {
+    @media (max-width: ($md - 1) + px) {
+        text-align: left;
+    }
+}
+.text-md-right {
+    @media (max-width: ($md - 1) + px) {
+        text-align: right;
+    }
+}
+.text-lg-center {
+    @media (max-width: ($lg - 1) + px) {
+        text-align: center;
+    }
+}
+.text-lg-left {
+    @media (max-width: ($lg - 1) + px) {
+        text-align: left;
+    }
+}
+.text-lg-right {
+    @media (max-width: ($lg - 1) + px) {
+        text-align: right;
+    }
+}
+.text-xl-center {
+    @media (max-width: ($xl - 1) + px) {
+        text-align: center;
+    }
+}
+.text-xl-left {
+    @media (max-width: ($xl - 1) + px) {
+        text-align: left;
+    }
+}
+.text-xl-right {
+    @media (max-width: ($xl - 1) + px) {
+        text-align: right;
+    }
+}
+.text-underline {
+    text-decoration: underline !important;
+}
+
+// Se oculta de aqui para abajo
+.hidden-sm {
+    @media (max-width: ($sm - 1) + px) {
+        display: none !important;
+    }
+}
+.hidden-md {
+    @media (max-width: ($md - 1) + px) {
+        display: none !important;
+    }
+}
+.hidden-lg {
+    @media (max-width: ($lg - 1) + px) {
+        display: none !important;
+    }
+}
+.hidden-xl {
+    @media (max-width: ($xl - 1) + px) {
+        display: none !important;
+    }
+}
+
+// Se muestra de aqui para abajo
+.visible-sm {
+    @media (min-width: $sm + px) {
+        display: none !important;
+    }
+}
+.visible-md {
+    @media (min-width: $md + px) {
+        display: none !important;
+    }
+}
+.visible-lg {
+    @media (min-width: $lg + px) {
+        display: none !important;
+    }
+}
+.visible-xl {
+    @media (min-width: $xl + px) {
+        display: none !important;
+    }
+}
+
+// Se muestra solo aqui
+.visible-sm-only {
+    @media (min-width: $sm + px) {
+        display: none !important;
+    }
+}
+.visible-md-only {
+    @media (max-width: ($sm - 1) + px) {
+        display: none !important;
+    }
+    @media (min-width: $md + px) {
+        display: none !important;
+    }
+}
+.visible-lg-only {
+    @media (max-width: ($md - 1) + px) {
+        display: none !important;
+    }
+    @media (min-width: $lg + px) {
+        display: none !important;
+    }
+}
+.visible-xl-only {
+    @media (max-width: ($lg - 1) + px) {
+        display: none !important;
+    }
+    @media (min-width: $xl + px) {
+        display: none !important;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+.ghost {
+    opacity: 0.3;
 }
 
 *, *:after, *:before {
@@ -526,81 +737,6 @@ footer {
     line-height: 80px;
 }
 
-.margin-auto {
-    margin: auto auto;
-}
-.text-center {
-    text-align: center !important;
-}
-.text-left {
-    text-align: left !important;
-}
-.text-right {
-    text-align: right !important;
-}
-.text-sm-center {
-    @media (max-width: ($sm - 1) + px) {
-        text-align: center;
-    }
-}
-.text-sm-left {
-    @media (max-width: ($sm - 1) + px) {
-        text-align: left;
-    }
-}
-.text-sm-right {
-    @media (max-width: ($sm - 1) + px) {
-        text-align: right;
-    }
-}
-.text-md-center {
-    @media (max-width: ($md - 1) + px) {
-        text-align: center;
-    }
-}
-.text-md-left {
-    @media (max-width: ($md - 1) + px) {
-        text-align: left;
-    }
-}
-.text-md-right {
-    @media (max-width: ($md - 1) + px) {
-        text-align: right;
-    }
-}
-.text-lg-center {
-    @media (max-width: ($lg - 1) + px) {
-        text-align: center;
-    }
-}
-.text-lg-left {
-    @media (max-width: ($lg - 1) + px) {
-        text-align: left;
-    }
-}
-.text-lg-right {
-    @media (max-width: ($lg - 1) + px) {
-        text-align: right;
-    }
-}
-.text-xl-center {
-    @media (max-width: ($xl - 1) + px) {
-        text-align: center;
-    }
-}
-.text-xl-left {
-    @media (max-width: ($xl - 1) + px) {
-        text-align: left;
-    }
-}
-.text-xl-right {
-    @media (max-width: ($xl - 1) + px) {
-        text-align: right;
-    }
-}
-.text-underline {
-    text-decoration: underline !important;
-}
 .dots {
     text-overflow: ellipsis;
     overflow: hidden; 
@@ -610,84 +746,6 @@ footer {
     display: block;
     content: "";
     clear: both;    
-}
-.hidden {
-    display: none !important;
-}
-// Se oculta de aqui para abajo
-.hidden-sm {
-    @media (max-width: ($sm - 1) + px) {
-        display: none !important;
-    }
-}
-.hidden-md {
-    @media (max-width: ($md - 1) + px) {
-        display: none !important;
-    }
-}
-.hidden-lg {
-    @media (max-width: ($lg - 1) + px) {
-        display: none !important;
-    }
-}
-.hidden-xl {
-    @media (max-width: ($xl - 1) + px) {
-        display: none !important;
-    }
-}
-// Se muestra de aqui para abajo
-.visible-sm {
-    @media (min-width: $sm + px) {
-        display: none !important;
-    }
-}
-.visible-md {
-    @media (min-width: $md + px) {
-        display: none !important;
-    }
-}
-.visible-lg {
-    @media (min-width: $lg + px) {
-        display: none !important;
-    }
-}
-.visible-xl {
-    @media (min-width: $xl + px) {
-        display: none !important;
-    }
-}
-// Se muestra solo aqui
-.visible-sm-only {
-    @media (min-width: $sm + px) {
-        display: none !important;
-    }
-}
-.visible-md-only {
-    @media (max-width: ($sm - 1) + px) {
-        display: none !important;
-    }
-    @media (min-width: $md + px) {
-        display: none !important;
-    }
-}
-.visible-lg-only {
-    @media (max-width: ($md - 1) + px) {
-        display: none !important;
-    }
-    @media (min-width: $lg + px) {
-        display: none !important;
-    }
-}
-.visible-xl-only {
-    @media (max-width: ($lg - 1) + px) {
-        display: none !important;
-    }
-    @media (min-width: $xl + px) {
-        display: none !important;
-    }
-}
-.ghost {
-    opacity: 0.3;
 }
 
 // Works with javascript code
@@ -741,6 +799,12 @@ footer {
 
 .hive-color {
     color: $hive-color;
+}
+.color-white {
+    color: white;
+}
+.color-black {
+    color: $black;
 }
 
 // Dark Mode
