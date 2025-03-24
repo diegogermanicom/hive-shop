@@ -1,0 +1,69 @@
+/*
+* Hive
+* Copyright 2025 Diego Martin
+* npm install -g sass
+* sass --watch css/sass:css --style compressed
+*/   
+
+$sm: 576;
+$md: 768;
+$lg: 992;
+$xl: 1200;
+$max-width: 1600;
+
+// Velocidad de las animaciones
+$transition-speed: .6s;
+
+$black: #333333;
+$gray: #b5b5b5;
+$light-gray: #e9e9e9;
+$hive-color: #f59f1e;
+$mega-color1: #ffc164;
+$mega-color2: #e34c4c;
+
+$font1: 'Bebas Neue';
+$font2: 'Maven Pro';
+$font3: 'Inter';
+
+@mixin user-select($val) {
+    -webkit-user-select: $val;
+    -moz-user-select: $val;
+    -ms-user-select: $val;
+    -o-user-select: $val;
+    user-select: $val;
+}
+@mixin transform($val) {
+    -webkit-transform: $val;
+    -moz-transform: $val;
+    -ms-transform: $val;
+    -o-transform: $val;
+    transform: $val;
+}
+@mixin transition-delay($val) {
+    -webkit-transition-delay: $val;
+    -moz-transition-delay: $val;
+    -ms-transition-delay: $val;
+    -o-transition-delay: $val;
+    transition-delay: $val;
+}
+@mixin box-sizing($val) {
+    -webkit-box-sizing: $val;
+    -moz-box-sizing: $val;
+    -ms-box-sizing: $val;
+    -o-box-sizing: $val;
+    box-sizing: $val;
+}
+@mixin user-select($val) {
+    -webkit-user-select: $val;
+    -moz-user-select: $val;
+    -ms-user-select: $val;
+    -o-user-select: $val;
+    user-select: $val; 
+}
+@mixin appearance($val) {
+    -webkit-appearance: $val;
+    -moz-appearance: $val;
+    -ms-appearance: $val;
+    -o-appearance: $val;
+    appearance: $val; 
+}

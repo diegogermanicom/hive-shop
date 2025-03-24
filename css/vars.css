@@ -1,0 +1,17 @@
+:root {
+    --sm: 576;
+    --md: 768;
+    --lg: 992;
+    --xl: 1200;
+    --max-width: 1600;
+    --transition-speed: .6s;
+    --black: #333333;
+    --gray: #b5b5b5;
+    --light-gray: #e9e9e9;
+    --hive-color: #f59f1e;
+    --mega-color1: #ffc164;
+    --mega-color2: #e34c4c;
+    --font1: 'Bebas Neue';
+    --font2: 'Maven Pro';
+    --font3: 'Inter';
+}

@@ -1,0 +1,31 @@
+<IfModule mod_expires.c>
+
+    ExpiresActive on
+    ExpiresDefault                          "access plus 31104000 seconds"
+    ExpiresByType image/jpg                 "access plus 31104000 seconds"
+    ExpiresByType image/jpeg                "access plus 31104000 seconds"
+    ExpiresByType image/png                 "access plus 31104000 seconds"
+    ExpiresByType image/webp                "access plus 31104000 seconds"
+    ExpiresByType text/css                  "access plus 31104000 seconds"
+    ExpiresByType text/javascript           "access plus 31104000 seconds"
+    ExpiresByType font/woff2                "access plus 31104000 seconds"
+    ExpiresByType application/font-woff     "access plus 31104000 seconds"
+    ExpiresByType application/font-woff2    "access plus 31104000 seconds"
+    ExpiresByType application/x-font-woff2  "access plus 31104000 seconds"
+
+</IfModule>
+
+<IfModule mod_rewrite.c>
+
+    RewriteEngine on
+
+    #RewriteCond %{HTTPS} off
+    #RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    #RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    #RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+    
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [NC,L,QSA]
+
+</IfModule>
