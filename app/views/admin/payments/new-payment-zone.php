@@ -17,7 +17,7 @@
                             <div class="col-12 col-sm-9 pr-10 pr-sm-0">
                                 <div class="pb-10"><b>Payment zone name *</b></div>
                                 <div>
-                                    <input type="text" id="input-alias" class="w-100" validate validate-type="name">
+                                    <input type="text" id="input-name" class="w-100" validate validate-type="name">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-3">

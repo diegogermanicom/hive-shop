@@ -13,11 +13,12 @@
                         <div class="title-container underline text-left">Edit shipping zone</div>
                     </div>
                     <div class="container-lg" id="form-edit-shipping-zone">
+                        <input type="hidden" id="input-id-shipping-zone" value="<?= $data['shipping_zone']['id_shipping_zone']; ?>">
                         <div class="row pb-20">
                             <div class="col-12 col-sm-9 pr-10 pr-sm-0">
                                 <div class="pb-10"><b>Shipping zone name *</b></div>
                                 <div>
-                                    <input type="text" id="input-alias" class="w-100" validate validate-type="name">
+                                    <input type="text" id="input-name" class="w-100" validate validate-type="name" value="<?= $data['shipping_zone']['name']; ?>">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-3">

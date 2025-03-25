@@ -56,7 +56,7 @@
                 $_GET['page'] = 1;
             }
             $data['products'] = $admin->get_products($_GET['page']);
-            $this->viewAdmin('/products', $data);
+            $this->viewAdmin('/products/products', $data);
         }
 
         public function products_custom_routes($args) {
@@ -74,7 +74,7 @@
             $data['routes'] = $admin->get_products_custom_routes($_GET['page']);
             $data['products_list'] = $admin->get_products_list();
             $data['languages'] = $admin->get_languages_array();
-            $this->viewAdmin('/products-custom-routes', $data);
+            $this->viewAdmin('/products/products-custom-routes', $data);
         }
 
         public function new_product($args) {
@@ -91,7 +91,7 @@
             $data['categories'] = $admin->get_categories_custom_list();
             $data['attributes'] = $admin->get_attributes_list();
             $data['languages'] = $admin->get_languages_array();
-            $this->viewAdmin('/new-product', $data);
+            $this->viewAdmin('/products/new-product', $data);
         }
 
         public function edit_product($args) {
@@ -118,7 +118,7 @@
             $data['attributes'] = $admin->get_attributes_list($_GET['id_product']);
             $data['attributes_product'] = $admin->get_attributes_list_product($_GET['id_product']);
             $data['languages'] = $admin->get_languages_product($_GET['id_product']);
-            $this->viewAdmin('/edit-product', $data);
+            $this->viewAdmin('/products/edit-product', $data);
         }
 
         public function categories($args) {
@@ -137,7 +137,7 @@
                 $_GET['id_parent'] = null;
             }
             $data['categories'] = $admin->get_categories($_GET['id_parent'], $_GET['page']);
-            $this->viewAdmin('/categories', $data);
+            $this->viewAdmin('/categories/categories', $data);
         }
 
         public function categories_custom_routes($args) {
@@ -155,7 +155,7 @@
             $data['routes'] = $admin->get_categories_custom_routes($_GET['page']);
             $data['category_list'] = $admin->get_categories_list();
             $data['languages'] = $admin->get_languages_array();
-            $this->viewAdmin('/categories-custom-routes', $data);
+            $this->viewAdmin('/categories/categories-custom-routes', $data);
         }
 
         public function new_category($args) {
@@ -171,7 +171,7 @@
             $data['category_views'] = $admin->get_category_views_list();
             $data['category_states'] = $admin->get_states_list();
             $data['languages'] = $admin->get_languages_array();
-            $this->viewAdmin('/new-category', $data);
+            $this->viewAdmin('/categories/new-category', $data);
         }
 
         public function edit_category($args) {
@@ -196,7 +196,7 @@
             $data['category_views'] = $admin->get_category_views_list($data['category']['id_category_view']);
             $data['category_states'] = $admin->get_states_list($data['category']['id_state']);
             $data['languages'] = $admin->get_languages_category($_GET['id_category']);
-            $this->viewAdmin('/edit-category', $data);
+            $this->viewAdmin('/categories/edit-category', $data);
         }
 
         public function attributes($args) {
@@ -710,12 +710,12 @@
                 'payment-zones'
             ];
             $data['meta']['title'] = $admin->setTitle('Edit payment zone');
-            $data['payment'] = $admin->get_payment_zone($_GET['id_payment_zone']);
-            if($data['payment'] == 'error') {
+            $data['payment_zone'] = $admin->get_payment_zone($_GET['id_payment_zone']);
+            if($data['payment_zone'] == 'error') {
                 header('Location: '.ADMIN_PATH.'/payments');
                 exit;
             }
-            $data['product_states'] = $admin->get_states_list($data['payment']['id_state']);
+            $data['product_states'] = $admin->get_states_list($data['payment_zone']['id_state']);
             $this->viewAdmin('/payments/edit-payment-zone', $data);
         }
 

@@ -28,8 +28,11 @@ var ADMIN = {
         this.newShipmentEvent();
         this.editShipmentEvent();
         this.newShippingZoneEvent();
+        this.editShippingZoneEvent();
         this.newPaymentEvent();
         this.editPaymentEvent();
+        this.newPaymentZoneEvent();
+        this.editPaymentZoneEvent();
         this.usersEvent();
         this.editUserEvents();
         this.adminUsersEvent();
@@ -1947,6 +1950,34 @@ var ADMIN = {
             });
         }
     },
+    editShippingZoneEvent: function() {
+        if($('body#admin-edit-shipping-zone-page').length == 1) {
+            $('#btn-save-edit-shipping-zone').on("click", function() {
+                var btn = $(this);
+                var obj = {
+                    id_shipping_zone: parseInt($('#input-id-shipping-zone').val()),
+                    name: $('#input-name').val().trim(),
+                    id_state: parseInt($('#select-state').val())
+                }
+                var form = HIVE.validateForm('#form-edit-shipping-zone');
+                if(!btn.hasClass('disabled') && form.response == true) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: ADMIN_PATH + '/save-edit-shipping-zone',
+                        data: obj,
+                        success: function(data) {
+                            if(data.save_edit_shipping_zone.response == 'ok') {
+                                HIVE.showInfo('Correct!', data.save_edit_shipping_zone.message);
+                            } else {
+                                HIVE.showInfo('Error', data.save_edit_shipping_zone.message);
+                            }
+                            btn.removeClass('disabled');
+                        }
+                    });
+                }
+            });
+        }
+    },
     newPaymentEvent: function() {
         if($('body#admin-new-payment-method-page').length == 1) {
             $('#btn-save-new-payment').on("click", function() {
@@ -1999,6 +2030,62 @@ var ADMIN = {
                                 HIVE.showInfo('Correct!', data.save_edit_payment.message);
                             } else {
                                 HIVE.showInfo('Error', data.save_edit_payment.message);
+                            }
+                            btn.removeClass('disabled');
+                        }
+                    });
+                }
+            });
+        }
+    },
+    newPaymentZoneEvent: function() {
+        if($('body#admin-new-payment-zone-page').length == 1) {
+            $('#btn-save-new-payment-zone').on("click", function() {
+                var btn = $(this);
+                var obj = {
+                    name: $('#input-name').val().trim(),
+                    id_state: parseInt($('#select-state').val())
+                }
+                var form = HIVE.validateForm('#form-new-payment-zone');
+                if(!btn.hasClass('disabled') && form.response == true) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: ADMIN_PATH + '/save-new-payment-zone',
+                        data: obj,
+                        success: function(data) {
+                            if(data.save_new_payment_zone.response == 'ok') {
+                                btn.addClass('btn-ok');
+                                window.location.href = ADMIN_PATH + '/payment-zones?new';
+                            } else {
+                                HIVE.showInfo('Error', data.save_new_payment_zone.message);
+                                btn.removeClass('disabled');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    },
+    editPaymentZoneEvent: function() {
+        if($('body#admin-edit-payment-zone-page').length == 1) {
+            $('#btn-save-edit-payment-zone').on("click", function() {
+                var btn = $(this);
+                var obj = {
+                    id_payment_zone: parseInt($('#input-id-payment-zone').val()),
+                    name: $('#input-name').val().trim(),
+                    id_state: parseInt($('#select-state').val())
+                }
+                var form = HIVE.validateForm('#form-edit-payment-zone');
+                if(!btn.hasClass('disabled') && form.response == true) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: ADMIN_PATH + '/save-edit-payment-zone',
+                        data: obj,
+                        success: function(data) {
+                            if(data.save_edit_payment_zone.response == 'ok') {
+                                HIVE.showInfo('Correct!', data.save_edit_payment_zone.message);
+                            } else {
+                                HIVE.showInfo('Error', data.save_edit_payment_zone.message);
                             }
                             btn.removeClass('disabled');
                         }

@@ -347,6 +347,14 @@
             echo json_encode($result);            
         }
 
+        public function save_edit_shipping_zone() {
+            $admin = new AdminAjax('ajax-save-edit-shipping-zone');
+            $admin->security_admin_login();
+            $result = [];
+            $result['save_edit_shipping_zone'] = $admin->save_edit_shipping_zone();
+            echo json_encode($result);            
+        }
+
         public function save_new_payment() {
             $admin = new AdminAjax('ajax-save-new-payment');
             $admin->security_admin_login();
@@ -361,6 +369,22 @@
             $result = [];
             $result['save_edit_payment'] = $admin->save_edit_payment();
             echo json_encode($result);
+        }
+
+        public function save_new_payment_zone() {
+            $admin = new AdminAjax('ajax-save-new-payment-zone');
+            $admin->security_admin_login();
+            $result = [];
+            $result['save_new_payment_zone'] = $admin->save_new_payment_zone();
+            echo json_encode($result);
+        }
+
+        public function save_edit_payment_zone() {
+            $admin = new AdminAjax('ajax-save-edit-payment-zone');
+            $admin->security_admin_login();
+            $result = [];
+            $result['save_edit_payment_zone'] = $admin->save_edit_payment_zone();
+            echo json_encode($result);            
         }
 
         public function save_edit_user() {

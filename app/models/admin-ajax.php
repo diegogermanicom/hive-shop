@@ -1594,9 +1594,28 @@
             } else {
                 return array(
                     'response' => 'error',
-                    'message' => 'That alias already exists. Try another one.'
+                    'message' => 'That name already exists. Try another one.'
                 );
             }            
+        }
+
+        public function save_edit_shipping_zone() {
+            // I check that this alias no longer exists.
+            $sql = 'SELECT id_shipping_zone FROM shipping_zones WHERE name = ? AND id_shipping_zone != ? LIMIT 1';
+            $result = $this->query($sql, array($_POST['name'], $_POST['id_shipping_zone']));
+            if($result->num_rows == 0) {
+                $sql = 'UPDATE shipping_zones SET name = ?, id_state = ? WHERE id_shipping_zone = ? LIMIT 1';
+                $this->query($sql, array($_POST['name'], $_POST['id_state'], $_POST['id_shipping_zone']));
+                return array(
+                    'response' => 'ok',
+                    'message' => 'The shipping zone has been successfully updated!'
+                );
+            } else {
+                return array(
+                    'response' => 'error',
+                    'message' => 'That name already exists. Try another one.'
+                );
+            }
         }
 
         public function save_new_payment() {
@@ -1637,6 +1656,41 @@
                 return array(
                     'response' => 'error',
                     'message' => 'That alias already exists. Try another one.'
+                );
+            }
+        }
+
+        public function save_new_payment_zone() {
+            // I check that this alias no longer exists.
+            $sql = 'SELECT id_payment_zone  FROM payment_zones WHERE name = ? LIMIT 1';
+            $result = $this->query($sql, $_POST['name']);
+            if($result->num_rows == 0) {
+                $sql = 'INSERT INTO payment_zones (name, id_state) VALUES (?, ?)';
+                $this->query($sql, array($_POST['name'], $_POST['id_state']));
+                return array('response' => 'ok');
+            } else {
+                return array(
+                    'response' => 'error',
+                    'message' => 'That name already exists. Try another one.'
+                );
+            }            
+        }
+
+        public function save_edit_payment_zone() {
+            // I check that this alias no longer exists.
+            $sql = 'SELECT id_payment_zone FROM payment_zones WHERE name = ? AND id_payment_zone != ? LIMIT 1';
+            $result = $this->query($sql, array($_POST['name'], $_POST['id_payment_zone']));
+            if($result->num_rows == 0) {
+                $sql = 'UPDATE payment_zones SET name = ?, id_state = ? WHERE id_payment_zone = ? LIMIT 1';
+                $this->query($sql, array($_POST['name'], $_POST['id_state'], $_POST['id_payment_zone']));
+                return array(
+                    'response' => 'ok',
+                    'message' => 'The payment zone has been successfully updated!'
+                );
+            } else {
+                return array(
+                    'response' => 'error',
+                    'message' => 'That name already exists. Try another one.'
                 );
             }
         }
