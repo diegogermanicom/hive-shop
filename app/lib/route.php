@@ -7,7 +7,7 @@
      * Last Update: 2024
      */
 
-    class Route extends Model {
+    class Route {
 
         public $root = PUBLIC_ROUTE;
         public $controller = null;
@@ -183,7 +183,7 @@
                     $sql = 'SELECT * FROM '.DDBB_PREFIX.'categories_routes AS r
                                 INNER JOIN '.DDBB_PREFIX.'ct_languages AS a ON a.id_language = r.id_language
                             WHERE r.route = ? AND a.name = ? LIMIT 1';
-                    $result = $this->query($sql, array($route, strtolower(LANG)));
+                    $result = Utils::query($sql, array($route, strtolower(LANG)));
                     if($result->num_rows != 0) {
                         $row = $result->fetch_assoc();
                         $capp = new CApp();
@@ -205,7 +205,7 @@
                     $sql = 'SELECT * FROM '.DDBB_PREFIX.'products_routes AS r
                                 INNER JOIN '.DDBB_PREFIX.'ct_languages AS a ON a.id_language = r.id_language
                             WHERE r.route = ? AND a.name = ? LIMIT 1';
-                    $result = $this->query($sql, array($route, strtolower(LANG)));
+                    $result = Utils::query($sql, array($route, strtolower(LANG)));
                     if($result->num_rows != 0) {
                         $row = $result->fetch_assoc();
                         $capp = new CApp();
@@ -227,7 +227,7 @@
                     $sql = 'SELECT * FROM '.DDBB_PREFIX.'categories_custom_routes AS r
                                 INNER JOIN '.DDBB_PREFIX.'ct_languages AS a ON a.id_language = r.id_language
                             WHERE r.route = ? AND a.name = ? LIMIT 1';
-                    $result = $this->query($sql, array($route, strtolower(LANG)));
+                    $result = Utils::query($sql, array($route, strtolower(LANG)));
                     if($result->num_rows != 0) {
                         $row = $result->fetch_assoc();
                         $capp = new CApp();
@@ -249,7 +249,7 @@
                     $sql = 'SELECT * FROM '.DDBB_PREFIX.'products_custom_routes AS r
                                 INNER JOIN '.DDBB_PREFIX.'ct_languages AS a ON a.id_language = r.id_language
                             WHERE r.route = ? AND a.name = ? LIMIT 1';
-                    $result = $this->query($sql, array($route, strtolower(LANG)));
+                    $result = Utils::query($sql, array($route, strtolower(LANG)));
                     if($result->num_rows != 0) {
                         $row = $result->fetch_assoc();
                         $capp = new CApp();

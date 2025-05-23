@@ -355,6 +355,22 @@
             echo json_encode($result);            
         }
 
+        public function get_shipping_zone_countries() {
+            $admin = new AdminAjax('ajax-get-shipping-zone-countries');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_shipping_zone_countries'] = $admin->get_shipping_zone_countries($_POST['id_shipping_zone'], $_POST['id_continent']);
+            echo json_encode($result);            
+        }
+
+        public function get_shipping_zone_provinces() {
+            $admin = new AdminAjax('ajax-get-shipping-zone-provinces');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_shipping_zone_provinces'] = $admin->get_shipping_zone_provinces($_POST['id_shipping_zone'], $_POST['id_country']);
+            echo json_encode($result);            
+        }
+
         public function save_new_payment() {
             $admin = new AdminAjax('ajax-save-new-payment');
             $admin->security_admin_login();

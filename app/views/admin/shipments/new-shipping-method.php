@@ -46,12 +46,46 @@
                                     <input type="number" id="input-min-weight" value="0" class="w-100" validate validate-type="number">
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-3 pr-10 pr-sm-0">
+                            <div class="col-12 col-sm-3">
                                 <div class="pb-10"><b>Maximum weight(kg) *</b></div>
                                 <div>
                                     <input type="number" id="input-max-weight" value="0" class="w-100" validate validate-type="number">
                                 </div>
                             </div>
+                        </div>
+                        <div class="pb-10"><b>Languages</b></div>
+                        <div class="custom-tab pb-20" id="languages">
+                            <div class="menu"><?php
+
+                                foreach($data['languages'] as $index => $value) {
+                                    if($index == 0) {
+                                        $active = ' class="active"';
+                                    } else {
+                                        $active = '';
+                                    }
+                                    echo '<div id-tab="'.($index + 1).'" id-lang="'.$value['id_language'].'"'.$active.'>'.$value['alias'].'</div>';
+                                }
+
+                            ?></div>
+                            <div class="content"><?php
+
+                                foreach($data['languages'] as $index => $value) {
+                                    if($index == 0) {
+                                        $active = ' class="active"';
+                                    } else {
+                                        $active = '';
+                                    }
+
+                            ?><div id-tab="<?= ($index + 1); ?>"<?= $active; ?>>
+                                    <div class="pb-10"><b>Shipment name *</b></div>
+                                    <div class="pb-20">
+                                        <input type="text" class="w-100 input-language-name" validate validate-type="name">
+                                    </div>
+                                </div><?php
+
+                                }
+
+                            ?></div>
                         </div>
                         <div class="text-center pt-40">
                             <div id="btn-save-new-shipment" class="btn btn-black">Create Shipment</div>

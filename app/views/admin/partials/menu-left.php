@@ -68,6 +68,14 @@
                     </a>
                 </div>
             </li>
+            <li <?php if(in_array('taxes-menu', $data['admin']['tags'])) echo 'class="active"'; ?>>
+                <div class="label"><i class="fa-solid fa-coins"></i>&nbsp;&nbsp;Taxes</div>
+                <div class="options">
+                    <a href="<?= ADMIN_PATH ?>/taxes"<?php if(in_array('taxes', $data['admin']['tags'])) echo ' class="active"'; ?>>
+                    <i class="fa-solid fa-receipt"></i>&nbsp;&nbsp;Taxes
+                    </a>
+                </div>
+            </li>
             <li <?php if(in_array('stats-menu', $data['admin']['tags'])) echo 'class="active"'; ?>>
                 <div class="label"><i class="fa-solid fa-chart-pie"></i>&nbsp;&nbsp;Stats</div>
                 <div class="options">
@@ -82,10 +90,13 @@
                     <a href="<?= ADMIN_PATH ?>/languages"<?php if(in_array('languages', $data['admin']['tags'])) echo ' class="active"'; ?>>
                         <i class="fa-solid fa-earth-americas"></i>&nbsp;&nbsp;Languages
                     </a>
+                    <a href="<?= ADMIN_PATH ?>/locations"<?php if(in_array('locations', $data['admin']['tags'])) echo ' class="active"'; ?>>
+                        <i class="fa-solid fa-location-dot"></i>&nbsp;&nbsp;Locations
+                    </a>
                     <a href="<?= ADMIN_PATH ?>/users-admin"<?php if(in_array('users-admin', $data['admin']['tags'])) echo ' class="active"'; ?>>
                         <i class="fa-solid fa-user-secret"></i>&nbsp;&nbsp;Admin Users
                     </a>
-                    <?php if(ENVIRONMENT == 'PRE') { ?>
+                    <?php if(ENVIRONMENT == 'DEV') { ?>
                         <a href="<?= ADMIN_PATH ?>/ftp-upload"<?php if(in_array('ftp-upload', $data['admin']['tags'])) echo ' class="active"'; ?>>
                             <i class="fa-regular fa-file"></i>&nbsp;&nbsp;Ftp Upload
                         </a>
@@ -93,7 +104,7 @@
                 </div>
             </li>
             <li>
-                <a class="label" href="<?= PUBLIC_ROUTE ?>" target="_blank"><i class="fa-solid fa-desktop"></i>&nbsp;&nbsp;Public Home</a>
+                <a class="label" href="<?= PUBLIC_ROUTE ?>/" target="_blank"><i class="fa-solid fa-desktop"></i>&nbsp;&nbsp;Public Home</a>
             </li>
             <li>
                 <a class="label" href="<?= ADMIN_PATH ?>/logout"><i class="fa-solid fa-right-from-bracket"></i>&nbsp;&nbsp;Logout</a>

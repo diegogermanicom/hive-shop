@@ -28,6 +28,54 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="pb-10"><b>Locations</b></div>
+                        <div id="locations-content">
+                            <div class="custom-tab">
+                                <div class="menu">
+                                    <div id-tab="1" class="active">Continents</div>
+                                    <div id-tab="2">Countries</div>
+                                    <div id-tab="3">Provinces</div>
+                                </div>
+                                <div class="content">
+                                    <div id-tab="1" class="active">
+                                        <div class="pb-20">
+                                            <label class="checkbox">
+                                                <input type="checkbox" value="0" id="btn-select-all-continents">
+                                                <span class="checkmark"></span>Select all
+                                            </label>
+                                        </div>
+                                        <div id="shipping-zone-continents"><?= $data['continents']; ?></div>
+                                    </div>
+                                    <div id-tab="2">
+                                        <div class="row pb-20">
+                                            <div class="col-12 col-sm-6 pt-10">
+                                                <label class="checkbox">
+                                                    <input type="checkbox" value="0" id="btn-select-all-countries">
+                                                    <span class="checkmark"></span>Select all
+                                                </label>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <select id="select-countries-continents"><?= $data['continents_select']; ?></select>
+                                            </div>
+                                        </div>
+                                        <div id="shipping-zone-countries"></div>
+                                    </div>
+                                    <div id-tab="3">
+                                        <div class="row pb-20">
+                                            <div class="col-12 col-sm-6 pt-10">
+                                                <label class="checkbox">
+                                                    <input type="checkbox" value="0" id="btn-select-all-provinces">
+                                                    <span class="checkmark"></span>Select all
+                                                </label>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <select id="select-provinces-countries"><?= $data['countries_select']; ?></select>
+                                            </div>
+                                        </div>
+                                        <div id="shipping-zone-provinces"></div>
+                                    </div>
+                                </div>
+                            </div>
                         <div class="text-center pt-40">
                             <div id="btn-save-edit-shipping-zone" class="btn btn-black">Save shipping zone</div>
                         </div>

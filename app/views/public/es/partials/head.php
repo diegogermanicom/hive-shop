@@ -24,7 +24,7 @@
         <link href="<?= PUBLIC_PATH; ?>/css/vendor/slick.css" rel="stylesheet">
         <link href="<?= PUBLIC_PATH; ?>/css/vendor/slick-theme.css" rel="stylesheet">
         <?php
-            if(ENVIRONMENT == 'PRE') {
+            if(ENVIRONMENT == 'DEV') {
                 echo '<link href="'.PUBLIC_PATH.'/css/core.css?'.uniqid().'" rel="stylesheet">';
                 echo '<link href="'.PUBLIC_PATH.'/css/app.css?'.uniqid().'" rel="stylesheet">';
             } else {
@@ -39,10 +39,10 @@
             const PUBLIC_ROUTE = '<?= PUBLIC_ROUTE; ?>';
             const ROUTE = '<?= ROUTE; ?>';
             const ACCEPT_COOKIES = <?php echo (isset($_COOKIE["acepto_cookies"])) ? 'true' : 'false'; ?>;
-            const APP_DATA = <?php echo (isset($data['javascript'])) ? $data['javascript'] : "''"; ?>;
+            const APP_DATA = <?php echo (isset($data['javascript'])) ? $data['javascript'] : "null"; ?>;
         </script>
         <?php
-            if(ENVIRONMENT == 'PRE') {
+            if(ENVIRONMENT == 'DEV') {
                 echo '<script src="'.PUBLIC_PATH.'/js/hive.js?'.uniqid().'"></script>';
                 echo '<script src="'.PUBLIC_PATH.'/js/app.js?'.uniqid().'"></script>';    
             } else {

@@ -25,10 +25,6 @@ var ADMIN = {
         this.codesEvent();
         this.newCodeEvent();
         this.editCodeEvent();
-        this.newShipmentEvent();
-        this.editShipmentEvent();
-        this.newShippingZoneEvent();
-        this.editShippingZoneEvent();
         this.newPaymentEvent();
         this.editPaymentEvent();
         this.newPaymentZoneEvent();
@@ -1842,7 +1838,7 @@ var ADMIN = {
                     ADMIN.editCodeRuleEvents();
                 }
             }
-        });    
+        });
     },
     editCodeRuleElementsEvent: function() {
         $('#edit-code-rule-elements-list .list-item').off().on('click', function() {
@@ -1857,127 +1853,6 @@ var ADMIN = {
             }                
         });
     },
-    newShipmentEvent: function() {
-        if($('body#admin-new-shipping-method-page').length == 1) {
-            $('#btn-save-new-shipment').on("click", function() {
-                var btn = $(this);
-                var obj = {
-                    alias: $('#input-alias').val().trim(),
-                    min_value: parseInt($('#input-min-value').val()),
-                    max_value: parseInt($('#input-max-value').val()),
-                    min_weight: parseInt($('#input-min-weight').val()),
-                    max_weight: parseInt($('#input-max-weight').val()),
-                    id_state: parseInt($('#select-state').val())
-                }                
-                var form = HIVE.validateForm('#form-new-shipment');
-                if(!btn.hasClass('disabled') && form.response == true) {
-                    btn.addClass('disabled');
-                    $.ajax({
-                        url: ADMIN_PATH + '/save-new-shipment',
-                        data: obj,
-                        success: function(data) {
-                            if(data.save_new_shipment.response == 'ok') {
-                                btn.addClass('btn-ok');
-                                window.location.href = ADMIN_PATH + '/shipments?new';
-                            } else {s
-                                HIVE.showInfo('Error', data.save_new_shipment.message);
-                                btn.removeClass('disabled');
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    },
-    editShipmentEvent: function() {
-        if($('body#admin-edit-shipping-method-page').length == 1) {
-            $('#btn-save-edit-shipment').on("click", function() {
-                var btn = $(this);
-                var obj = {
-                    id_shipping_method: parseInt($('#input-id-shipping-method').val()),
-                    alias: $('#input-alias').val().trim(),
-                    min_value: parseInt($('#input-min-value').val()),
-                    max_value: parseInt($('#input-max-value').val()),
-                    min_weight: parseInt($('#input-min-weight').val()),
-                    max_weight: parseInt($('#input-max-weight').val()),
-                    id_state: parseInt($('#select-state').val())
-                }
-                var form = HIVE.validateForm('#form-edit-shipment');
-                if(!btn.hasClass('disabled') && form.response == true) {
-                    btn.addClass('disabled');
-                    $.ajax({
-                        url: ADMIN_PATH + '/save-edit-shipment',
-                        data: obj,
-                        success: function(data) {
-                            if(data.save_edit_shipment.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_shipment.message);
-                            } else {
-                                HIVE.showInfo('Error', data.save_edit_shipment.message);
-                            }
-                            btn.removeClass('disabled');
-                        }
-                    });
-                }
-            });
-        }
-    },
-    newShippingZoneEvent: function() {
-        if($('body#admin-new-shipping-zone-page').length == 1) {
-            $('#btn-save-new-shipping-zone').on("click", function() {
-                var btn = $(this);
-                var obj = {
-                    name: $('#input-name').val().trim(),
-                    id_state: parseInt($('#select-state').val())
-                }
-                var form = HIVE.validateForm('#form-new-shipping-zone');
-                if(!btn.hasClass('disabled') && form.response == true) {
-                    btn.addClass('disabled');
-                    $.ajax({
-                        url: ADMIN_PATH + '/save-new-shipping-zone',
-                        data: obj,
-                        success: function(data) {
-                            if(data.save_new_shipping_zone.response == 'ok') {
-                                btn.addClass('btn-ok');
-                                window.location.href = ADMIN_PATH + '/shipping-zones?new';
-                            } else {
-                                HIVE.showInfo('Error', data.save_new_shipping_zone.message);
-                                btn.removeClass('disabled');
-                            }
-                            btn.removeClass('disabled');
-                        }
-                    });
-                }
-            });
-        }
-    },
-    editShippingZoneEvent: function() {
-        if($('body#admin-edit-shipping-zone-page').length == 1) {
-            $('#btn-save-edit-shipping-zone').on("click", function() {
-                var btn = $(this);
-                var obj = {
-                    id_shipping_zone: parseInt($('#input-id-shipping-zone').val()),
-                    name: $('#input-name').val().trim(),
-                    id_state: parseInt($('#select-state').val())
-                }
-                var form = HIVE.validateForm('#form-edit-shipping-zone');
-                if(!btn.hasClass('disabled') && form.response == true) {
-                    btn.addClass('disabled');
-                    $.ajax({
-                        url: ADMIN_PATH + '/save-edit-shipping-zone',
-                        data: obj,
-                        success: function(data) {
-                            if(data.save_edit_shipping_zone.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_shipping_zone.message);
-                            } else {
-                                HIVE.showInfo('Error', data.save_edit_shipping_zone.message);
-                            }
-                            btn.removeClass('disabled');
-                        }
-                    });
-                }
-            });
-        }
-    },
     newPaymentEvent: function() {
         if($('body#admin-new-payment-method-page').length == 1) {
             $('#btn-save-new-payment').on("click", function() {
@@ -1986,8 +1861,18 @@ var ADMIN = {
                     alias: $('#input-alias').val().trim(),
                     min_value: parseInt($('#input-min-value').val()),
                     max_value: parseInt($('#input-max-value').val()),
-                    id_state: parseInt($('#select-state').val())
+                    id_state: parseInt($('#select-state').val()),
+                    languages: []
                 }
+                $('#languages .menu > div').each(function() {
+                    let id_tab = $(this).attr('id-tab');
+                    let content = $(this).closest('#languages').find('.content > div[id-tab="' + id_tab + '"]');
+                    let data = {
+                        'id_lang': parseInt($(this).attr('id-lang')),
+                        'name': $(content).find('.input-language-name').val().trim()
+                    }
+                    obj.languages.push(data);
+                });
                 var form = HIVE.validateForm('#form-new-payment');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
@@ -2017,8 +1902,18 @@ var ADMIN = {
                     alias: $('#input-alias').val().trim(),
                     min_value: parseInt($('#input-min-value').val()),
                     max_value: parseInt($('#input-max-value').val()),
-                    id_state: parseInt($('#select-state').val())
+                    id_state: parseInt($('#select-state').val()),
+                    languages: []
                 }
+                $('#languages .menu > div').each(function() {
+                    let id_tab = $(this).attr('id-tab');
+                    let content = $(this).closest('#languages').find('.content > div[id-tab="' + id_tab + '"]');
+                    let data = {
+                        'id_lang': parseInt($(this).attr('id-lang')),
+                        'name': $(content).find('.input-language-name').val().trim()
+                    }
+                    obj.languages.push(data);
+                });
                 var form = HIVE.validateForm('#form-edit-payment');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');

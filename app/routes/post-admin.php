@@ -53,6 +53,8 @@
     $R->postAdmin('/save-edit-shipment'                 , 'save_edit_shipment');
     $R->postAdmin('/save-new-shipping-zone'             , 'save_new_shipping_zone');
     $R->postAdmin('/save-edit-shipping-zone'            , 'save_edit_shipping_zone');
+    $R->postAdmin('/get-shipping-zone-countries'        , 'get_shipping_zone_countries');
+    $R->postAdmin('/get-shipping-zone-provinces'        , 'get_shipping_zone_provinces');
 
     $R->postAdmin('/save-new-payment'                   , 'save_new_payment');
     $R->postAdmin('/save-edit-payment'                  , 'save_edit_payment');

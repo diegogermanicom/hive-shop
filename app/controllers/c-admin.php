@@ -399,7 +399,7 @@
                 header('Location: '.ADMIN_PATH.'/users');
                 exit;
             }
-            $data['continents'] = $admin->get_continents_active_list();
+            $data['continents'] = $admin->get_continents_active_options();
             $data['user_states'] = $admin->get_states_list($data['user']['id_state']);
             $this->viewAdmin('/edit-user', $data);
         }
@@ -540,6 +540,7 @@
                 'shipments-methods'
             ];
             $data['meta']['title'] = $admin->setTitle('New shipping method');
+            $data['languages'] = $admin->get_languages_array();
             $data['product_states'] = $admin->get_states_list();
             $this->viewAdmin('/shipments/new-shipping-method', $data);
         }
@@ -562,6 +563,7 @@
                 header('Location: '.ADMIN_PATH.'/shipments');
                 exit;
             }
+            $data['languages'] = $admin->get_languages_shipment($_GET['id_shipping_method']);
             $data['product_states'] = $admin->get_states_list($data['shipping_method']['id_state']);
             $this->viewAdmin('/shipments/edit-shipping-method', $data);
         }
@@ -613,6 +615,9 @@
                 header('Location: '.ADMIN_PATH.'/shipping-zones');
                 exit;
             }
+            $data['continents'] = $admin->get_shipping_zone_continents($_GET['id_shipping_zone']);
+            $data['continents_select'] = $admin->get_continents_active_options();
+            $data['countries_select'] = $admin->get_countries_active_options();
             $data['product_states'] = $admin->get_states_list($data['shipping_zone']['id_state']);
             $this->viewAdmin('/shipments/edit-shipping-zone', $data);
         }
@@ -642,6 +647,7 @@
                 'payments'
             ];
             $data['meta']['title'] = $admin->setTitle('New payment method');
+            $data['languages'] = $admin->get_languages_array();
             $data['product_states'] = $admin->get_states_list();
             $this->viewAdmin('/payments/new-payment-method', $data);
         }
@@ -664,6 +670,7 @@
                 header('Location: '.ADMIN_PATH.'/payments');
                 exit;
             }
+            $data['languages'] = $admin->get_languages_payment($_GET['id_payment_method']);
             $data['product_states'] = $admin->get_states_list($data['payment_method']['id_state']);
             $this->viewAdmin('/payments/edit-payment-method', $data);
         }
@@ -717,6 +724,30 @@
             }
             $data['product_states'] = $admin->get_states_list($data['payment_zone']['id_state']);
             $this->viewAdmin('/payments/edit-payment-zone', $data);
+        }
+
+        public function taxes($args) {
+            $admin = new Admin('admin-taxes-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'taxes-menu',
+                'taxes'
+            ];
+            $data['meta']['title'] = $admin->setTitle('Taxes');
+            $this->viewAdmin('/taxes', $data);
+        }
+
+        public function locations($args) {
+            $admin = new Admin('admin-locations-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'settings',
+                'locations'
+            ];
+            $data['meta']['title'] = $admin->setTitle('Locations');
+            $this->viewAdmin('/locations', $data);
         }
 
         public function ftp_upload($args) {

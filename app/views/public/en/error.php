@@ -6,7 +6,7 @@
         <meta name="robots" content="noindex, nofollow">
         <link rel="icon" href="<?= PUBLIC_PATH; ?>/icono.png" type="image/png">
         <?php
-            if(ENVIRONMENT == 'PRE') {
+            if(ENVIRONMENT == 'DEV') {
                 echo '<link href="'.PUBLIC_PATH.'/css/core.css?'.uniqid().'" rel="stylesheet">';
                 echo '<link href="'.PUBLIC_PATH.'/css/app.css?'.uniqid().'" rel="stylesheet">';
             } else {

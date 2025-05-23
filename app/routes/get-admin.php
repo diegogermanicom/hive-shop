@@ -45,6 +45,8 @@
     $R->getAdmin('/view-cart'                       , 'view_cart');
     $R->getAdmin('/orders'                          , 'orders');
     $R->getAdmin('/order'                           , 'order');
+    $R->getAdmin('/taxes'                           , 'taxes');
+    $R->getAdmin('/locations'                       , 'locations');
 
     $R->getAdmin('/shipments'                       , 'shipments');
     $R->getAdmin('/new-shipping-method'             , 'new_shipping_method');

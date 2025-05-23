@@ -215,7 +215,7 @@
                 'en' => '/checkout',
                 'es' => '/tramitar-pedido'
             );
-            $data['continents'] = $app->get_continents_active_list();
+            $data['continents'] = $app->get_continents_active_options();
             $data['cart'] = $app->get_checkout_cart($_COOKIE['id_cart']);
             $data['javascript'] = json_encode(array(
                 'shippingAddressErrorTitle' => 'Missing Data',

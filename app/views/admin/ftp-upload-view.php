@@ -3,7 +3,7 @@
     <head>
         <?php include VIEWS_ADMIN.'/partials/head.php'; ?>
         <?php
-            if(ENVIRONMENT == 'PRE') {
+            if(ENVIRONMENT == 'DEV') {
                 echo '<script src="'.PUBLIC_PATH.'/js/ftp-upload.js?'.uniqid().'"></script>';
             } else {
                 echo '<script src="'.PUBLIC_PATH.'/js/min/ftp-upload.min.js?'.uniqid().'"></script>';

@@ -1095,7 +1095,7 @@
             $sql = 'SELECT * FROM '.DDBB_PREFIX.'orders WHERE id_order = ? LIMIT 1';
             $result = $this->query($sql, array($id_order));
             if($result->num_rows != 0) {
-                return 1;                
+                return 1;
             } else {
                 return 'error';
             }
@@ -1159,6 +1159,14 @@
             }
         }
 
+        public function get_languages_shipment($id_shipping_method) {
+            $sql = 'SELECT s.*, l.alias AS alias FROM '.DDBB_PREFIX.'shipping_methods_language AS s
+                        INNER JOIN '.DDBB_PREFIX.'ct_languages AS l ON l.id_language = s.id_language
+                    WHERE s.id_shipping_method = ? ORDER BY id_language';
+            $result = $this->query($sql, $id_shipping_method);
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+
         public function get_shipping_zones($page = 1, $per_page = 20) {
             $sql = 'SELECT m.*, s.name AS state_name FROM '.DDBB_PREFIX.'shipping_zones AS m
                         INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = m.id_state
@@ -1214,6 +1222,39 @@
             }
         }
 
+        public function get_shipping_zone_continents($id_shipping_zone) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'shipping_zone_continents WHERE id_shipping_zone = ?';
+            $result = $this->query($sql, $id_shipping_zone);
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'ct_continents WHERE id_state = 2 ORDER BY id_continent';
+            $result_continents = $this->query($sql);
+            if($result_continents->num_rows != 0) {
+                $html = '<table>';
+                $html .= '<tbody>';
+                while($row_continent = $result_continents->fetch_assoc()) {
+                    $checked = '';
+                    while($row = $result->fetch_assoc()) {
+                        if($row_continent['id_continent'] == $row['id_continent']) {
+                            $checked = ' checked';
+                        }
+                    }
+                    $result->data_seek(0);
+                    $html .= '<tr>';
+                    $html .=    '<td>';
+                    $html .=        '<label class="checkbox">';
+                    $html .=            '<input type="checkbox" value="'.$row_continent['id_continent'].'"'.$checked.'>';
+                    $html .=            '<span class="checkmark"></span>'.$row_continent['en'];
+                    $html .=        '</label>';
+                    $html .=    '</td>';
+                    $html .= '</tr>';
+                }
+                $html .= '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No continents found.';
+            }
+            return $html;
+        }
+
         public function get_payment_methods($page = 1, $per_page = 20) {
             $sql = 'SELECT m.*, s.name AS state_name FROM '.DDBB_PREFIX.'payment_methods AS m
                         INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = m.id_state
@@ -1266,6 +1307,14 @@
             } else {
                 return 'error';
             }
+        }
+
+        public function get_languages_payment($id_payment_method) {
+            $sql = 'SELECT p.*, l.alias AS alias FROM '.DDBB_PREFIX.'payment_methods_language AS p
+                        INNER JOIN '.DDBB_PREFIX.'ct_languages AS l ON l.id_language = p.id_language
+                    WHERE p.id_payment_method = ? ORDER BY id_language';
+            $result = $this->query($sql, $id_payment_method);
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
 
         public function get_payment_zones($page = 1, $per_page = 20) {

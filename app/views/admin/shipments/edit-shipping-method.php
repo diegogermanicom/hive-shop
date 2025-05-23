@@ -54,6 +54,42 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="pb-10"><b>Languages</b></div>
+                        <div class="custom-tab pb-20" id="languages">
+                            <div class="menu"><?php
+
+                                foreach($data['languages'] as $index => $value) {
+                                    if($index == 0) {
+                                        $active = ' class="active"';
+                                    } else {
+                                        $active = '';
+                                    }
+                                    echo '<div id-tab="'.($index + 1).'" id-lang="'.$value['id_language'].'"'.$active.'>'.$value['alias'].'</div>';
+                                }
+
+                            ?></div>
+                            <div class="content"><?php
+
+                                foreach($data['languages'] as $index => $value) {
+                                    if($index == 0) {
+                                        $active = ' class="active"';
+                                    } else {
+                                        $active = '';
+                                    }
+
+                            ?><div id-tab="<?= ($index + 1); ?>"<?= $active; ?>>
+                                    <div class="pb-10"><b>Product name *</b></div>
+                                    <div class="pb-20">
+                                        <input type="text" class="w-100 input-language-name" value="<?= $value['name']; ?>" validate validate-type="name">
+                                    </div>
+                                </div><?php
+
+                                }
+
+                            ?></div>
+                        </div>
+                        <div class="pb-10"><b>Zones</b></div>
+                        <div></div>
                         <div class="text-center pt-40">
                             <div id="btn-save-edit-shipment" class="btn btn-black">Save Shipment</div>
                         </div>

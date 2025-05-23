@@ -15,7 +15,7 @@
             'error-view-title'                  => 'View not found',
             'error-view-description'            => 'The view you are trying to display does not exist.',
             'error-ddbb-title'                  => 'Failed to connect to the database',
-            'error-ddbb-description'            => 'Check that the connection variables are correct in the file <b>app/config/config.php</b>.',
+            'error-ddbb-description'            => 'Check that the connection variables are correct in the file <b>app/config/settings.php</b>.',
             'error-query-title'                 => 'Query failed',
             'error-query-description'           => 'An error has occurred when performing the query to the database, check the parameters.',
             'send-notify-stock'                 => 'Your request has been registered correctly!',

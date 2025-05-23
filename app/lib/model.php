@@ -31,6 +31,9 @@
 
         public function check_maintenance() {
             // Close the access to the web for maintenance
+            if(in_array($this->get_ip(), MAINTENANCE_IPS)) {
+                return false;
+            }
             if(MAINTENANCE == true && ROUTE != PUBLIC_ROUTE.'/service-down') {
                 if(METHOD == 'get') {
                     header('Location: '.PUBLIC_ROUTE.'/service-down');
@@ -135,7 +138,37 @@
             return $value;
         }
 
-        public function get_continents_list($id_continent = null) {
+        public function get_countries_options($id_continent = null) {
+            $sql = 'SELECT * FROM ct_countries';
+            $result = $this->query($sql);
+            $html = '';
+            while($row = $result->fetch_assoc()) {
+                if($row['id_country'] == $id_continent) {
+                    $selected = ' selected';
+                } else {
+                    $selected = '';
+                }
+                $html .= '<option value="'.$row['id_country'].'"'.$selected.'>'.$row[strtolower(LANG)].'</option>';
+            }
+            return $html;
+        }
+
+        public function get_countries_active_options($id_country = null) {
+            $sql = 'SELECT * FROM ct_countries WHERE id_state = 2';
+            $result = $this->query($sql);
+            $html = '';
+            while($row = $result->fetch_assoc()) {
+                if($row['id_country'] == $id_country) {
+                    $selected = ' selected';
+                } else {
+                    $selected = '';
+                }
+                $html .= '<option value="'.$row['id_country'].'"'.$selected.'>'.$row[strtolower(LANG)].'</option>';
+            }
+            return $html;
+        }
+
+        public function get_continents_options($id_continent = null) {
             $sql = 'SELECT * FROM ct_continents';
             $result = $this->query($sql);
             $html = '';
@@ -145,12 +178,12 @@
                 } else {
                     $selected = '';
                 }
-                $html .= '<option value="'.$row['id_continent'].'"'.$selected.'>'.$row[LANG].'</option>';
+                $html .= '<option value="'.$row['id_continent'].'"'.$selected.'>'.$row[strtolower(LANG)].'</option>';
             }
             return $html;
         }
 
-        public function get_continents_active_list($id_continent = null) {
+        public function get_continents_active_options($id_continent = null) {
             $sql = 'SELECT * FROM ct_continents WHERE id_state = 2';
             $result = $this->query($sql);
             $html = '';
@@ -160,7 +193,7 @@
                 } else {
                     $selected = '';
                 }
-                $html .= '<option value="'.$row['id_continent'].'"'.$selected.'>'.$row[LANG].'</option>';
+                $html .= '<option value="'.$row['id_continent'].'"'.$selected.'>'.$row[strtolower(LANG)].'</option>';
             }
             return $html;
         }
