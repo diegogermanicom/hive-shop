@@ -33,11 +33,11 @@
         </script>
         <?php
             if(ENVIRONMENT == 'DEV') {
-                echo '<script src="'.PUBLIC_PATH.'/js/hive.js?'.uniqid().'"></script>';
+                echo '<script src="'.PUBLIC_PATH.'/js/utils.js?'.uniqid().'"></script>';
                 echo '<script src="'.PUBLIC_PATH.'/js/admin.js?'.uniqid().'"></script>';    
                 echo '<script src="'.PUBLIC_PATH.'/js/admin-shipment.js?'.uniqid().'"></script>';    
             } else {
-                echo '<script src="'.PUBLIC_PATH.'/js/min/hive.min.js?'.uniqid().'"></script>';
+                echo '<script src="'.PUBLIC_PATH.'/js/min/utils.min.js?'.uniqid().'"></script>';
                 echo '<script src="'.PUBLIC_PATH.'/js/min/admin.min.js?'.uniqid().'"></script>';                
                 echo '<script src="'.PUBLIC_PATH.'/js/min/admin-shipment.min.js?'.uniqid().'"></script>';                
             }

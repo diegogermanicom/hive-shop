@@ -15,10 +15,7 @@
                 $view .= '.php';
             }
             if(!file_exists($view)) {
-                new Err(
-                    LANGTXT['error-view-title'],
-                    LANGTXT['error-view-description']                    
-                );
+                Utils::error(LANGTXT['error-view-description']);
             } else {
                 include $view;
             }

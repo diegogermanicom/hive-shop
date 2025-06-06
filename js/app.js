@@ -60,7 +60,7 @@ var APP = {
                     $('#label-discontinued').removeClass('hidden');
                 }
                 btns.removeClass('disabled');
-                HIVE.scrollEvent();
+                UTILS.scrollEvent();
             }
         });    
     },
@@ -105,7 +105,7 @@ var APP = {
                             amount: $(this).val().trim()
                         }
                         btn.closest('.item *').removeClass('error');
-                        if(!HIVE.validate('number', obj.amount)) {
+                        if(!UTILS.validate('number', obj.amount)) {
                             btn.addClass('error');
                         }
                         if(!btn.hasClass('disabled') && !btn.hasClass('error')) {
@@ -172,7 +172,7 @@ var APP = {
                                         } else {
                                             $('.edit-address-main-content').removeClass('hidden');
                                         }
-                                        HIVE.showPopup('#popup-edit-address');
+                                        UTILS.showPopup('#popup-edit-address');
                                     }
                                     btn.removeClass('disabled');
                                 }
@@ -244,7 +244,7 @@ var APP = {
                                         } else {
                                             $('.edit-billing-address-main-content').removeClass('hidden');
                                         }
-                                        HIVE.showPopup('#popup-edit-billing-address');
+                                        UTILS.showPopup('#popup-edit-billing-address');
                                     }
                                     btn.removeClass('disabled');
                                 }
@@ -300,7 +300,7 @@ var APP = {
                             btn.addClass('btn-ok');
                             $('#popup-cookies').removeClass('active');
                         } else {
-                            HIVE.showInfo('Error', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            UTILS.showInfo('Error', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             btn.removeClass('disabled');
                         }
                     }
@@ -315,7 +315,7 @@ var APP = {
                 email: $('#input-send-newsletter').val().trim()
             }
             $('.newsletter-content *').removeClass('error');
-            if(!HIVE.validate('email', obj.email)) {
+            if(!UTILS.validate('email', obj.email)) {
                 $('#input-send-newsletter').addClass('error');
             }
             if($('#checkbox-send-newsletter:checked').val() == undefined) {
@@ -329,9 +329,9 @@ var APP = {
                     success: function(data) {
                         if(data.newsletter.response == 'ok') {
                             btn.addClass('btn-ok');
-                            HIVE.showInfo(data.newsletter.title, data.newsletter.description);
+                            UTILS.showInfo(data.newsletter.title, data.newsletter.description);
                         } else {
-                            HIVE.showInfo('Error', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            UTILS.showInfo('Error', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             btn.removeClass('disabled');
                         }
                     }
@@ -349,7 +349,7 @@ var APP = {
                 checkout: $('#input-checkout').val()
             }
             $('.login-content *').removeClass('error');
-            if(!HIVE.validate('email', obj.email)) {
+            if(!UTILS.validate('email', obj.email)) {
                 $('#input-login-email').addClass('error');
             }
             if(obj.pass == '' || obj.pass.length < 8) {
@@ -365,7 +365,7 @@ var APP = {
                             btn.addClass('btn-ok');
                             window.location.href = data.login.url;
                         } else {
-                            HIVE.showInfo('Uups', data.login.mensaje);
+                            UTILS.showInfo('Uups', data.login.mensaje);
                             btn.removeClass('disabled');
                         }
                     }
@@ -386,13 +386,13 @@ var APP = {
                 checkout: $('#input-checkout').val()
             }
             $('.register-content *').removeClass('error');
-            if(!HIVE.validate('email', obj.email)) {
+            if(!UTILS.validate('email', obj.email)) {
                 $('#input-register-email').addClass('error');
             }
-            if(!HIVE.validate('name', obj.name)) {
+            if(!UTILS.validate('name', obj.name)) {
                 $('#input-register-name').addClass('error');
             }
-            if(!HIVE.validate('lastname', obj.lastname)) {
+            if(!UTILS.validate('lastname', obj.lastname)) {
                 $('#input-register-lastname').addClass('error');
             }
             if(obj.pass1 == '' || obj.pass1.length < 8) {
@@ -417,7 +417,7 @@ var APP = {
                             btn.addClass('btn-ok');
                             window.location.href = data.register.url;
                         } else {
-                            HIVE.showInfo('Uups', data.register.mensaje);
+                            UTILS.showInfo('Uups', data.register.mensaje);
                             btn.removeClass('disabled');
                         }
                     }
@@ -507,9 +507,9 @@ var APP = {
                                     $('#input-notify-stock-name').val('');
                                     $('#input-notify-stock-email').val('');
                                     $('#popup-notify-stock *').removeClass('error');
-                                    HIVE.showPopup('#popup-notify-stock');
+                                    UTILS.showPopup('#popup-notify-stock');
                                 } else {
-                                    HIVE.showPopup('#popup-notify-stock-info');
+                                    UTILS.showPopup('#popup-notify-stock-info');
                                 }
                             }
                             btn.removeClass('disabled');
@@ -527,10 +527,10 @@ var APP = {
                     email: $('#input-notify-stock-email').val().trim()
                 }
                 $('#popup-notify-stock *').removeClass('error');
-                if(!HIVE.validate('name', obj.name)) {
+                if(!UTILS.validate('name', obj.name)) {
                     $('#input-notify-stock-name').addClass('error');
                 }
-                if(!HIVE.validate('email', obj.email)) {
+                if(!UTILS.validate('email', obj.email)) {
                     $('#input-notify-stock-email').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('#popup-notify-stock .error').length == 0) {
@@ -540,8 +540,8 @@ var APP = {
                         data: obj,
                         success: function(data) {
                             if(data.send_notify_stock.response == 'ok') {
-                                HIVE.closePopup('#popup-notify-stock');
-                                HIVE.showInfo('Correct!', data.send_notify_stock.mensaje);
+                                UTILS.closePopup('#popup-notify-stock');
+                                UTILS.showInfo('Correct!', data.send_notify_stock.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -560,7 +560,7 @@ var APP = {
                 $('#input-new-address-province').html('');
                 $('#checkbox-new-address-main').prop("checked", false);
                 $('#popup-new-address *').removeClass('error');
-                HIVE.showPopup('#popup-new-address');
+                UTILS.showPopup('#popup-new-address');
             });
             $('#btn-popup-new-billing-address').on('click', function() {
                 $('#popup-new-billing-address input').val('');
@@ -569,7 +569,7 @@ var APP = {
                 $('#input-new-billing-address-province').html('');
                 $('#checkbox-new-billing-address-main').prop("checked", false);
                 $('#popup-new-billing-address *').removeClass('error');
-                HIVE.showPopup('#popup-new-billing-address');
+                UTILS.showPopup('#popup-new-billing-address');
             });
             $('#btn-save-new-address').on('click', function() {
                 var btn = $(this);
@@ -586,10 +586,10 @@ var APP = {
                     main: ($('#checkbox-new-address-main:checked').val() == undefined) ? 0 : 1
                 }
                 $('#popup-new-address *').removeClass('error');
-                if(!HIVE.validate('name', obj.name)) {
+                if(!UTILS.validate('name', obj.name)) {
                     $('#input-new-address-name').addClass('error');
                 }
-                if(!HIVE.validate('lastname', obj.lastname)) {
+                if(!UTILS.validate('lastname', obj.lastname)) {
                     $('#input-new-address-lastname').addClass('error');
                 }
                 if(obj.id_country == null) {
@@ -606,7 +606,7 @@ var APP = {
                         success: function(data) {
                             if(data.save_new_address.response == 'ok') {
                                 APP.getAddresses();
-                                HIVE.closePopup('#popup-new-address');
+                                UTILS.closePopup('#popup-new-address');
                             }
                             btn.removeClass('disabled');
                         }
@@ -629,10 +629,10 @@ var APP = {
                     main: ($('#checkbox-edit-address-main:checked').val() == undefined) ? 0 : 1
                 }
                 $('#popup-edit-address *').removeClass('error');
-                if(!HIVE.validate('name', obj.name)) {
+                if(!UTILS.validate('name', obj.name)) {
                     $('#input-edit-address-name').addClass('error');
                 }
-                if(!HIVE.validate('lastname', obj.lastname)) {
+                if(!UTILS.validate('lastname', obj.lastname)) {
                     $('#input-edit-address-lastname').addClass('error');
                 }
                 if(obj.id_country == null) {
@@ -649,7 +649,7 @@ var APP = {
                         success: function(data) {
                             if(data.save_edit_address.response == 'ok') {
                                 APP.getAddresses();
-                                HIVE.closePopup('#popup-edit-address');
+                                UTILS.closePopup('#popup-edit-address');
                             }
                             btn.removeClass('disabled');
                         }
@@ -671,10 +671,10 @@ var APP = {
                     main: ($('#checkbox-new-billing-address-main:checked').val() == undefined) ? 0 : 1
                 }
                 $('#popup-new-billing-address *').removeClass('error');
-                if(!HIVE.validate('name', obj.name)) {
+                if(!UTILS.validate('name', obj.name)) {
                     $('#input-new-billing-address-name').addClass('error');
                 }
-                if(!HIVE.validate('lastname', obj.lastname)) {
+                if(!UTILS.validate('lastname', obj.lastname)) {
                     $('#input-new-billing-address-lastname').addClass('error');
                 }
                 if(obj.id_country == null) {
@@ -691,7 +691,7 @@ var APP = {
                         success: function(data) {
                             if(data.save_new_billing_address.response == 'ok') {
                                 APP.getBillingAddresses();
-                                HIVE.closePopup('#popup-new-billing-address');
+                                UTILS.closePopup('#popup-new-billing-address');
                             }
                             btn.removeClass('disabled');
                         }
@@ -714,10 +714,10 @@ var APP = {
                     main: ($('#checkbox-edit-billing-address-main:checked').val() == undefined) ? 0 : 1
                 }
                 $('#popup-edit-billing-address *').removeClass('error');
-                if(!HIVE.validate('name', obj.name)) {
+                if(!UTILS.validate('name', obj.name)) {
                     $('#input-edit-billing-address-name').addClass('error');
                 }
-                if(!HIVE.validate('lastname', obj.lastname)) {
+                if(!UTILS.validate('lastname', obj.lastname)) {
                     $('#input-edit-billing-address-lastname').addClass('error');
                 }
                 if(obj.id_country == null) {
@@ -734,7 +734,7 @@ var APP = {
                         success: function(data) {
                             if(data.save_edit_billing_address.response == 'ok') {
                                 APP.getBillingAddresses();
-                                HIVE.closePopup('#popup-edit-billing-address');
+                                UTILS.closePopup('#popup-edit-billing-address');
                             }
                             btn.removeClass('disabled');
                         }
@@ -771,7 +771,7 @@ var APP = {
                         success: function(data) {
                             if(data.apply_code.response == 'ok') {
                             }
-                            HIVE.showInfo(data.apply_code.title, data.apply_code.description);
+                            UTILS.showInfo(data.apply_code.title, data.apply_code.description);
                             btn.removeClass('disabled');
                         }
                     });
@@ -789,7 +789,7 @@ var APP = {
                 if($('#address-list .item.active').length == 1) {
                     obj.id_user_address = parseInt($('#address-list .item.active').attr('id-user-address'));
                 } else {
-                    HIVE.showInfo(APP_DATA.shippingAddressErrorTitle, APP_DATA.shippingAddressErrorText);
+                    UTILS.showInfo(APP_DATA.shippingAddressErrorTitle, APP_DATA.shippingAddressErrorText);
                     return;
                 }
                 let check_billing = ($('#input-check-billing').val() == undefined) ? false : true;
@@ -798,7 +798,7 @@ var APP = {
                     if($('#billing-list .item.active').length == 1) {
                         obj.id_user_billing_address = parseInt($('#billing-list .item.active').attr('id-user-billing-address'));
                     } else {
-                        HIVE.showInfo(APP_DATA.shippingAddressErrorTitle, APP_DATA.shippingAddressErrorText);
+                        UTILS.showInfo(APP_DATA.shippingAddressErrorTitle, APP_DATA.shippingAddressErrorText);
                         return;    
                     }
                 }

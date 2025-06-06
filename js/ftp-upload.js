@@ -73,7 +73,7 @@ var FTPUPLOAD = {
                 } else {
                     $('.ftp-dir').removeClass('disabled active');
                     $('.ftp-file').removeClass('disabled');
-                    HIVE.showInfo('Uups', data.get_dir.mensaje);
+                    UTILS.showInfo('Uups', data.get_dir.mensaje);
                 }
             }
         });    
@@ -105,9 +105,9 @@ var FTPUPLOAD = {
                                 for(i = 0; i < id_files.length; i++) {
                                     $('.upload-ftp-dir-content').find('.ftp-file[id-file="' + id_files[i] + '"]').removeClass('warning no-existe');
                                 }
-                                HIVE.showInfo('Completo', data.result.mensaje);
+                                UTILS.showInfo('Completo', data.result.mensaje);
                             } else {
-                                HIVE.showInfo('Uups', data.result.mensaje);
+                                UTILS.showInfo('Uups', data.result.mensaje);
                             }
                             btn.removeClass('disabled');
                             $('.ftp-dir').removeClass('disabled');
@@ -137,9 +137,9 @@ var FTPUPLOAD = {
                             var id_file = $('#popup-upload-ftp-id-file').val();
                             $('.upload-ftp-dir-content').find('.ftp-file[id-file="' + id_file + '"]').removeClass('warning no-existe');
                             $('#popup-upload-ftp').removeClass('active');
-                            HIVE.showInfo('Completo', data.upload.mensaje);
+                            UTILS.showInfo('Completo', data.upload.mensaje);
                         } else {
-                            HIVE.showInfo('Uups', data.upload.mensaje);
+                            UTILS.showInfo('Uups', data.upload.mensaje);
                         }
                         btn.removeClass('disabled');
                     }
@@ -167,9 +167,9 @@ var FTPUPLOAD = {
                             var id_folder = $('#popup-upload-ftp-create-id-folder').val();
                             $('.upload-ftp-dir-content').find('.ftp-dir[id-folder="' + id_folder + '"]').removeClass('no-existe');
                             $('#popup-upload-ftp-create').removeClass('active');
-                            HIVE.showInfo('Completo', data.folder.mensaje);
+                            UTILS.showInfo('Completo', data.folder.mensaje);
                         } else {
-                            HIVE.showInfo('Uups', data.folder.mensaje);
+                            UTILS.showInfo('Uups', data.folder.mensaje);
                         }
                         $(self).removeClass('disabled');
                     }
@@ -201,7 +201,7 @@ var FTPUPLOAD = {
                             $('#popup-upload-ftp').removeClass('active');
                             $('#popup-upload-ftp-comparar').addClass('active');
                         } else {
-                            HIVE.showInfo('Uups', data.compare.mensaje);
+                            UTILS.showInfo('Uups', data.compare.mensaje);
                         }
                         $(self).removeClass('disabled');
                     }

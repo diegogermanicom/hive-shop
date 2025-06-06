@@ -1,26 +1,18 @@
 <?php
     /*
      * Upload Ftp
-     * Copyright 2021 Diego Martin
+     * Copyright 2025 Diego Martin
      * Compara los ficheros del servidor con un ftp y los sube
      * Dep: Font Awesome, jQuery
      * Files:
-     *      - ftp-upload.scss
-     *      - ftp-upload.js
-     *      - ftp-upload.php
-     *      - ftp-upload-view.php
-     *      - ftp-upload-ajax.php
-     */   
+     *      - /js/ftp-upload.js
+     *      - /app/lib/ftp-upload.php
+     *      - /app/views/admin/ftp-upload-view.php
+    */   
 
     class FtpUpload {
 
         public $conn;
-        // Change this data---
-        public $host = '195.78.228.157';
-        private $user = 'lostinbahamas.com';
-        private $pass = 'Ftp-lostinbahamas-1';
-        public $raiz = '/home/cabox/workspace/lostinbahamas';
-        // -------------------
         public $conn_success = false;
         public $mensajes = array(
             'El directorio no existe',
@@ -49,7 +41,7 @@
         }
 
         public function connect() {
-            if($this->conn = @ftp_connect($this->host)) {
+            if($this->conn = @ftp_connect(FTP_UPLOAD_HOST)) {
                 $this->conn_success = true;
                 return true;
             } else {
@@ -59,7 +51,7 @@
         }
 
         public function login() {
-            if(@ftp_login($this->conn, $this->user, $this->pass)) {
+            if(@ftp_login($this->conn, FTP_UPLOAD_USER, FTP_UPLOAD_PASS)) {
                 ftp_pasv($this->conn, true);
                 return true;
              } else {
@@ -69,11 +61,11 @@
 
         public function get_folder_html($folder = '') {
             // Impido que puedan bajar mas de la raiz
-            $pos1 = strpos($folder, $this->raiz);
-            $pos2 = strpos($folder, $this->raiz.'/..');
+            $pos1 = strpos($folder, SERVER_PATH);
+            $pos2 = strpos($folder, SERVER_PATH.'/..');
             if(($pos1 !== false && $pos2 === false) || $folder == '') {
                 if($folder == '') {
-                    $folder = $this->raiz;
+                    $folder = SERVER_PATH;
                 } else if(substr($folder, -3) == '/..') {
                     // Si son dos puntos bajo un nivel
                     $array_folder = explode('/', $folder);
@@ -106,8 +98,14 @@
                     sort($array_dir);
                     sort($array_file);
                     // Obtengo el directorio del ftp relaccionado
-                    $dir = str_replace($this->raiz, "", $folder);
-                    ftp_chdir($this->conn, $dir);
+                    $dir = str_replace(SERVER_PATH, "", $folder);
+                    $dir = FTP_UPLOAD_SERVER_PATH.$dir.'/';
+                    if(!(@ftp_chdir($this->conn, $dir))) {
+                        return array(
+                            'response' => 'error',
+                            'mensaje' => 'Could not switch to directory "'.$dir.'".'
+                        );    
+                    }
                     // Obtengo la información de los ficheros del ftp
                     $ftp_rawlist = ftp_rawlist($this->conn, '.');
                     // Pintado del html del arbol
@@ -118,7 +116,7 @@
                         $css_exist = ' no-existe';
                         for($e = 0; $e < count($ftp_rawlist); $e++) {
                             $ftp_file_info = preg_split("/[\s]+/", $ftp_rawlist[$e], 9);
-                            if($array_dir[$i] == $ftp_file_info['8']) {
+                            if($array_dir[$i] == $ftp_file_info['8'] || $array_dir[$i] == '..') {
                                 $css_exist = '';
                             }
                         }
@@ -148,38 +146,43 @@
                                 '</li>';
                     }
                     $html .= '</ul>';
-                    return array('response' => 'ok',
-                                 'html' => $html
-                                );
+                    return array(
+                        'response' => 'ok',
+                        'html' => $html
+                    );
                 } else {
-                    return array('response' => 'error',
-                                 'mensaje' => $this->mensajes[0]
-                                );
+                    return array(
+                        'response' => 'error',
+                        'mensaje' => $this->mensajes[0]
+                    );
                 }
             } else {
-                return array('response' => 'error',
-                             'mensaje' => $this->mensajes[1]
-                            );
+                return array(
+                    'response' => 'error',
+                    'mensaje' => $this->mensajes[1]
+                );
             }
         }
 
         public function upload_ftp($folder, $file) {
-            $dir = str_replace($this->raiz, "", $folder);
-            $dir .= '/';
+            $dir = str_replace(SERVER_PATH, "", $folder);
+            $dir = FTP_UPLOAD_SERVER_PATH.$dir.'/';
             if(ftp_put($this->conn, $dir.$file, $folder.'/'.$file, FTP_BINARY)) {
-                return array('response' => 'ok',
-                             'mensaje' => $this->mensajes[4]
-                            );
+                return array(
+                    'response' => 'ok',
+                    'mensaje' => $this->mensajes[4]
+                );
             } else {
-                return array('response' => 'error',
-                             'mensaje' => $this->mensajes[2]
-                            );
+                return array(
+                    'response' => 'error',
+                    'mensaje' => $this->mensajes[2]
+                );
             }
         }
         
         public function upload_all_ftp($folder, $files) {
-            $dir = str_replace($this->raiz, "", $folder);
-            $dir .= '/';
+            $dir = str_replace(SERVER_PATH, "", $folder);
+            $dir = FTP_UPLOAD_SERVER_PATH.$dir.'/';
             $errors = 0;
             for($i = 0; $i < count($files); $i++) {
                 if(!ftp_put($this->conn, $dir.$files[$i], $folder.'/'.$files[$i], FTP_BINARY)) {
@@ -187,27 +190,31 @@
                 }
             }
             if($errors == 0) {
-                return array('response' => 'ok',
+                return array(
+                    'response' => 'ok',
                     'mensaje' => $this->mensajes[4]
                 );
             } else {
-                return array('response' => 'error',
+                return array(
+                    'response' => 'error',
                     'mensaje' => $this->mensajes[2]
                 );
             }
         }
 
         public function create_folder($folder, $name) {
-            $dir = str_replace($this->raiz, "", $folder);
-            $dir .= '/';
+            $dir = str_replace(SERVER_PATH, "", $folder);
+            $dir = FTP_UPLOAD_SERVER_PATH.$dir.'/';
             if(ftp_mkdir($this->conn, $dir.$name)) {
-                return array('response' => 'ok',
-                             'mensaje' => $this->mensajes[5]
-                            );
+                return array(
+                    'response' => 'ok',
+                    'mensaje' => $this->mensajes[5]
+                );
             } else {
-                return array('response' => 'error',
-                             'mensaje' => $this->mensajes[6]
-                            );                
+                return array(
+                    'response' => 'error',
+                    'mensaje' => $this->mensajes[6]
+                );                
             }
         }
         
@@ -218,8 +225,8 @@
                 $line = fgets($file_server);
                 $code_server .= $line;
             }
-            $dir = str_replace($this->raiz, "", $folder);
-            $dir .= '/';
+            $dir = str_replace(SERVER_PATH, "", $folder);
+            $dir = FTP_UPLOAD_SERVER_PATH.$dir.'/';
             $temp = fopen('php://temp', 'r+');
             if (ftp_fget($this->conn, $temp, $dir.$file, FTP_BINARY)) {
                 $code_ftp = '';
@@ -228,14 +235,16 @@
                     $line = fgets($temp);
                     $code_ftp .= $line;
                 }
-                return array('response' => 'ok',
-                             'code_server' =>  $code_server,
-                             'code_ftp' => $code_ftp
-                            );
+                return array(
+                    'response' => 'ok',
+                    'code_server' =>  $code_server,
+                    'code_ftp' => $code_ftp
+                );
             } else {
-                return array('response' => 'error',
-                             'mensaje' => $this->mensajes[7]
-                            );                
+                return array(
+                    'response' => 'error',
+                    'mensaje' => $this->mensajes[7]
+                );                
             }
         }
         
@@ -261,9 +270,10 @@
                 $html .= '<li class="ftp-file"><i class="far fa-file"></i> '.$array_file[$i].'</li>';
             }
             $html .= '</ul>';
-            return array('response' => 'ok',
-                         'html' => $html
-                        );
+            return array(
+                'response' => 'ok',
+                'html' => $html
+            );
         }
         
     }

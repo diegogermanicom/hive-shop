@@ -67,10 +67,7 @@
                     }
                 }    
                 if(!@$query->bind_param($type, ...$params)) {
-                    new Err(
-                        LANGTXT['error-query-title'],
-                        LANGTXT['error-query-description']
-                    );
+                    Utils::error(LANGTXT['error-query-description']);
                 }
             }
             $query->execute();

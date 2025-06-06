@@ -18,7 +18,7 @@
         'LANGUAGE' => 'en',
         // Set if the web is multilanguage.
         'MULTILANGUAGE' => true,
-        // Languages ​​supported by the application if it is multilingual (ISO language codes)
+        // Languages supported by the application if it is multilingual (ISO language codes)
         'LANGUAGES' => array('en', 'es'),
         // Set if your website has a database
         'HAS_DDBB' => true,
@@ -33,6 +33,7 @@
         'EMAIL_FROM' => 'info@hiveframework.com',
         // Default meta values for SEO
         'META_TITLE' => 'Hive Shop PHP Framework',
+        'META_EXTRA_TITLE' => ' | Hive Shop',
         'META_DESCRIPTION' => 'Welcome to Hive Shop, the fastest, lightest and simplest PHP framework for your web applications.',
         'META_KEYS' => 'hive shop, framework, php',
         // Default Open Graph tags for RRSS
@@ -62,7 +63,12 @@
             'DDBB_USER' => 'hiveuser',
             'DDBB_PASS' => 'mysqlhivepass',
             'DDBB' => 'hive_shop'
-        )
+        ),
+        'FTP_UPLOAD_HOST' => '',
+        'FTP_UPLOAD_USER' => '',
+        'FTP_UPLOAD_PASS' => '',
+        // Leave empty to indicate the root
+        'FTP_UPLOAD_SERVER_PATH' => ''
     );
 
 ?>

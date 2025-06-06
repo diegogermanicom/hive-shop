@@ -14,7 +14,7 @@
         }
 
         public function setTitle($title) {
-            return $title.' | Hive Shop';
+            return $title.META_EXTRA_TITLE;
         }
 
         public function security_app_logout() {

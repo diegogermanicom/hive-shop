@@ -55,7 +55,7 @@
         }
 
         public function choose_color_mode($args) {
-            setcookie('color-mode', $_POST['mode'], time() + (24 * 60 * 60 * 365), PUBLIC_PATH.'/'); // 1 año
+            setcookie('color-mode', $_POST['mode'], time() + Utils::ONEYEAR, PUBLIC_PATH.'/'); // 1 año
             $result = [];
             echo json_encode($result);
         }

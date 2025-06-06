@@ -5,7 +5,7 @@
 * Last Update: 2024
 */   
 
-var HIVE = {
+var UTILS = {
     // Vars
     blockAjax: false,
     konamiCodePosition: 0,
@@ -27,8 +27,8 @@ var HIVE = {
             type: 'POST',
             dataType: "json",
             error: function() {
-                HIVE.showInfo('Error', 'An unexpected error has occurred.<br>Reload the page to try again.');
-                HIVE.blockAjax = false;
+                UTILS.showInfo('Error', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                UTILS.blockAjax = false;
             }
         });
     },
@@ -142,7 +142,7 @@ var HIVE = {
         $(content).find('input[validate][validate-type], select[validate][validate-type], textarea[validate][validate-type]').each(function() {
             const type = $(this).attr('validate-type');
             var val = $(this).val().trim();
-            if(!HIVE.validate(type, val)) {
+            if(!UTILS.validate(type, val)) {
                 $(this).addClass('error');
                 result.response = false;
                 const name = $(this).attr('validate-name');
@@ -304,11 +304,11 @@ var HIVE = {
 }
 
 $(window).ready(function() {
-    HIVE.init();
+    UTILS.init();
 });        
 $(window).on('keydown', function(e) {
-    HIVE.konamiCode(e.keyCode);
+    UTILS.konamiCode(e.keyCode);
 });
 $(window).scroll(function() {
-    HIVE.scrollEvent();
+    UTILS.scrollEvent();
 });

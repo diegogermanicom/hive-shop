@@ -75,7 +75,7 @@
         }
 
         public function choose_language($language) {
-            setcookie('lang', $language, time() + (24 * 60 * 60 * 365), PUBLIC_PATH.'/'); // 1 año
+            setcookie('lang', $language, time() + Utils::ONEYEAR, PUBLIC_PATH.'/'); // 1 año
             $_COOKIE['lang'] = $language;
             return array('response' => 'ok');
         }

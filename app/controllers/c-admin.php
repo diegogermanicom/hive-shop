@@ -764,16 +764,10 @@
                     $data['meta']['title'] = $admin->setTitle('FTP Upload');
                     $this->viewAdmin('/ftp-upload-view', $data);
                 } else {
-                    new Err(
-                        'The username or password is not correct.',
-                        'Check that the <b>$user</b> and <b>$pass</b> variables of the ftp-upload model are correct.'
-                    );
+                    Utils::error('The Ftp Upload user or password is not correct.');
                 }    
             } else {
-                new Err(
-                    'Could not connect to server <b>'.$upload->host.'</b>.',
-                    'Check that the <b>$host</b> variable of the ftp-upload model is correct.'
-                );
+                Utils::error('Ftp Upload could not connect to server.');
             }
         }
         

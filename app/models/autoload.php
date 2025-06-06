@@ -8,20 +8,24 @@
     */   
 
     // Files of the folder to ignore
-    $ignore_models = array(
+    $ignoreModels = array(
         'autoload.php'
     );
     // I add classes that are prioritized in order
-    $priority_models = array(
+    $priorityModels = array(
         'app-model.php',
         'admin-model.php'
     );
-    foreach($priority_models as $value) {
-        include MODELS_PATH.'/'.$value;
+    foreach($priorityModels as $value) {
+        if(file_exists(MODELS_PATH.'/'.$value)) {
+            include MODELS_PATH.'/'.$value;
+        } else {
+            Utils::error('The priority model file you are trying to load <b>'.$value.'</b> does not exist.');
+        }
     }
     // I automatically include each model
     $scandir = scandir(MODELS_PATH);
-    $files = array_diff($scandir, array('.', '..'), $ignore_models, $priority_models);
+    $files = array_diff($scandir, array('.', '..'), $ignoreModels, $priorityModels);
     foreach($files as $value) {
         include MODELS_PATH.'/'.$value;
     }

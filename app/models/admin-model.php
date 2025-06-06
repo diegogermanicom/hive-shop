@@ -12,10 +12,7 @@
         function __construct() {
             parent::__construct();
             if(HAS_DDBB == false) {
-                new Err(
-                    'Error accessing administrator.',
-                    'If you want to use the administrator you have to activate the <b>HAS_DDBB</b> variable to true and configure the database.'
-                );
+                Utils::error('If you want to use the administrator you have to activate the access to the database.');
             }
         }
 

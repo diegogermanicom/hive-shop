@@ -60,7 +60,7 @@ var ADMIN = {
                                 btn.closest('tr').remove();
                             }
                         } else {
-                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                         }
                         btn.removeClass('disabled');
                     }
@@ -89,7 +89,7 @@ var ADMIN = {
                                     $(this).addClass('selected');
                                 }
                             });
-                            HIVE.showPopup('#popup-edit-related');
+                            UTILS.showPopup('#popup-edit-related');
                         }
                         btn.removeClass('disabled');
                     }
@@ -131,7 +131,7 @@ var ADMIN = {
                             $('#upload-image').attr('image-name', file.name);
                             $('#upload-image').css('background-image', 'url(' + event.target.result + ')');
                         } else {
-                            HIVE.showInfo('Error', 'Image size cannot be larger than 1 mb.');
+                            UTILS.showInfo('Error', 'Image size cannot be larger than 1 mb.');
                         }
                     }
                     reader.readAsDataURL(file);
@@ -159,7 +159,7 @@ var ADMIN = {
             if(obj.alias == '') {
                 $('#input-value-alias').addClass('error');
             }
-            if(type == 2 && !HIVE.validate('hexadecimal', obj.property)) {
+            if(type == 2 && !UTILS.validate('hexadecimal', obj.property)) {
                 $('#input-value-property-color').addClass('error');
             } else if(type == 3 && obj.property.name == '') {
                 $('#upload-image').addClass('error');
@@ -201,7 +201,7 @@ var ADMIN = {
                         let parent = $(this).closest('.item-image');            
                         $('#popup-delete-image').attr('id-product-image', parent.attr('id-product-image'));
                         $('#popup-delete-image').attr('id-image', parent.attr('id-image'));
-                        HIVE.showPopup('#popup-delete-image');
+                        UTILS.showPopup('#popup-delete-image');
                     });
                     $('#upload-images .btn-item-image-main').on('click', function() {
                         var btn = $(this);
@@ -219,7 +219,7 @@ var ADMIN = {
                                 success: function(data) {
                                     if(data.save_product_main_image.response == 'ok') {
                                         ADMIN.getProductImages(id_product);
-                                        HIVE.showInfo('Correct!', data.save_product_main_image.mensaje);                                
+                                        UTILS.showInfo('Correct!', data.save_product_main_image.mensaje);                                
                                     }
                                     $('#upload-images .btn-item-image-main').removeClass('disabled');
                                 }
@@ -241,7 +241,7 @@ var ADMIN = {
                                 success: function(data) {
                                     if(data.save_product_hover_image.response == 'ok') {
                                         ADMIN.getProductImages(id_product);
-                                        HIVE.showInfo('Correct!', data.save_product_hover_image.mensaje);                                
+                                        UTILS.showInfo('Correct!', data.save_product_hover_image.mensaje);                                
                                     }
                                     $('#upload-images .btn-item-image-hover').removeClass('disabled');
                                 }
@@ -280,10 +280,10 @@ var ADMIN = {
                                     $('#popup-attribute-value-properties').attr('id-attribute-value', id_attribute_value)
                                     $('#input-edit-value-alias').val(data.get_attribute_value_properties.alias);
                                     $('#value-properties-content').html(data.get_attribute_value_properties.html);
-                                    HIVE.customTabEvent();
-                                    HIVE.showPopup('#popup-attribute-value-properties');
+                                    UTILS.customTabEvent();
+                                    UTILS.showPopup('#popup-attribute-value-properties');
                                 } else {
-                                    HIVE.showInfo('Error', data.get_attribute_value_properties.mensaje);
+                                    UTILS.showInfo('Error', data.get_attribute_value_properties.mensaje);
                                 }
                             }
                         });
@@ -339,7 +339,7 @@ var ADMIN = {
                                         $('#input-edit-address-location').val(address.location);
                                         $('#input-edit-address-postal-code').val(address.postal_code);
                                         $('#input-edit-address-telephone').val(address.telephone);
-                                        HIVE.showPopup('#popup-edit-address');
+                                        UTILS.showPopup('#popup-edit-address');
                                     }
                                     btn.removeClass('disabled');
                                 }
@@ -390,7 +390,7 @@ var ADMIN = {
                                     if(data.delete_user_address.response == 'ok') {
                                         btn.closest('tr').remove();
                                     } else {
-                                        HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                        UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                                     }
                                     btn.removeClass('disabled');
                                 }
@@ -431,7 +431,7 @@ var ADMIN = {
                     $(this).closest('.item-image').remove();
                 });
             } else {
-                HIVE.showInfo('Error', 'Image size cannot be larger than 5 mb.');
+                UTILS.showInfo('Error', 'Image size cannot be larger than 5 mb.');
             }
         }
         reader.readAsDataURL(image);    
@@ -603,32 +603,32 @@ var ADMIN = {
             free_shipping: parseInt($('#select-free-shipping').val())
         }
         $('.content-save-code *').removeClass('error');
-        if(!HIVE.validate('min-char-3', obj.name)) {
+        if(!UTILS.validate('min-char-3', obj.name)) {
             $('#input-name').addClass('error');
         }
-        if(!HIVE.validate('code', obj.code)) {
+        if(!UTILS.validate('code', obj.code)) {
             $('#input-code').addClass('error');
         }
-        if(!HIVE.validate('number', obj.available)) {
+        if(!UTILS.validate('number', obj.available)) {
             $('#input-available').addClass('error');
         } else {
             obj.available = parseInt(obj.available);
         }
-        if(!HIVE.validate('number', obj.per_user)) {
+        if(!UTILS.validate('number', obj.per_user)) {
             $('#input-per-user').addClass('error');
         } else {
             obj.per_user = parseInt(obj.per_user);
         }
-        if(!HIVE.validate('price', obj.amount)) {
+        if(!UTILS.validate('price', obj.amount)) {
             $('#input-amount').addClass('error');
         }
-        if(!HIVE.validate('price', obj.minimum)) {
+        if(!UTILS.validate('price', obj.minimum)) {
             $('#input-minimum').addClass('error');
         }
-        if(!HIVE.validate('date', obj.start_date)) {
+        if(!UTILS.validate('date', obj.start_date)) {
             $('#input-start-date').addClass('error');
         }
-        if(!HIVE.validate('date', obj.end_date)) {
+        if(!UTILS.validate('date', obj.end_date)) {
             $('#input-end-date').addClass('error');
         }
         return obj;    
@@ -674,7 +674,7 @@ var ADMIN = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/home?login';
                             } else {
-                                HIVE.showInfo('Uups', data.login.mensaje);
+                                UTILS.showInfo('Uups', data.login.mensaje);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -704,7 +704,7 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -721,7 +721,7 @@ var ADMIN = {
                 $('#categories-list').addClass('hidden');
                 $('#languages-content input').val('');
                 $('#languages-content').addClass('hidden');
-                HIVE.showPopup('#popup-new-product-custom-route');
+                UTILS.showPopup('#popup-new-product-custom-route');
             });
             $('#products-list').on("change", function() {
                 var btn = $(this);
@@ -763,7 +763,7 @@ var ADMIN = {
                         route: $(this).find('input').val().trim()
                     };
                     // If the route is empty, I don't validate it
-                    if(!HIVE.validate('slug', temp.route) || temp.route == '') {
+                    if(!UTILS.validate('slug', temp.route) || temp.route == '') {
                         $(this).find('input').addClass('error');
                     }
                     obj.routes.push(temp);
@@ -809,7 +809,7 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -862,7 +862,7 @@ var ADMIN = {
                             }
                         }
                     } else {
-                        HIVE.showInfo('Uups', 'You can only upload a maximum of 10 files.');
+                        UTILS.showInfo('Uups', 'You can only upload a maximum of 10 files.');
                     }
                     this.value = '';
                 }
@@ -872,13 +872,13 @@ var ADMIN = {
                 var obj = ADMIN.objSaveEditProduct();
                 // Validation
                 $('.content-new-product *').removeClass('error');
-                if(!HIVE.validate('min-char-3', obj.alias)) {
+                if(!UTILS.validate('min-char-3', obj.alias)) {
                     $('#input-name').addClass('error');
                 }
-                if(!HIVE.validate('price', obj.price) || obj.price == 0) {
+                if(!UTILS.validate('price', obj.price) || obj.price == 0) {
                     $('#input-price').addClass('error');
                 }
-                if(!HIVE.validate('weight', obj.weight) || obj.weight == 0) {
+                if(!UTILS.validate('weight', obj.weight) || obj.weight == 0) {
                     $('#input-weight').addClass('error');
                 }
                 if(obj.categories.length == 0) {
@@ -897,7 +897,7 @@ var ADMIN = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/products?new';
                             } else {
-                                HIVE.showInfo('Error', data.save_new_product.mensaje);
+                                UTILS.showInfo('Error', data.save_new_product.mensaje);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -960,9 +960,9 @@ var ADMIN = {
                             if(data.delete_server_image.response == 'ok') {
                                 let id_product = parseInt($('#input-id-product').val())
                                 ADMIN.getProductImages(id_product);
-                                HIVE.closePopup('#popup-delete-image');
+                                UTILS.closePopup('#popup-delete-image');
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.closest('.popup').find('.btn').removeClass('disabled');
                         }
@@ -983,9 +983,9 @@ var ADMIN = {
                         success: function(data) {
                             if(data.delete_product_image.response == 'ok') {
                                 ADMIN.getProductImages(obj.id_product);
-                                HIVE.closePopup('#popup-delete-image');
+                                UTILS.closePopup('#popup-delete-image');
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.closest('.popup').find('.btn').removeClass('disabled');
                         }
@@ -1013,9 +1013,9 @@ var ADMIN = {
                                         $(this).parent().addClass('selected');
                                     }
                                 });
-                                HIVE.showPopup('#popup-add-image');
+                                UTILS.showPopup('#popup-add-image');
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1038,7 +1038,7 @@ var ADMIN = {
                     $('#upload-images .new-image .btn-item-image-delete').off().on('click', function() {
                         $(this).closest('.item-image').remove();
                     });
-                    HIVE.closePopup('#popup-add-image');
+                    UTILS.closePopup('#popup-add-image');
                 }
             });
             // Event when images are selected from the browser
@@ -1052,7 +1052,7 @@ var ADMIN = {
                             }
                         }
                     } else {
-                        HIVE.showInfo('Uups', 'You can only upload a maximum of 10 files.');
+                        UTILS.showInfo('Uups', 'You can only upload a maximum of 10 files.');
                     }
                     this.value = '';
                 }
@@ -1077,9 +1077,9 @@ var ADMIN = {
                                         $(this).addClass('selected');
                                     }
                                 });
-                                HIVE.showPopup('#popup-add-related');
+                                UTILS.showPopup('#popup-add-related');
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1107,15 +1107,15 @@ var ADMIN = {
                 $('#popup-add-related .content-images .item-image.selected').each(function() {
                     obj.images.push($(this).attr('id-product-image'));
                 });
-                if(!HIVE.validate('number', obj.stock)) {
+                if(!UTILS.validate('number', obj.stock)) {
                     $('#input-add-related-stock').addClass('error');
                 } else {
                     obj.stock = parseInt(obj.stock);
                 }
-                if(!HIVE.validate('price-negative', obj.price_change)) {
+                if(!UTILS.validate('price-negative', obj.price_change)) {
                     $('#input-add-related-price-change').addClass('error');
                 }
-                if(!HIVE.validate('weight-negative', obj.weight_change)) {
+                if(!UTILS.validate('weight-negative', obj.weight_change)) {
                     $('#input-add-related-weight-change').addClass('error');
                 }
                 if(!btn.hasClass('disabled')) {
@@ -1131,9 +1131,9 @@ var ADMIN = {
                                     $('#products-related').html(data.add_related.html);
                                 }
                                 ADMIN.editProductRelatedEvents();
-                                HIVE.closePopup('#popup-add-related');
+                                UTILS.closePopup('#popup-add-related');
                             } else {
-                                HIVE.showInfo('Uups', data.add_related.mensaje);
+                                UTILS.showInfo('Uups', data.add_related.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -1157,25 +1157,25 @@ var ADMIN = {
                     obj.images.push($(this).attr('id-product-image'));
                 });
                 $('#popup-edit-related *').removeClass('error');
-                if(!HIVE.validate('number', obj.stock)) {
+                if(!UTILS.validate('number', obj.stock)) {
                     $('#input-edit-related-stock').addClass('error');
                 } else {
                     obj.stock = parseInt(obj.stock);
                 }
-                if(!HIVE.validate('price-negative', obj.price_change)) {
+                if(!UTILS.validate('price-negative', obj.price_change)) {
                     $('#input-edit-related-price-change').addClass('error');
                 }
-                if(!HIVE.validate('weight-negative', obj.weight_change)) {
+                if(!UTILS.validate('weight-negative', obj.weight_change)) {
                     $('#input-edit-related-weight-change').addClass('error');
                 }
-                if(!HIVE.validate('price', obj.offer)) {
+                if(!UTILS.validate('price', obj.offer)) {
                     $('#input-edit-related-offer').addClass('error');
                 }
                 if(obj.offer != 0) {
-                    if(!HIVE.validate('date', obj.offer_start)) {
+                    if(!UTILS.validate('date', obj.offer_start)) {
                         $('#input-edit-related-offer-start-date').addClass('error');
                     }
-                    if(!HIVE.validate('date', obj.offer_end)) {
+                    if(!UTILS.validate('date', obj.offer_end)) {
                         $('#input-edit-related-offer-end-date').addClass('error');                        
                     }
                 }
@@ -1188,7 +1188,7 @@ var ADMIN = {
                             if(data.save_related.response == 'ok') {
                                 let id_product = parseInt($('#input-id-product').val());
                                 ADMIN.getRelated(id_product);
-                                HIVE.showInfo('Correct!', data.save_related.mensaje);
+                                UTILS.showInfo('Correct!', data.save_related.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -1204,13 +1204,13 @@ var ADMIN = {
                 }
                 // Validation
                 $('.content-edit-product *').removeClass('error');
-                if(!HIVE.validate('min-char-3', obj.alias)) {
+                if(!UTILS.validate('min-char-3', obj.alias)) {
                     $('#input-name').addClass('error');
                 }
-                if(!HIVE.validate('price', obj.price) || obj.price == 0) {
+                if(!UTILS.validate('price', obj.price) || obj.price == 0) {
                     $('#input-price').addClass('error');
                 }
-                if(!HIVE.validate('weight', obj.weight) || obj.weight == 0) {
+                if(!UTILS.validate('weight', obj.weight) || obj.weight == 0) {
                     $('#input-weight').addClass('error');
                 }
                 if(obj.categories.length == 0) {
@@ -1226,11 +1226,11 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_product.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_product.mensaje);
+                                UTILS.showInfo('Correct!', data.save_edit_product.mensaje);
                                 let id_product = parseInt($('#input-id-product').val());
                                 ADMIN.getProductImages(id_product);
                             } else {
-                                HIVE.showInfo('Error', data.save_edit_product.mensaje);
+                                UTILS.showInfo('Error', data.save_edit_product.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -1260,7 +1260,7 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1275,7 +1275,7 @@ var ADMIN = {
                 $('#categories-list').val(0);
                 $('#languages-content input').val('');
                 $('#languages-content').addClass('hidden');
-                HIVE.showPopup('#popup-new-category-custom-route');
+                UTILS.showPopup('#popup-new-category-custom-route');
             });
             $('#categories-list').on("change", function() {
                 $('#languages-content').removeClass('hidden');
@@ -1293,7 +1293,7 @@ var ADMIN = {
                         route: $(this).find('input').val().trim()
                     };
                     // If the route is empty, I don't validate it
-                    if(!HIVE.validate('slug', temp.route) || temp.route == '') {
+                    if(!UTILS.validate('slug', temp.route) || temp.route == '') {
                         $(this).find('input').addClass('error');
                     }
                     obj.routes.push(temp);
@@ -1336,7 +1336,7 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1351,7 +1351,7 @@ var ADMIN = {
                 var btn = $(this);
                 var obj = ADMIN.objSaveEditCategory();
                 $('.content-new-category *').removeClass('error');
-                if(!HIVE.validate('min-char-3', obj.alias)) {
+                if(!UTILS.validate('min-char-3', obj.alias)) {
                     $('#input-alias').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-new-category .error').length == 0) {
@@ -1364,7 +1364,7 @@ var ADMIN = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/categories?new';
                             } else {
-                                HIVE.showInfo('Error', data.save_new_category.mensaje);
+                                UTILS.showInfo('Error', data.save_new_category.mensaje);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -1380,7 +1380,7 @@ var ADMIN = {
                 var obj = ADMIN.objSaveEditCategory();
                 obj.id_category = parseInt($('#input-id-category').val());
                 $('.content-edit-category *').removeClass('error');
-                if(!HIVE.validate('min-char-3', obj.alias)) {
+                if(!UTILS.validate('min-char-3', obj.alias)) {
                     $('#input-alias').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-edit-category .error').length == 0) {
@@ -1390,9 +1390,9 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_category.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_category.mensaje);
+                                UTILS.showInfo('Correct!', data.save_edit_category.mensaje);
                             } else {
-                                HIVE.showInfo('Error', data.save_edit_category.mensaje);
+                                UTILS.showInfo('Error', data.save_edit_category.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -1422,7 +1422,7 @@ var ADMIN = {
                                     btn.closest('tr').remove();
                                 }
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1438,7 +1438,7 @@ var ADMIN = {
                 var btn = $(this);
                 var obj = ADMIN.objSaveEditAttribute();
                 $('.content-new-attribute *').removeClass('error');
-                if(!HIVE.validate('min-char-3', obj.alias)) {
+                if(!UTILS.validate('min-char-3', obj.alias)) {
                     $('#input-alias').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-new-attribute .error').length == 0) {
@@ -1471,7 +1471,7 @@ var ADMIN = {
                 var obj = ADMIN.objSaveEditAttribute();
                 obj.id_attribute = parseInt($('#input-id-attribute').val());
                 $('.content-edit-attribute *').removeClass('error');
-                if(!HIVE.validate('min-char-3', obj.alias)) {
+                if(!UTILS.validate('min-char-3', obj.alias)) {
                     $('#input-alias').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-edit-attribute .error').length == 0) {
@@ -1482,7 +1482,7 @@ var ADMIN = {
                         success: function(data) {
                             if(data.save_edit_attribute.response == 'ok') {
                                 ADMIN.getAttributeValues(obj.id_attribute);
-                                HIVE.showInfo('Correct!', data.save_edit_attribute.mensaje);
+                                UTILS.showInfo('Correct!', data.save_edit_attribute.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -1515,8 +1515,8 @@ var ADMIN = {
                             if(data.save_attribute_value_properties.response == 'ok') {
                                 let id_attribute = parseInt($('#input-id-attribute').val())
                                 ADMIN.getAttributeValues(id_attribute);
-                                HIVE.closePopup('#popup-attribute-value-properties');
-                                HIVE.showInfo('Correct!', data.save_attribute_value_properties.mensaje);
+                                UTILS.closePopup('#popup-attribute-value-properties');
+                                UTILS.showInfo('Correct!', data.save_attribute_value_properties.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -1541,7 +1541,7 @@ var ADMIN = {
                             if(data.delete_server_image.response == 'ok') {
                                 btn.closest('tr').remove();
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1566,7 +1566,7 @@ var ADMIN = {
                             if(data.delete_code.response == 'ok') {
                                 btn.closest('tr').remove();
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1600,7 +1600,7 @@ var ADMIN = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/codes?new';
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                                 btn.removeClass('disabled');
                             }
                         }
@@ -1629,7 +1629,7 @@ var ADMIN = {
                                 btn.closest('tr').remove();
                             }                            
                         } else {
-                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                         }
                         btn.removeClass('disabled');
                     }
@@ -1654,9 +1654,9 @@ var ADMIN = {
                             $('#edit-code-rule-elements-list').html(data.get_code_rule.html_elements);
                             $('#edit-code-rule-elements-added').html(data.get_code_rule.html_selected);
                             ADMIN.editCodeRuleElementsEvent();
-                            HIVE.showPopup('#popup-edit-code-rule');
+                            UTILS.showPopup('#popup-edit-code-rule');
                         } else {
-                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                         }
                         btn.removeClass('disabled');
                     }
@@ -1679,7 +1679,7 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_code.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_code.mensaje);
+                                UTILS.showInfo('Correct!', data.save_edit_code.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -1692,7 +1692,7 @@ var ADMIN = {
                 $('#add-code-rule-elements-list').html('');
                 $('#add-code-rule-elements-added').html('');
                 $('#select-add-code-rule-type').trigger("change");
-                HIVE.showPopup('#popup-add-code-rule');
+                UTILS.showPopup('#popup-add-code-rule');
             });
             $('#select-add-code-rule-type').on("change", function() {
                 var select = $(this);
@@ -1721,7 +1721,7 @@ var ADMIN = {
                                 }                
                             });
                         } else {
-                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                         }
                         select.prop("disabled", false);
                     }
@@ -1757,9 +1757,9 @@ var ADMIN = {
                                     $('#code-rules').html(data.add_code_rule.html);
                                 }
                                 ADMIN.editCodeRuleEvents();
-                                HIVE.closePopup('#popup-add-code-rule');
+                                UTILS.closePopup('#popup-add-code-rule');
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1783,7 +1783,7 @@ var ADMIN = {
                             $('#edit-code-rule-elements-list').html(data.get_code_rule_elements_list.html);
                             ADMIN.editCodeRuleElementsEvent();
                         } else {
-                            HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                            UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                         }
                         select.prop("disabled", false);
                     }
@@ -1814,9 +1814,9 @@ var ADMIN = {
                         success: function(data) {
                             if(data.save_code_rule.response == 'ok') {
                                 ADMIN.getCodeRules(id_code);
-                                HIVE.showInfo('Correct!', data.save_code_rule.mensaje);
+                                UTILS.showInfo('Correct!', data.save_code_rule.mensaje);
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -1873,7 +1873,7 @@ var ADMIN = {
                     }
                     obj.languages.push(data);
                 });
-                var form = HIVE.validateForm('#form-new-payment');
+                var form = UTILS.validateForm('#form-new-payment');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -1884,7 +1884,7 @@ var ADMIN = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/payments?new';
                             } else {
-                                HIVE.showInfo('Error', data.save_new_payment.message);
+                                UTILS.showInfo('Error', data.save_new_payment.message);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -1914,7 +1914,7 @@ var ADMIN = {
                     }
                     obj.languages.push(data);
                 });
-                var form = HIVE.validateForm('#form-edit-payment');
+                var form = UTILS.validateForm('#form-edit-payment');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -1922,9 +1922,9 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_payment.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_payment.message);
+                                UTILS.showInfo('Correct!', data.save_edit_payment.message);
                             } else {
-                                HIVE.showInfo('Error', data.save_edit_payment.message);
+                                UTILS.showInfo('Error', data.save_edit_payment.message);
                             }
                             btn.removeClass('disabled');
                         }
@@ -1941,7 +1941,7 @@ var ADMIN = {
                     name: $('#input-name').val().trim(),
                     id_state: parseInt($('#select-state').val())
                 }
-                var form = HIVE.validateForm('#form-new-payment-zone');
+                var form = UTILS.validateForm('#form-new-payment-zone');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -1952,7 +1952,7 @@ var ADMIN = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/payment-zones?new';
                             } else {
-                                HIVE.showInfo('Error', data.save_new_payment_zone.message);
+                                UTILS.showInfo('Error', data.save_new_payment_zone.message);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -1970,7 +1970,7 @@ var ADMIN = {
                     name: $('#input-name').val().trim(),
                     id_state: parseInt($('#select-state').val())
                 }
-                var form = HIVE.validateForm('#form-edit-payment-zone');
+                var form = UTILS.validateForm('#form-edit-payment-zone');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -1978,9 +1978,9 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_payment_zone.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_payment_zone.message);
+                                UTILS.showInfo('Correct!', data.save_edit_payment_zone.message);
                             } else {
-                                HIVE.showInfo('Error', data.save_edit_payment_zone.message);
+                                UTILS.showInfo('Error', data.save_edit_payment_zone.message);
                             }
                             btn.removeClass('disabled');
                         }
@@ -2005,7 +2005,7 @@ var ADMIN = {
                             if(data.delete_user.response == 'ok') {
                                 btn.closest('tr').remove();
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -2037,10 +2037,10 @@ var ADMIN = {
                 if(obj.location == '') {
                     $('#input-edit-address-location').addClass('error');
                 }
-                if(!HIVE.validate('cp', obj.postal_code)) {
+                if(!UTILS.validate('cp', obj.postal_code)) {
                     $('#input-edit-address-postal-code').addClass('error');
                 }
-                if(!HIVE.validate('telephone', obj.telephone)) {
+                if(!UTILS.validate('telephone', obj.telephone)) {
                     $('#input-edit-address-telephone').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-edit-address .error').length == 0) {
@@ -2050,7 +2050,7 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_user_address.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_user_address.mensaje);
+                                UTILS.showInfo('Correct!', data.save_edit_user_address.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -2069,7 +2069,7 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.close_user_seassons.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.close_user_seassons.mensaje);
+                                UTILS.showInfo('Correct!', data.close_user_seassons.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -2090,7 +2090,7 @@ var ADMIN = {
                             if(data.send_validation_email.response == 'ok') {
                                 let html = '<div class="pb-10">' + data.send_validation_email.mensaje + '</div>';
                                 html += '<div><b>Link:</b> ' + data.send_validation_email.link + '</div>';
-                                HIVE.showInfo('Correct!', html);
+                                UTILS.showInfo('Correct!', html);
                             }
                             btn.removeClass('disabled');
                         }
@@ -2111,13 +2111,13 @@ var ADMIN = {
                     obj.id_address_main = parseInt($('input[name="input-address-main"]:checked').val());
                 }
                 $('.content-edit-user *').removeClass('error');
-                if(!HIVE.validate('name', obj.name)) {
+                if(!UTILS.validate('name', obj.name)) {
                     $('#input-name').addClass('error');
                 }
-                if(!HIVE.validate('lastname', obj.lastname)) {
+                if(!UTILS.validate('lastname', obj.lastname)) {
                     $('#input-last-name').addClass('error');
                 }
-                if(!HIVE.validate('email', obj.email)) {
+                if(!UTILS.validate('email', obj.email)) {
                     $('#input-email').addClass('error');
                 }
                 if(!btn.hasClass('disabled') && $('.content-edit-user .error').length == 0) {
@@ -2127,7 +2127,7 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_user.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_user.mensaje);
+                                UTILS.showInfo('Correct!', data.save_edit_user.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -2152,7 +2152,7 @@ var ADMIN = {
                             if(data.delete_admin_user.response == 'ok') {
                                 btn.closest('tr').remove();
                             } else {
-                                HIVE.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
+                                UTILS.showInfo('Uups', 'An unexpected error has occurred.<br>Reload the page to try again.');
                             }
                             btn.removeClass('disabled');
                         }
@@ -2174,13 +2174,13 @@ var ADMIN = {
                     id_admin_type: parseInt($('#select-admin-type').val())
                 };
                 $('.content-new-admin-user *').removeClass('error');
-                if(!HIVE.validate('name', obj.name)) {
+                if(!UTILS.validate('name', obj.name)) {
                     $('#input-name').addClass('error');
                 }
-                if(!HIVE.validate('lastname', obj.lastname)) {
+                if(!UTILS.validate('lastname', obj.lastname)) {
                     $('#input-last-name').addClass('error');
                 }
-                if(!HIVE.validate('email', obj.email)) {
+                if(!UTILS.validate('email', obj.email)) {
                     $('#input-email').addClass('error');
                 }
                 if(obj.pass1 == '' || obj.pass1.length < 8) {
@@ -2202,7 +2202,7 @@ var ADMIN = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/users-admin?new';
                             } else {
-                                HIVE.showInfo('Error', data.save_new_admin_user.mensaje);
+                                UTILS.showInfo('Error', data.save_new_admin_user.mensaje);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -2229,7 +2229,7 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.close_admin_user_sessions.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.close_admin_user_sessions.mensaje);
+                                UTILS.showInfo('Correct!', data.close_admin_user_sessions.mensaje);
                             }
                             btn.removeClass('disabled');
                         }
@@ -2249,13 +2249,13 @@ var ADMIN = {
                     id_state: parseInt($('#select-state').val())
                 };
                 $('.content-edit-admin-user *').removeClass('error');
-                if(!HIVE.validate('name', obj.name)) {
+                if(!UTILS.validate('name', obj.name)) {
                     $('#input-name').addClass('error');
                 }
-                if(!HIVE.validate('lastname', obj.lastname)) {
+                if(!UTILS.validate('lastname', obj.lastname)) {
                     $('#input-last-name').addClass('error');
                 }
-                if(!HIVE.validate('email', obj.email)) {
+                if(!UTILS.validate('email', obj.email)) {
                     $('#input-email').addClass('error');
                 }
                 if(obj.pass1 != '' || obj.pass2 != '') {
@@ -2276,7 +2276,7 @@ var ADMIN = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_admin_user.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_admin_user.mensaje);
+                                UTILS.showInfo('Correct!', data.save_edit_admin_user.mensaje);
                             }
                             btn.removeClass('disabled');
                         }

@@ -67,7 +67,7 @@ var ADMIN_SHIPMENT = {
                     }
                     obj.languages.push(data);
                 });
-                var form = HIVE.validateForm('#form-new-shipment');
+                var form = UTILS.validateForm('#form-new-shipment');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -78,7 +78,7 @@ var ADMIN_SHIPMENT = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/shipments?new';
                             } else {s
-                                HIVE.showInfo('Error', data.save_new_shipment.message);
+                                UTILS.showInfo('Error', data.save_new_shipment.message);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -110,7 +110,7 @@ var ADMIN_SHIPMENT = {
                     }
                     obj.languages.push(data);
                 });
-                var form = HIVE.validateForm('#form-edit-shipment');
+                var form = UTILS.validateForm('#form-edit-shipment');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -118,9 +118,9 @@ var ADMIN_SHIPMENT = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_shipment.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_shipment.message);
+                                UTILS.showInfo('Correct!', data.save_edit_shipment.message);
                             } else {
-                                HIVE.showInfo('Error', data.save_edit_shipment.message);
+                                UTILS.showInfo('Error', data.save_edit_shipment.message);
                             }
                             btn.removeClass('disabled');
                         }
@@ -137,7 +137,7 @@ var ADMIN_SHIPMENT = {
                     name: $('#input-name').val().trim(),
                     id_state: parseInt($('#select-state').val())
                 }
-                var form = HIVE.validateForm('#form-new-shipping-zone');
+                var form = UTILS.validateForm('#form-new-shipping-zone');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -148,7 +148,7 @@ var ADMIN_SHIPMENT = {
                                 btn.addClass('btn-ok');
                                 window.location.href = ADMIN_PATH + '/shipping-zones?new';
                             } else {
-                                HIVE.showInfo('Error', data.save_new_shipping_zone.message);
+                                UTILS.showInfo('Error', data.save_new_shipping_zone.message);
                                 btn.removeClass('disabled');
                             }
                             btn.removeClass('disabled');
@@ -228,7 +228,7 @@ var ADMIN_SHIPMENT = {
                         }
                     }
                 });
-                var form = HIVE.validateForm('#form-edit-shipping-zone');
+                var form = UTILS.validateForm('#form-edit-shipping-zone');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
@@ -236,9 +236,9 @@ var ADMIN_SHIPMENT = {
                         data: obj,
                         success: function(data) {
                             if(data.save_edit_shipping_zone.response == 'ok') {
-                                HIVE.showInfo('Correct!', data.save_edit_shipping_zone.message);
+                                UTILS.showInfo('Correct!', data.save_edit_shipping_zone.message);
                             } else {
-                                HIVE.showInfo('Error', data.save_edit_shipping_zone.message);
+                                UTILS.showInfo('Error', data.save_edit_shipping_zone.message);
                             }
                             btn.removeClass('disabled');
                         }
