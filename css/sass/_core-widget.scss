@@ -266,7 +266,7 @@ body.dark-mode {
         width: 0;
         height: 0;
         &:checked + .slider {
-            background-color: $hive-color;
+            background-color: $core-color;
             &:before {
                 @include transform(translateX(26px));
             }

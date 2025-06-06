@@ -19,5 +19,5 @@
         </div>
         <?php } ?>
         <div class="text-center">Publicado bajo licencia <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a>.</div>
-        <div class="text-center"><b class="hive-color">Hive</b> Framework Copyright © <?= date('Y'); ?></div>
+        <div class="text-center"><b class="core-color">Hive</b> Framework Copyright © <?= date('Y'); ?></div>
     </footer>

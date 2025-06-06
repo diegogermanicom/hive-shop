@@ -113,7 +113,7 @@
                 $html .= '</thead>';
                 $html .= '<tbody>';
                 foreach($pager['result'] as $row) {
-                    $state = ($row['id_state'] == 1) ? $row['state_name'] : '<span class="hive-color">'.$row['state_name'].'</span>';
+                    $state = ($row['id_state'] == 1) ? $row['state_name'] : '<span class="core-color">'.$row['state_name'].'</span>';
                     $image = '';
                     if($row['image_name'] != '') {
                         $url_image = PUBLIC_PATH.'/img/products/thumbnails/'.$row['image_name'];
@@ -229,7 +229,7 @@
                     } else {
                         $parent_html = '<a href="'.ADMIN_PATH.'/categories?id_parent='.$row['id_parent'].'" class="text-underline">'.$row['parent'].'</a>';
                     }
-                    $state = ($row['id_state'] == 2) ? '<span class="hive-color">Active</span>' : 'Disabled';
+                    $state = ($row['id_state'] == 2) ? '<span class="core-color">Active</span>' : 'Disabled';
                     $html .= '<tr>';
                     $html .=    '<td class="text-center">'.$row['id_category'].'</td>';
                     $html .=    '<td>'.$row['alias'].'</td>';
@@ -401,7 +401,7 @@
                 $html .= '</thead>';
                 $html .= '<tbody>';
                 foreach($pager['result'] as $row) {
-                    $active = ($row['id_state'] == 2) ? '<span class="hive-color">Active</span>' : 'Disabled';
+                    $active = ($row['id_state'] == 2) ? '<span class="core-color">Active</span>' : 'Disabled';
                     $html .= '<tr>';
                     $html .=    '<td class="text-center">'.$row['id_code'].'</td>';
                     $html .=    '<td>'.$row['name'].'</td>';
@@ -505,7 +505,7 @@
                 $html .= '</thead>';
                 $html .= '<tbody>';
                 foreach($pager['result'] as $row) {
-                    $validated = ($row['validated_email'] == 0) ? 'No' : '<span class="hive-color">Yes</span>';
+                    $validated = ($row['validated_email'] == 0) ? 'No' : '<span class="core-color">Yes</span>';
                     $html .= '<tr>';
                     $html .=    '<td class="text-center">'.$row['id_user'].'</td>';
                     $html .=    '<td>'.$row['name'].'</td>';
