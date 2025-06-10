@@ -107,7 +107,7 @@
 			$cabeceras .= "Reply-To: ".$reply."\r\n";
 			$cabeceras .= "MIME-Version: 1.0\r\n";
 			$cabeceras .= "Content-type: text/html; charset=utf-8\r\n";
-			$cabeceras .= "X-Mailer: PHP/".phpversion();
+			$cabeceras .= "X-Mailer: PHP/".phpversion().'\r\n';
     	    mail($email, $titulo, $html, $cabeceras);
 		}
 

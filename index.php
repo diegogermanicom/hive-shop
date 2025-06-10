@@ -8,6 +8,6 @@
      */
 
     // Init framework
-    include __DIR__.'/app/config/init.php';
+    require_once __DIR__.'/app/config/init.php';
 
 ?>

@@ -6,8 +6,12 @@
             'es' => '/inicio'
         ),
         'privacy-policy' => array(
-            'en' => '/home',
-            'es' => '/inicio'
+            'en' => '/privacy-policy',
+            'es' => '/politica-de-privacidad'
+        ),
+        'cookie-policy' => array(
+            'en' => '/cookie-policy',
+            'es' => '/politica-de-cookies'
         ),
         'service-down' => array(
             'en' => '/service-down',

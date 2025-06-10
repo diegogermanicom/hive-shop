@@ -7,28 +7,25 @@
      * Last Update: 2025
     */
 
+    Utils::checkDefined('CONTROLLERS_PATH');
     $classBefore = get_declared_classes();
-
-    // Files of the folder to ignore
-    $ignoreFiles = array(
-        'autoload.php'
-    );
     // I add files that are prioritized in order
     $priorityFiles = array();
     foreach($priorityFiles as $value) {
         if(file_exists(CONTROLLERS_PATH.'/'.$value)) {
-            include CONTROLLERS_PATH.'/'.$value;
+            require_once CONTROLLERS_PATH.'/'.$value;
         } else {
             Utils::error('The priority controller file you are trying to load <b>'.$value.'</b> does not exist.');
         }
     }
+    // I add classes that I will not load
+    $ignoreControllers = array();
     // I automatically include each controller
     $scandir = scandir(CONTROLLERS_PATH);
-    $files = array_diff($scandir, array('.', '..'), $ignoreFiles, $priorityFiles);
+    $files = array_diff($scandir, array('.', '..'), $ignoreControllers, $priorityFiles);
     foreach($files as $value) {
-        include CONTROLLERS_PATH.'/'.$value;
+        require_once CONTROLLERS_PATH.'/'.$value;
     }
-
     //I ignore system controllers
     $ignoreControllers = array();
     foreach($ignoreControllers as $value) {
@@ -44,6 +41,6 @@
             'functions' => get_class_methods($value)
         );
     }
-    define('CONTROLLERS', $arrayControllers);
+    return $arrayControllers;
 
 ?>

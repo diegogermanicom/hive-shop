@@ -1,4 +1,4 @@
-    <footer>
+<footer>
         <?php if(MULTILANGUAGE == true && isset($data['routes'])) { ?>
         <div class="pb-15 animate animate-opacity text-center">
             <label>Elige tu idioma</label>
@@ -18,6 +18,6 @@
             ?>
         </div>
         <?php } ?>
-        <div class="text-center">Publicado bajo licencia <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a>.</div>
-        <div class="text-center"><b class="core-color">Hive</b> Framework Copyright © <?= date('Y'); ?></div>
+        <div class="text-center font-14">Published under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a> license.</div>
+        <div class="text-center font-14 pt-5">Copyright © <?= date('Y'); ?> <b class="core-color">Hive</b> Framework - <a href="<?= PUBLIC_ROUTE; ?>/privacy-policy">Privacy policy</a> - <a href="<?= PUBLIC_ROUTE; ?>/cookie-policy">Cookie policy</a></div>
     </footer>

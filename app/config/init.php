@@ -7,20 +7,12 @@
      * Last Update: 2025
     */
 
-    include __DIR__.'/../libs/utils.php';
+    require_once __DIR__.'/../libs/utils.php';
 
-    $settings = include __DIR__.'/settings.php';
+    $settings = require_once __DIR__.'/settings.php';
     // If all setting values ​​are correct continue
     Utils::settingsValidator($settings);
-    
-    // Server config
-    date_default_timezone_set('Europe/Madrid');
-    ignore_user_abort(true);
-    ini_set('memory_limit', '256M');
-    // Start user session
-    session_name(APP_NAME);
-    session_start();
-
+ 
     // Constant system variables
     define('HOST', strtolower($_SERVER['HTTP_HOST']));
     define('METHOD', strtolower($_SERVER['REQUEST_METHOD']));
@@ -28,7 +20,7 @@
 
     define('HOST_DEV', $settings['HOST_DEV']);
     define('HOST_PRO', $settings['HOST_PRO']);
-    define('ENVIRONMENT', Utils::getEnviroment(HOST, HOST_DEV, HOST_PRO));
+    define('ENVIRONMENT', Utils::getEnviroment());
 
     define('PROTOCOL', $settings[ENVIRONMENT]['PROTOCOL']);
     define('PUBLIC_PATH', $settings[ENVIRONMENT]['PUBLIC_PATH']);
@@ -84,7 +76,8 @@
     
     // Find out the language
     define('LANG', Utils::getLanguage());
-    include LANG_PATH.'/routes.php';
+    require_once LANG_PATH.'/'.LANG.'.php';
+    require_once LANG_PATH.'/routes.php';
 
     // Declare public paths
     if(MULTILANGUAGE == true) {
@@ -100,29 +93,17 @@
     }
     define('URL', PROTOCOL.'://'.HOST.PUBLIC_ROUTE);
     
-    // If it is not in maintenance and try to access service-down view
-    if(MAINTENANCE == false && ROUTE == PUBLIC_ROUTE.'/service-down') {
-        header('Location: '.PUBLIC_ROUTE);
-        exit;
-    }
-
-    // I save the application theme
-    if(!isset($_COOKIE['color-mode'])) {
-        setcookie('color-mode', 'light-mode', time() + Utils::ONEYEAR, PUBLIC_PATH.'/'); // 1 año
-        $_COOKIE['color-mode'] = 'light-mode';
-    }
-
-    // I load all the framework libraries
-    include LIBS_PATH.'/autoload.php';
-    // I create an object to connect to the database
+    Utils::init();
+    Utils::checkServiceDownView();
+    Utils::setThemeColor();
+    require_once __DIR__.'/autoload-libs.php';
+    // I create the core objects
     $DB = new Ddbb();
-    // I create an object to control the routes
     $R = new Route();
-    // Load model objects
-    include MODELS_PATH.'/autoload.php';
-    // Load controler objects
-    include CONTROLLERS_PATH.'/autoload.php';   
-    // Load routes list
-    include ROUTES_PATH.'/autoload.php';
+    require_once __DIR__.'/autoload-models.php';
+    define('CONTROLLERS', require_once __DIR__.'/autoload-controllers.php');
+    require_once __DIR__.'/autoload-routes.php';
+    // No route found
+    $R->empty();
 
 ?>

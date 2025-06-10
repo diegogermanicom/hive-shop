@@ -16,6 +16,7 @@
     if(LANG == 'en') {
         $R->get('/home'                                 , 'home');
         $R->get('/privacy-policy'                       , 'privacy_policy');
+        $R->get('/cookie-policy'                        , 'cookie_policy');
         $R->get('/access'                               , 'access');
         $R->get('/register'                             , 'register');
         $R->get('/cart'                                 , 'cart');
@@ -26,6 +27,7 @@
     } else if(LANG == 'es') {
         $R->get('/inicio'                               , 'home');
         $R->get('/politica-de-privacidad'               , 'privacy_policy');
+        $R->get('/politica-de-cookies'                  , 'cookie_policy');
         $R->get('/acceso'                               , 'access');
         $R->get('/registro'                             , 'register');
         $R->get('/carrito'                              , 'cart');

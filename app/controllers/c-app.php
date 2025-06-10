@@ -103,6 +103,22 @@
             $this->view('/privacy-policy', $data);
         }
 
+        public function cookie_policy($args) {
+            $app = new App('cookie-policy-page');
+            $data = $app->getAppData();
+            if(LANG == 'en') {
+                $data['meta']['title'] = $app->setTitle('Cookie Policy');
+                $data['meta']['description'] = 'Find out about our cookie policies to make good use of our application.';
+                $data['meta']['keywords'] .= ', cookies, cookies policy';
+            } else if(LANG == 'es') {
+                $data['meta']['title'] = $app->setTitle('Política de Cookie');
+                $data['meta']['description'] = 'Infórmate de nuestras políticas de cookies para hacer un buen uso de nuestra aplicación.';
+                $data['meta']['keywords'] .= ', cookies, cookies policy';
+            }
+            $data['routes'] = LANG_ROUTES['cookie-policy'];
+            $this->view('/cookie-policy', $data);
+        }
+
         public function service_down($args) {
             $app = new App('service-down-page');
             $data = $app->getAppData();
