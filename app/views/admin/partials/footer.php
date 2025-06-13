@@ -1,4 +1,4 @@
     <footer>
-        <div class="text-center">Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>.</div>
-        <div class="text-center"><b class="core-color">Hive</b> Framework Copyright © <?= date('Y'); ?></div>
+        <div class="text-center font-14">Published under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a> license.</div>
+        <div class="text-center font-14 pt-5">Copyright © <?= date('Y'); ?> <b class="core-color">Hive</b> Framework</div>
     </footer>

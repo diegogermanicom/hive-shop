@@ -10,7 +10,7 @@
     require_once __DIR__.'/../libs/utils.php';
 
     $settings = require_once __DIR__.'/settings.php';
-    // If all setting values ​​are correct continue
+    // If all setting values are correct continue
     Utils::settingsValidator($settings);
  
     // Constant system variables
@@ -77,7 +77,6 @@
     // Find out the language
     define('LANG', Utils::getLanguage());
     require_once LANG_PATH.'/'.LANG.'.php';
-    require_once LANG_PATH.'/routes.php';
 
     // Declare public paths
     if(MULTILANGUAGE == true) {
@@ -96,14 +95,18 @@
     Utils::init();
     Utils::checkServiceDownView();
     Utils::setThemeColor();
+
     require_once __DIR__.'/autoload-libs.php';
+    require_once __DIR__.'/autoload-models.php';
+    $controllers = require_once __DIR__.'/autoload-controllers.php';
+    define('CONTROLLERS', $controllers);
+
     // I create the core objects
     $DB = new Ddbb();
     $R = new Route();
-    require_once __DIR__.'/autoload-models.php';
-    define('CONTROLLERS', require_once __DIR__.'/autoload-controllers.php');
+
     require_once __DIR__.'/autoload-routes.php';
-    // No route found
-    $R->empty();
+    define('ROUTES', $R->getRoutes());
+    $R->init();
 
 ?>

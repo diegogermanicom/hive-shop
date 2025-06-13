@@ -9,33 +9,38 @@
 
     // App Get
     $R->setController('CApp');
-    $R->get(''                                      , 'root');
-    $R->get('/'                                     , 'root');
-    $R->get('/404'                                  , 'page_404', false);
-
-    if(LANG == 'en') {
-        $R->get('/home'                                 , 'home');
-        $R->get('/privacy-policy'                       , 'privacy_policy');
-        $R->get('/cookie-policy'                        , 'cookie_policy');
-        $R->get('/access'                               , 'access');
-        $R->get('/register'                             , 'register');
-        $R->get('/cart'                                 , 'cart');
-        $R->get('/checkout'                             , 'checkout');
-        $R->get('/service-down'                         , 'service_down', false);
-        $R->get('/validate-email'                       , 'validate_email', false);
-        $R->get('/logout'                               , 'logout', false);
-    } else if(LANG == 'es') {
-        $R->get('/inicio'                               , 'home');
-        $R->get('/politica-de-privacidad'               , 'privacy_policy');
-        $R->get('/politica-de-cookies'                  , 'cookie_policy');
-        $R->get('/acceso'                               , 'access');
-        $R->get('/registro'                             , 'register');
-        $R->get('/carrito'                              , 'cart');
-        $R->get('/tramitar-pedido'                      , 'checkout');
-        $R->get('/servicio-caido'                       , 'service_down', false);
-        $R->get('/validar-email'                        , 'validate_email', false);
-        $R->get('/desconectar'                          , 'logout', false);
-    }
+    // Routes in English
+    $R->get(
+        [''                                 , 'root'                , 'en', 'empty-root'],
+        ['/'                                , 'root'                , 'en', 'bar-root'],
+        ['/404'                             , 'page_404'            , 'en', 'page-404'],
+        ['/home'                            , 'home'                , 'en', 'home'],
+        ['/privacy-policy'                  , 'privacy_policy'      , 'en', 'privacy-policy'],
+        ['/cookie-policy'                   , 'privacy_policy'      , 'en', 'cookie-policy'],
+        ['/access'                          , 'access'              , 'en', 'access'],
+        ['/register'                        , 'register'            , 'en', 'register'],
+        ['/cart'                            , 'cart'                , 'en', 'cart'],
+        ['/checkout'                        , 'checkout'            , 'en', 'checkout'],
+        ['/service-down'                    , 'service_down'        , 'en', 'service-down'],
+        ['/validate-email'                  , 'validate_email'      , 'en', 'validate-email'],
+        ['/logout'                          , 'logout'              , 'en', 'logout']
+    );
+    // Routes in Spanish
+    $R->get(
+        [''                                 , 'root'                , 'es', 'empty-root'],
+        ['/'                                , 'root'                , 'es', 'bar-root'],
+        ['/404'                             , 'page_404'            , 'es', 'page-404'],
+        ['/inicio'                          , 'home'                , 'es', 'home'],
+        ['/politica-de-privacidad'          , 'privacy_policy'      , 'es', 'privacy-policy'],
+        ['/politica-de-cookies'             , 'privacy_policy'      , 'es', 'cookie-policy'],
+        ['/acceso'                          , 'access'              , 'es', 'access'],
+        ['/registro'                        , 'register'            , 'es', 'register'],
+        ['/carrito'                         , 'cart'                , 'es', 'cart'],
+        ['/tramitar-pedido'                 , 'checkout'            , 'es', 'checkout'],
+        ['/servicio-caido'                  , 'service_down'        , 'es', 'service-down'],
+        ['/validar-email'                   , 'validate_email'      , 'es', 'validate-email'],
+        ['/desconectar'                     , 'logout'              , 'es', 'logout']
+    );
 
     $R->get_categories();
     $R->get_products();

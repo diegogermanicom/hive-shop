@@ -145,7 +145,16 @@
             if($result->num_rows != 0) {
                 $routes = array();
                 while($row = $result->fetch_assoc()) {
-                    $routes[$row['language_name']] = $row['route'];
+                    if(MULTILANGUAGE == true) {
+                        $route = PUBLIC_PATH.'/'.$row['language_name'].$row['route'];
+                    } else {
+                        $route = PUBLIC_ROUTE.$row['route'];
+                    }
+                    $obj = array(
+                        'route' => $route,
+                        'language' => $row['language_name']
+                    );
+                    array_push($routes, $obj);
                 }
                 return $routes;
             } else {

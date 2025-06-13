@@ -4,13 +4,13 @@
             <label>Elige tu idioma</label>
             <?php
                 $html = '<select id="select-choose-language">';
-                foreach($data['routes'] as $index => $value) {
-                    if(in_array($index, LANGUAGES)) {
+                foreach($data['routes'] as $value) {
+                    if(in_array($value['language'], LANGUAGES)) {
                         $selected = '';
-                        if($index == LANG) {
+                        if($value['language'] == LANG) {
                             $selected = ' selected';
                         }
-                        $html .= '<option value="'.$index.'" route="'.$value.'"'.$selected.'>'.$index.'</option>';
+                        $html .= '<option value="'.$value['language'].'" route="'.$value['route'].'"'.$selected.'>'.$value['language'].'</option>';
                     }
                 }
                 $html .= '</select>';
@@ -18,6 +18,6 @@
             ?>
         </div>
         <?php } ?>
-        <div class="text-center">Publicado bajo licencia <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a>.</div>
-        <div class="text-center"><b class="core-color">Hive</b> Framework Copyright © <?= date('Y'); ?></div>
+        <div class="text-center font-14">Publicado bajo licencia <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a>.</div>
+        <div class="text-center font-14 pt-5">Copyright © <?= date('Y'); ?> <b class="core-color">Hive</b> Framework - <a href="<?= PUBLIC_ROUTE; ?>/politica-de-privacidad">Política de privacidad</a> - <a href="<?= PUBLIC_ROUTE; ?>/politica-de-cookies">Política de cookies</a></div>
     </footer>

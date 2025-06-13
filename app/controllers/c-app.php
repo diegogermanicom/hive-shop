@@ -83,7 +83,7 @@
             } else if(LANG == 'es') {
                 $data['meta']['title'] = $app->setTitle('Inicio');
             }
-            $data['routes'] = LANG_ROUTES['home'];
+            $data['routes'] = ROUTES['home'];
             $this->view('/home', $data);
         }
 
@@ -99,7 +99,7 @@
                 $data['meta']['description'] = 'Infórmate de nuestras políticas de privacidad para hacer un buen uso de nuestra aplicación.';
                 $data['meta']['keywords'] .= ', política de privacidad, legal, cookies, política de cookies';
             }
-            $data['routes'] = LANG_ROUTES['privacy-policy'];
+            $data['routes'] = ROUTES['privacy-policy'];
             $this->view('/privacy-policy', $data);
         }
 
@@ -115,7 +115,7 @@
                 $data['meta']['description'] = 'Infórmate de nuestras políticas de cookies para hacer un buen uso de nuestra aplicación.';
                 $data['meta']['keywords'] .= ', cookies, cookies policy';
             }
-            $data['routes'] = LANG_ROUTES['cookie-policy'];
+            $data['routes'] = ROUTES['cookie-policy'];
             $this->view('/cookie-policy', $data);
         }
 
@@ -129,7 +129,7 @@
                 $data['meta']['title'] = $app->setTitle('Servicio caído');
                 $data['meta']['description'] = 'Estamos realizando mejoras en nuestra aplicación. En muy poco tiempo estaremos de vuelta.';
             }
-            $data['routes'] = LANG_ROUTES['service-down'];
+            $data['routes'] = ROUTES['service-down'];
             $this->view('/service-down', $data);
         }
 
@@ -144,7 +144,7 @@
                 $data['meta']['title'] = $app->setTitle('Acceso');
                 $data['meta']['description'] = 'Accede a tu cuenta de usuario de la tienda o crea una cuenta nueva.';
             }
-            $data['routes'] = LANG_ROUTES['access'];
+            $data['routes'] = ROUTES['access'];
             $this->view('/access', $data);
         }
 
@@ -159,10 +159,7 @@
                 $data['meta']['title'] = $app->setTitle('Registro');
                 $data['meta']['description'] = 'Crea tu cuenta de usuario en la tienda para tener un registro de tus pedidos.';
             }
-            $data['routes'] = array(
-                'en' => '/register',
-                'es' => '/registro'
-            );
+            $data['routes'] = ROUTES['register'];
             $this->view('/register', $data);
         }
 
@@ -210,10 +207,7 @@
                 $data['meta']['title'] = $app->setTitle('Carrito');
                 $data['meta']['description'] = 'Revisa y modifica los productos de tu carrito.';
             }
-            $data['routes'] = array(
-                'en' => '/cart',
-                'es' => '/carrito'
-            );
+            $data['routes'] = ROUTES['cart'];
             $this->view('/cart', $data);
         }
 
@@ -227,10 +221,7 @@
                 $data['meta']['title'] = $app->setTitle('Tramitar pedido');
                 $data['meta']['description'] = 'Rellena los datos del formulario para finalizar tu pedido.';
             }
-            $data['routes'] = array(
-                'en' => '/checkout',
-                'es' => '/tramitar-pedido'
-            );
+            $data['routes'] = ROUTES['checkout'];
             $data['continents'] = $app->get_continents_active_options();
             $data['cart'] = $app->get_checkout_cart($_COOKIE['id_cart']);
             $data['javascript'] = json_encode(array(

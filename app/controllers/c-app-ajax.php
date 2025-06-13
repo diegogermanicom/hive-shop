@@ -43,14 +43,8 @@
 
         public function choose_language($args) {
             $app = new AppAjax();
-            $app->choose_language($_POST['language']);
             $result = [];
-            $route_tail = str_replace(PUBLIC_ROUTE, '', $_POST['route']);
-            $result['language'] = array(
-                'response' => 'ok',
-                'route' => PUBLIC_PATH.'/'.$_COOKIE['lang'].$route_tail,
-                'language_route' => PUBLIC_PATH.'/'.$_COOKIE['lang'].$_POST['language_route']
-            );
+            $result['language'] = $app->choose_language($_POST['language']);
             echo json_encode($result);
         }
 

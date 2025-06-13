@@ -4,64 +4,60 @@
      * Author: Diego Martin
      * Copyright: Hive®
      * Version: 1.0
-     * Last Update: 2023
+     * Last Update: 2025
      */
 
     // Admin Get
+    $R->setRoot(ADMIN_PATH);
     $R->setController('CAdmin');
-    $R->getAdmin(''                                 , 'root');
-    $R->getAdmin('/'                                , 'root');
-    $R->getAdmin('/login'                           , 'login');
-    $R->getAdmin('/logout'                          , 'logout');
-    $R->getAdmin('/home'                            , 'home');
-
-    $R->getAdmin('/products'                        , 'products');
-    $R->getAdmin('/products-custom-routes'          , 'products_custom_routes');
-    $R->getAdmin('/new-product'                     , 'new_product');
-    $R->getAdmin('/edit-product'                    , 'edit_product');
-
-    $R->getAdmin('/categories'                      , 'categories');
-    $R->getAdmin('/categories-custom-routes'        , 'categories_custom_routes');
-    $R->getAdmin('/new-category'                    , 'new_category');
-    $R->getAdmin('/edit-category'                   , 'edit_category');
-    
-    $R->getAdmin('/attributes'                      , 'attributes');
-    $R->getAdmin('/new-attribute'                   , 'new_attribute');
-    $R->getAdmin('/edit-attribute'                  , 'edit_attribute');
-
-    $R->getAdmin('/images'                          , 'images');
-    $R->getAdmin('/codes'                           , 'codes');
-    $R->getAdmin('/new-code'                        , 'new_code');
-    $R->getAdmin('/edit-code'                       , 'edit_code');
-    $R->getAdmin('/stats'                           , 'stats');
-    $R->getAdmin('/languages'                       , 'languages');
-    $R->getAdmin('/edit-language'                   , 'edit_language');
-    $R->getAdmin('/users'                           , 'users');
-    $R->getAdmin('/edit-user'                       , 'edit_user');
-    $R->getAdmin('/users-admin'                     , 'users_admin');
-    $R->getAdmin('/edit-user-admin'                 , 'edit_user_admin');
-    $R->getAdmin('/new-admin-user'                  , 'new_admin_user');
-    $R->getAdmin('/carts'                           , 'carts');
-    $R->getAdmin('/view-cart'                       , 'view_cart');
-    $R->getAdmin('/orders'                          , 'orders');
-    $R->getAdmin('/order'                           , 'order');
-    $R->getAdmin('/taxes'                           , 'taxes');
-    $R->getAdmin('/locations'                       , 'locations');
-
-    $R->getAdmin('/shipments'                       , 'shipments');
-    $R->getAdmin('/new-shipping-method'             , 'new_shipping_method');
-    $R->getAdmin('/edit-shipping-method'            , 'edit_shipping_method');
-    $R->getAdmin('/shipping-zones'                  , 'shipping_zones');
-    $R->getAdmin('/new-shipping-zone'               , 'new_shipping_zone');
-    $R->getAdmin('/edit-shipping-zone'              , 'edit_shipping_zone');
-
-    $R->getAdmin('/payments'                        , 'payments');
-    $R->getAdmin('/new-payment-method'              , 'new_payment_method');
-    $R->getAdmin('/edit-payment-method'             , 'edit_payment_method');
-    $R->getAdmin('/payment-zones'                   , 'payment_zones');
-    $R->getAdmin('/new-payment-zone'                , 'new_payment_zone');
-    $R->getAdmin('/edit-payment-zone'               , 'edit_payment_zone');
-    
-    $R->getAdmin('/ftp-upload'                      , 'ftp_upload');
+    $R->get(
+        [''                                 , 'root'],
+        ['/'                                , 'root'],
+        ['/login'                           , 'login'],
+        ['/logout'                          , 'logout'],
+        ['/home'                            , 'home'],
+        ['/products'                        , 'products'],
+        ['/products-custom-routes'          , 'products_custom_routes'],
+        ['/new-product'                     , 'new_product'],
+        ['/edit-product'                    , 'edit_product'],
+        ['/categories'                      , 'categories'],
+        ['/categories-custom-routes'        , 'categories_custom_routes'],
+        ['/new-category'                    , 'new_category'],
+        ['/edit-category'                   , 'edit_category'],
+        ['/attributes'                      , 'attributes'],
+        ['/new-attribute'                   , 'new_attribute'],
+        ['/edit-attribute'                  , 'edit_attribute'],
+        ['/images'                          , 'images'],
+        ['/codes'                           , 'codes'],
+        ['/new-code'                        , 'new_code'],
+        ['/edit-code'                       , 'edit_code'],
+        ['/stats'                           , 'stats'],
+        ['/languages'                       , 'languages'],
+        ['/edit-language'                   , 'edit_language'],
+        ['/users'                           , 'users'],
+        ['/edit-user'                       , 'edit_user'],
+        ['/users-admin'                     , 'users_admin'],
+        ['/edit-user-admin'                 , 'edit_user_admin'],
+        ['/new-admin-user'                  , 'new_admin_user'],
+        ['/carts'                           , 'carts'],
+        ['/view-cart'                       , 'view_cart'],
+        ['/orders'                          , 'orders'],
+        ['/order'                           , 'order'],
+        ['/taxes'                           , 'taxes'],
+        ['/locations'                       , 'locations'],
+        ['/shipments'                       , 'shipments'],
+        ['/new-shipping-method'             , 'new_shipping_method'],
+        ['/edit-shipping-method'            , 'edit_shipping_method'],
+        ['/shipping-zones'                  , 'shipping_zones'],
+        ['/new-shipping-zone'               , 'new_shipping_zone'],
+        ['/edit-shipping-zone'              , 'edit_shipping_zone'],
+        ['/payments'                        , 'payments'],
+        ['/new-payment-method'              , 'new_payment_method'],
+        ['/edit-payment-method'             , 'edit_payment_method'],
+        ['/payment-zones'                   , 'payment_zones'],
+        ['/new-payment-zone'                , 'new_payment_zone'],
+        ['/edit-payment-zone'               , 'edit_payment_zone'],
+        ['/ftp-upload'                      , 'ftp_upload']
+    );
 
 ?>

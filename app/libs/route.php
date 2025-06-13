@@ -4,27 +4,113 @@
      * Author: Diego Martin
      * Copyright: Hive®
      * Version: 1.0
-     * Last Update: 2024
+     * Last Update: 2025
      */
 
     class Route {
 
-        public $root = PUBLIC_ROUTE;
+        public $prefix = '';
+        public $root = null;
         public $controller = null;
+        public $method = null;
         // I save all the routes that have been configured in this array
-        public $routesGet = array();
+        public $routes;
+
+        function __construct() {
+            $this->routes = array(
+                'get' => array(),
+                'post' => array(),
+                'put' => array(),
+                'connect' => array(),
+                'trace' => array(),
+                'patch' => array(),
+                'delete' => array()
+            );
+        }
 
         public function reset() {
-            $this->root = PUBLIC_ROUTE;
+            $this->prefix = '';
+            $this->root = null;
             $this->controller = null;
+            $this->method = null;
         }
 
-        public function setRoot($root = '') {
-            $this->root = PUBLIC_ROUTE.$root;
+        public function setPrefix($prefix) {
+            $this->prefix = $prefix;
         }
         
-        public function setController($controller = null) {
+        public function setRoot($root) {
+            $this->root = $root;
+        }
+
+        public function setController($controller) {
             $this->controller = $controller;
+        }
+
+        public function setMethod($method) {
+            $this->method = $method;
+        }
+
+        public function getRoutes() {
+            return $this->routes['get'];
+        }
+
+        public function postRoutes() {
+            return $this->routes['post'];
+        }
+
+        public function add($routes) {
+            foreach($routes as $route) {
+                // I check if a default controller has been selected
+                if($this->controller == null) {
+                    list($controller, $function) = explode("#", $route[1]);
+                } else {
+                    $controller = $this->controller;
+                    $function = $route[1];
+                }
+                $objRoute = array(
+                    'route' => PUBLIC_PATH.$this->prefix.$route[0],
+                    'controller' => $controller,
+                    'function' => $function,
+                    'language' => LANG
+                );
+                // If you specify a language
+                if(MULTILANGUAGE == true && isset($route[2])) {
+                    //If you specify a specific route
+                    if($this->root != null) {
+                        $objRoute['route'] = $this->root.'/'.$route[2].$this->prefix.$route[0];
+                    } else {
+                        $objRoute['route'] = PUBLIC_PATH.'/'.$route[2].$this->prefix.$route[0];
+                    }
+                    $objRoute['language'] = $route[2];
+                    // If the alias does not exist
+                    if(!isset($this->routes[$this->method][$route[3]])) {
+                        $this->routes[$this->method][$route[3]] = array();
+                    }
+                    array_push($this->routes[$this->method][$route[3]], $objRoute);
+                } else {
+                    //If you specify a specific route
+                    if($this->root != null) {
+                        $objRoute['route'] = $this->root.$this->prefix.$route[0];
+                    }
+                    // If the alias does not exist
+                    if(!isset($this->routes[$this->method]['root'])) {
+                        $this->routes[$this->method]['root'] = array();
+                    }
+                    array_push($this->routes[$this->method]['root'], $objRoute);
+                }
+            }
+        }
+
+        public function init() {
+            foreach($this->routes as $method => $methods) {
+                foreach($methods as $alias) {
+                    foreach($alias as $route) {
+                        $this->call($method, $route['route'], $route['controller'], $route['function']);
+                    }
+                }
+            }
+            $this->empty();
         }
 
         public function scan_route($route): array {
@@ -56,108 +142,57 @@
             }
         }
 
-        public function call($type, $route, $function) {
+        public function call($type, $route, $controller, $function) {
             list($scan_route, $args) = $this->scan_route($route);
             if(METHOD == $type && ROUTE == $scan_route) {
                 // I save the call details
                 $args['_route'] = $route;
-                $args['_function'] = $function;
-                // If i pass a function
-                if(is_callable($function)) {
-                    $function($args);
-                    exit;
-                } else {
-                    // I check if a default controller has been selected
-                    if($this->controller == null) {
-                        list($controller, $function_controller) = explode("#", $function);
-                    } else {
-                        $controller = $this->controller;
-                        $function_controller = $function;
-                    }
-                    // If the object exists
-                    $class_exist = class_exists($controller);
-                    if($class_exist == true) {
-                        $obj = eval('return new '.$controller.'();');
-                        // If the function exists in the object
-                        if(method_exists($obj, $function_controller)) {
-                            eval('$obj->'.$function_controller.'($args);');    
-                            exit;
-                        }
+                // If the object exists
+                $class_exist = class_exists($controller);
+                if($class_exist == true) {
+                    $obj = eval('return new '.$controller.'();');
+                    // If the function exists in the object
+                    if(method_exists($obj, $function)) {
+                        eval('$obj->'.$function.'($args);');    
+                        exit;
                     }
                 }
             } 
         }
 
-        public function get($route, $function, $public = true) {
-            if(is_array($route)) {
-                foreach($route AS $r) {
-                    if($public == true) {
-                        array_push($this->routesGet, $this->root.$r);
-                    }
-                    $this->call(__FUNCTION__, $this->root.$r, $function);
-                }
-            } else {
-                if($public == true) {
-                    array_push($this->routesGet, $this->root.$route);
-                }
-                $this->call(__FUNCTION__, $this->root.$route, $function);
-            }
+        public function get(...$routes) {
+            $this->method = __FUNCTION__;
+            $this->add($routes);
         }
 
-        public function post($route, $function) {
-            $this->call(__FUNCTION__, PUBLIC_PATH.$route, $function);
+        public function post(...$routes) {
+            $this->method = __FUNCTION__;
+            $this->add($routes);
         }
 
-        public function put($route, $function) {
-            $this->call(__FUNCTION__, PUBLIC_PATH.$route, $function);
+        public function put(...$routes) {
+            $this->method = __FUNCTION__;
+            $this->add($routes);
         }
 
-        public function connect($route, $function) {
-            $this->call(__FUNCTION__, PUBLIC_PATH.$route, $function);
+        public function connect(...$routes) {
+            $this->method = __FUNCTION__;
+            $this->add($routes);
         }
 
-        public function trace($route, $function) {
-            $this->call(__FUNCTION__, PUBLIC_PATH.$route, $function);
+        public function trace(...$routes) {
+            $this->method = __FUNCTION__;
+            $this->add($routes);
         }
 
-        public function patch($route, $function) {
-            $this->call(__FUNCTION__, PUBLIC_PATH.$route, $function);
+        public function patch(...$routes) {
+            $this->method = __FUNCTION__;
+            $this->add($routes);
         }
 
-        public function delete($route, $function) {
-            $this->call(__FUNCTION__, PUBLIC_PATH.$route, $function);
-        }
-
-        public function getAdmin($route, $function) {
-            $this->call('get', ADMIN_PATH.$route, $function);
-        }
-
-        public function postAdmin($route, $function) {
-            $this->call('post', ADMIN_PATH.$route, $function);
-        }
-
-        public function putAdmin($route, $function) {
-            $this->call('put', ADMIN_PATH.$route, $function);
-        }
-
-        public function connectAdmin($route, $function) {
-            $this->call('connect', ADMIN_PATH.$route, $function);
-        }
-
-        public function traceAdmin($route, $function) {
-            $this->call('trace', ADMIN_PATH.$route, $function);
-        }
-
-        public function patchAdmin($route, $function) {
-            $this->call('patch', ADMIN_PATH.$route, $function);
-        }
-
-        public function deleteAdmin($route, $function) {
-            $this->call('delete', ADMIN_PATH.$route, $function);
-        }
-
-        public function createSiteMap() {
-
+        public function delete(...$routes) {
+            $this->method = __FUNCTION__;
+            $this->add($routes);
         }
 
         public function empty() {
@@ -166,7 +201,8 @@
             } else {
                 echo json_encode(array(
                     'status' => '404',
-                    'error' => 'Permission denied'
+                    'error' => 'Route not found',
+                    'route' => ROUTE
                 ));
             }
             exit;
@@ -174,7 +210,7 @@
 
         public function get_categories() {
             if(METHOD == 'get' && !in_array(ROUTE, array('', '/'))) {
-                if(PUBLIC_ROUTE != '' && strpos(ROUTE, PUBLIC_ROUTE) == 0) {
+                if(PUBLIC_ROUTE != '' && strpos(ROUTE, PUBLIC_ROUTE) === 0) {
                     $route = explode(PUBLIC_ROUTE, ROUTE, 2)[1];
                 } else {
                     $route = ROUTE;
@@ -196,7 +232,7 @@
 
         public function get_products() {
             if(METHOD == 'get' && !in_array(ROUTE, array('', '/'))) {
-                if(PUBLIC_ROUTE != '' && strpos(ROUTE, PUBLIC_ROUTE) == 0) {
+                if(PUBLIC_ROUTE != '' && strpos(ROUTE, PUBLIC_ROUTE) === 0) {
                     $route = explode(PUBLIC_ROUTE, ROUTE, 2)[1];
                 } else {
                     $route = ROUTE;
@@ -218,7 +254,7 @@
 
         public function get_categories_custom_routes() {
             if(METHOD == 'get' && !in_array(ROUTE, array('', '/'))) {
-                if(PUBLIC_ROUTE != '' && strpos(ROUTE, PUBLIC_ROUTE) == 0) {
+                if(PUBLIC_ROUTE != '' && strpos(ROUTE, PUBLIC_ROUTE) === 0) {
                     $route = explode(PUBLIC_ROUTE, ROUTE, 2)[1];
                 } else {
                     $route = ROUTE;
@@ -240,7 +276,7 @@
 
         public function get_products_custom_routes() {
             if(METHOD == 'get' && !in_array(ROUTE, array('', '/'))) {
-                if(PUBLIC_ROUTE != '' && strpos(ROUTE, PUBLIC_ROUTE) == 0) {
+                if(PUBLIC_ROUTE != '' && strpos(ROUTE, PUBLIC_ROUTE) === 0) {
                     $route = explode(PUBLIC_ROUTE, ROUTE, 2)[1];
                 } else {
                     $route = ROUTE;

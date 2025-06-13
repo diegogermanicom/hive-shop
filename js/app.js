@@ -428,10 +428,9 @@ var APP = {
     chooseLanguageEvent: function() {
         $("#select-choose-language").on("change", function() {
             var select = $(this);
+            var route = $("option:selected", this).attr("route");
             var obj = {
-                language: $(this).val(),
-                route: ROUTE,
-                language_route: $("option:selected", this).attr("route")
+                language: $(this).val()
             }
             if(!select.hasClass('disabled')) {
                 select.addClass('disabled');
@@ -441,11 +440,7 @@ var APP = {
                     data: obj,
                     success: function(data) {
                         if(data.language.response == 'ok') {
-                            if(obj.language_route == '') {
-                                window.location.href = data.language.route;
-                            } else {
-                                window.location.href = data.language.language_route;
-                            }
+                            window.location.href = route;
                         } else {
                             select.prop('disabled', false);
                             select.removeClass('disabled');

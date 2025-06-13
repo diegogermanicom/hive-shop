@@ -108,7 +108,16 @@
             if($result->num_rows != 0) {
                 $routes = array();
                 while($row = $result->fetch_assoc()) {
-                    $routes[$row['language_name']] = $row['route'];
+                    if(MULTILANGUAGE == true) {
+                        $route = PUBLIC_PATH.'/'.$row['language_name'].$row['route'];
+                    } else {
+                        $route = PUBLIC_ROUTE.$row['route'];
+                    }
+                    $obj = array(
+                        'route' => $route,
+                        'language' => $row['language_name']
+                    );
+                    array_push($routes, $obj);
                 }
                 return $routes;
             } else {
@@ -126,7 +135,16 @@
             if($result->num_rows != 0) {
                 $routes = array();
                 while($row = $result->fetch_assoc()) {
-                    $routes[$row['language_name']] = $row['route'];
+                    if(MULTILANGUAGE == true) {
+                        $route = PUBLIC_PATH.'/'.$row['language_name'].$row['route'];
+                    } else {
+                        $route = PUBLIC_ROUTE.$row['route'];
+                    }
+                    $obj = array(
+                        'route' => $route,
+                        'language' => $row['language_name']
+                    );
+                    array_push($routes, $obj);
                 }
                 return $routes;
             } else {
@@ -239,8 +257,13 @@
                     // Get attributes
                     $attributes = $this->get_product_related_attributes($row['id_product_related'])[strtolower(LANG)];
                     // Get the route of the main product related of the product
-                    $product_url = $this->get_product_routes($row['id_product'], $row['id_category']);
-                    $product_url = PUBLIC_ROUTE.$product_url[strtolower(LANG)].'?r='.$row['id_product_related'];
+                    $product_url = null;
+                    $product_routes = $this->get_product_routes($row['id_product'], $row['id_category']);
+                    foreach($product_routes as $route) {
+                        if($route['language'] == LANG) {
+                            $product_url = $route['route'].'?r='.$row['id_product_related'];
+                        }
+                    }
                     // Get the image
                     $sql = 'SELECT i.name FROM '.DDBB_PREFIX.'products_related_images AS ri
                                 INNER JOIN '.DDBB_PREFIX.'products_images AS p ON p.id_product_image = ri.id_product_image
