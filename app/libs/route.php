@@ -110,6 +110,10 @@
                     }
                 }
             }
+            $this->get_categories();
+            $this->get_products();
+            $this->get_categories_custom_routes();
+            $this->get_products_custom_routes();
             $this->empty();
         }
 

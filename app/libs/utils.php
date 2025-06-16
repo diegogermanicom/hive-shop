@@ -29,45 +29,34 @@
         }
 
         public static function error($message) {
-            echo <<<HTML
-                <html>
-                    <head>
-                        <title>Error</title>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                        <style>
-                            body {
-                                font-size: 18px;
-                                font-family: arial;
-                                color: #494949;
-                                padding: 20px 20px 20px 20px;
-                            }
-                            div.content {
-                                max-width: 800px;
-                                background-color: #e7e7e7;
-                                border: 2px solid #c7c7c7;
-                                padding: 40px 50px 40px 50px;
-                                margin: auto auto;
-                            }
-                            div.title {
-                                font-size: 22px;
-                                border-bottom: 2px solid #c7c7c7;
-                                padding-bottom: 10px;
-                                margin-bottom: 20px;
-                            }
-                        </style>
-                    </head>
-                <body>
-                    <div class="content">
-                        <div class="title"><b>An error has occurred</b></div>
-                        <div>$message</div>
-                        <div style="padding-top: 40px;">
-                            <button onclick="window.history.back()">Return to the previous page</button>
-                        </div>
-                    </div>
-                </body>
-            </html>
-            HTML;
+            $html = '<html>';
+            $html .=    '<head>';
+            $html .=        '<title>Error</title>';
+            $html .=        '<meta charset="UTF-8">';
+            $html .=        '<meta name="viewport" content="width=device-width, initial-scale=1">';
+            $html .=        '<style>';
+            $html .=            'body {';
+            $html .=                'font-size: 18px; font-family: arial; color: #494949; padding: 20px 20px 20px 20px;';
+            $html .=            '}';
+            $html .=            'div.content {';
+            $html .=                'max-width: 800px; background-color: #e7e7e7; border: 2px solid #c7c7c7; padding: 40px 50px 40px 50px; margin: auto auto;';
+            $html .=            '}';
+            $html .=            'div.title {';
+            $html .=                'font-size: 22px; border-bottom: 2px solid #c7c7c7; padding-bottom: 10px; margin-bottom: 20px;';
+            $html .=            '}';
+            $html .=        '</style>';
+            $html .=    '</head>';
+            $html .=    '<body>';
+            $html .=        '<div class="content">';
+            $html .=            '<div class="title"><b>An error has occurred</b></div>';
+            $html .=            '<div>'.$message.'</div>';
+            $html .=            '<div style="padding-top: 40px;">';
+            $html .=                '<button onclick="window.history.back()">Return to the previous page</button>';
+            $html .=            '</div>';
+            $html .=        '</div>';
+            $html .=    '</body>';
+            $html .= '</html>';
+            echo $html;
             exit;
         }
         

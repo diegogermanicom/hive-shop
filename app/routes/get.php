@@ -42,9 +42,4 @@
         ['/desconectar'                     , 'logout'              , 'es', 'logout']
     );
 
-    $R->get_categories();
-    $R->get_products();
-    $R->get_categories_custom_routes();
-    $R->get_products_custom_routes();
-
 ?>
