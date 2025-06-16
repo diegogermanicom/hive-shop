@@ -63,6 +63,7 @@
     define('FTP_UPLOAD_PASS', $settings['FTP_UPLOAD_PASS']);
     define('FTP_UPLOAD_SERVER_PATH', $settings['FTP_UPLOAD_SERVER_PATH']);
 
+    define('URL', PROTOCOL.'://'.HOST);
     define('SERVER_PATH', $_SERVER['DOCUMENT_ROOT'].PUBLIC_PATH);
     define('LIBS_PATH', SERVER_PATH.'/app/libs');
     define('CONTROLLERS_PATH', SERVER_PATH.'/app/controllers');
@@ -90,7 +91,7 @@
         define('VIEWS_PUBLIC', SERVER_PATH.'/app/views/public');
         define('PUBLIC_ROUTE', PUBLIC_PATH);
     }
-    define('URL', PROTOCOL.'://'.HOST.PUBLIC_ROUTE);
+    define('URL_ROUTE', PROTOCOL.'://'.HOST.PUBLIC_ROUTE);
     
     Utils::init();
     Utils::checkServiceDownView();

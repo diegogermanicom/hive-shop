@@ -19,6 +19,14 @@
             echo json_encode($result);
         }
 
+        public function create_new_sitemap() {
+            $admin = new AdminAjax('ajax-sitemap');
+            $admin->security_admin_login();
+            $result = [];
+            $result['sitemap'] = $admin->create_new_sitemap();
+            echo json_encode($result);
+        }
+
         public function save_new_product() {
             $admin = new AdminAjax('ajax-save-new-product');
             $admin->security_admin_login();

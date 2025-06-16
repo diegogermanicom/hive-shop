@@ -16,6 +16,40 @@
             $this->name_page = $name_page;
         }
 
+        public function create_new_sitemap() {
+            $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+            $xml .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            foreach(LANGUAGES as $lang) {
+                $xml .= '<sitemap>';
+                $xml .=     '<loc>'.URL.'/sitemap-'.$lang.'.xml</loc>';
+                $xml .=     '<lastmod>'.date('Y-m-d').'</lastmod>';
+                $xml .= '</sitemap>';
+                $xmlLang = '<?xml version="1.0" encoding="UTF-8"?>';
+                $xmlLang .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+                foreach(ROUTES as $alias) {
+                    foreach($alias as $route) {
+                        if($route['language'] == $lang) {
+                            $xmlLang .= '<url>';
+                            $xmlLang .=     '<loc>'.URL.$route['route'].'</loc>';
+                            $xmlLang .=     '<lastmod>'.date('Y-m-d').'</lastmod>';
+                            $xmlLang .=     '<changefreq>monthly</changefreq>';
+                            $xmlLang .=     '<priority>1</priority>';
+                            $xmlLang .= '</url>';    
+                        }
+                    }
+                }
+                $xmlLang .= '</urlset>';
+                file_put_contents(SERVER_PATH.'/sitemap-'.$lang.'.xml', $xmlLang);
+            }
+            $xml .= '</sitemapindex>';
+            file_put_contents(SERVER_PATH.'/sitemap-index.xml', $xml);
+            return array(
+                'response' => 'ok',
+                'title' => 'Correct!',
+                'message' => 'The sitemap files have been created successfully.'
+            );
+        }
+
         public function create_all_product_routes($id_product = null) {
             // I create the routes of a product or of all the products
             if($id_product == null) {

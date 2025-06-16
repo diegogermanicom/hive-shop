@@ -31,7 +31,7 @@
                 'application-name' => 'Hive',
                 'author' => 'Diego Martín',
                 'robots' => 'index, follow',
-                'canonical' => URL
+                'canonical' => URL_ROUTE
             );
             $data['meta'] = array(
                 'title' => META_TITLE,

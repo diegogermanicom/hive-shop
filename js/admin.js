@@ -10,6 +10,7 @@ var ADMIN = {
     init: function() {
         this.menuLeftEvents();
         this.sendLoginEvent();
+        this.sitemapEvent();
         this.productsEvent();
         this.productsCustomRoutesEvents();
         this.newProductEvents();
@@ -682,6 +683,29 @@ var ADMIN = {
                 }
             });
         }    
+    },
+    sitemapEvent: function() {
+        if($('body#admin-sitemap').length != 0) {
+            $("#btn-create-sitemap").off().on("click", function() {
+                var btn = $(this);
+                if(!btn.hasClass('disabled')) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: ADMIN_PATH + '/create-new-sitemap',
+                        data: {},
+                        success: function(data) {
+                            if(data.sitemap.response == 'ok') {
+                                btn.addClass('btn-ok');
+                                UTILS.showInfo(data.sitemap.title, data.sitemap.message);
+                            } else {
+                                btn.removeClass('disabled');
+                                UTILS.showInfo('Uups', data.sitemap.message);
+                            }
+                        }
+                    });
+                }
+            });
+        }
     },
     productsEvent: function() {
         if($('body#admin-products-page').length == 1) {

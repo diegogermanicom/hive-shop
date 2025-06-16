@@ -34,7 +34,7 @@
             $data['meta']['keywords'] = $data['category']['meta_keywords'];
             $data['og']['og:title'] = $data['category']['meta_title'];
             $data['og']['og:description'] = $data['category']['meta_description'];
-            $data['og']['og:url'] = URL.$route;
+            $data['og']['og:url'] = URL_ROUTE.$route;
             $data['routes'] = $app->get_category_routes($id_category);
             $app->update_visit_category($id_category);
             $this->view('/'.$data['category']['view_name'], $data);
@@ -68,7 +68,7 @@
             $data['meta']['keywords'] = $data['product']['meta_keywords'];
             $data['og']['og:title'] = $data['product']['meta_title'];
             $data['og']['og:description'] = $data['product']['meta_description'];
-            $data['og']['og:url'] = URL.$route;
+            $data['og']['og:url'] = URL_ROUTE.$route;
             $data['routes'] = $app->get_product_routes($id_product, $id_category);
             $data['product']['active_values_id'] = $app->get_product_related_values($_GET['r']);
             $app->update_visit_product($id_product);

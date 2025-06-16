@@ -43,6 +43,19 @@
             $this->viewAdmin('/home', $data);
         }
 
+        public function sitemap($args) {
+            $admin = new Admin('admin-sitemap');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'settings',
+                'sitemap'
+            ];
+            $data['meta']['title'] = $admin->setTitle('Sitemap');
+            $data['sitemap'] = $admin->getSitemapInfo();
+            $this->viewAdmin('/sitemap', $data);
+        }
+
         public function products($args) {
             $admin = new Admin('admin-products-page');
             $admin->security_admin_login();

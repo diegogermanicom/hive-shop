@@ -304,24 +304,53 @@ body.dark-mode {
 
 .box {
     padding: 20px 30px 20px 30px;
-    background-color: $light-gray;
+    background-color: #f1f1f1;
+    border: 1px solid #cecece;
     border-radius: 6px;
     -webkit-transition: background-color $transition-speed ease-out;
     transition: background-color $transition-speed ease-out;
     &.box-yellow {
-        background-color: #ffeba9;
+        background-color: #fff4d2;
+        border: 1px solid #eacf7c;
         color: #594f2f;    
     }
     &.box-red {
-        background-color: #ffb5b5;
+        background-color: #ffe7e7;
+        border: 1px solid #ecadad;
         color: #6d2f2f;        
     }
     &.box-blue {
-        background-color: #b8dcf9;
+        background-color: #e8f5ff;
+        border: 1px solid #aecae0;
         color: #325775;        
     }
     &.box-green {
+        background-color: #eeffd2;
+        border: 1px solid #bfd2a0;
+        color: #536d2a;        
+    }
+    &.box-solid-gray {
+        background-color: #e9e9e9;
+        border: 0px solid white;
+    }
+    &.box-solid-yellow {
+        background-color: #ffeba9;
+        border: 0px solid white;
+        color: #594f2f;    
+    }
+    &.box-solid-red {
+        background-color: #ffb5b5;
+        border: 0px solid white;
+        color: #6d2f2f;        
+    }
+    &.box-solid-blue {
+        background-color: #b8dcf9;
+        border: 0px solid white;
+        color: #325775;        
+    }
+    &.box-solid-green {
         background-color: #cff197;
+        border: 0px solid white;
         color: #536d2a;        
     }
     &.box-sm {

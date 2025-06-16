@@ -96,6 +96,9 @@
                     <a href="<?= ADMIN_PATH ?>/users-admin"<?php if(in_array('users-admin', $data['admin']['tags'])) echo ' class="active"'; ?>>
                         <i class="fa-solid fa-user-secret"></i>&nbsp;&nbsp;Admin Users
                     </a>
+                    <a href="<?= ADMIN_PATH ?>/sitemap"<?php if(in_array('sitemap', $data['admin']['tags'])) echo ' class="active"'; ?>>
+                        <i class="fa-solid fa-sitemap"></i>&nbsp;&nbsp;Sitemap
+                    </a>
                     <?php if(ENVIRONMENT == 'DEV') { ?>
                         <a href="<?= ADMIN_PATH ?>/ftp-upload"<?php if(in_array('ftp-upload', $data['admin']['tags'])) echo ' class="active"'; ?>>
                             <i class="fa-regular fa-file"></i>&nbsp;&nbsp;Ftp Upload

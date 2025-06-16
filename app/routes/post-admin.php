@@ -12,6 +12,7 @@
     $R->setController('CAdminAjax');
     $R->post(
         ['/send-login'                      , 'send_login'],
+        ['/create-new-sitemap'              , 'create_new_sitemap'],        
         ['/save-new-product'                , 'save_new_product'],
         ['/get-product-images'              , 'get_product_images'],
         ['/save-product-main-image'         , 'save_product_main_image'],

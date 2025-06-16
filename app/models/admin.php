@@ -24,23 +24,6 @@
                 'name_page' => $this->name_page,
                 'tags' => array()
             );
-            $data['menu'] = array(
-                'home' => array('admin-home-page'),
-                'products' => array('admin-products-page', 'admin-new-product-page', 'admin-edit-product-page'),
-                'categories' => array('admin-categories-page', 'admin-new-category-page', 'admin-edit-category-page'),
-                'attributes' => array('admin-attributes-page', 'admin-new-attribute-page', 'admin-edit-attribute-page'),
-                'images' => array('admin-images-page'),
-                'codes' => array('admin-codes-page', 'admin-new-code-page', 'admin-edit-code-page'),
-                'carts' => array('admin-carts-page'),
-                'orders' => array('admin-orders-page'),
-                'shipments' => array('admin-shipments-page', 'admin-new-shipping-method-page', 'admin-edit-shipping-method-page'),
-                'payments' => array('admin-payments-page', 'admin-new-payments-method-page'),
-                'languages' => array('admin-languages-page'),
-                'stats' => array('admin-stats-page'),
-                'users' => array('admin-users-page', 'admin-edit-users-page'),
-                'admin_users' => array('admin-users-admin-page', 'admin-new-admin-user-page', 'admin-edit-user-admin-page'),
-                'ftp_upload' => array('ftp-upload-page')
-            );
             $data['meta'] = array(
                 'title' => META_TITLE
             );
@@ -74,6 +57,39 @@
         public function logout() {
             unset($_SESSION['admin']);
             setcookie('admin_remember', '', time() -3600, PUBLIC_PATH.'/');
+        }
+
+        public function getSitemapInfo() {
+            $fileMain = SERVER_PATH.'/sitemap-index.xml';
+            $html = '';
+            if(file_exists($fileMain)) {
+                $html .= '<div class="box box-green mb-20">';
+                $html .=    '<div>The main sitemap <b>sitemap-index.xml</b> exists.</div>';
+                $html .=    '<div>Last modified date: <b>'.date("Y-m-d", filemtime($fileMain)).'</b>.</div>';
+                $html .=    '<div>Last access date: <b>'.date("Y-m-d", fileatime($fileMain)).'</b>.</div>';
+                $html .= '</div>';
+                // I check if the sitemap for each language exists
+                foreach(LANGUAGES as $language) {
+                    $fileLang = SERVER_PATH.'/sitemap-'.$language.'.xml';
+                    if(file_exists($fileLang)) {
+                        $html .= '<div class="box box-green mb-20">';
+                        $html .=    '<div>The sitemap for the '.$language.' exists in the <b>sitemap-'.$language.'.xml</b> file.</div>';
+                        $html .=    '<div>Last modified date: <b>'.date("Y-m-d", filemtime($fileLang)).'</b>.</div>';
+                        $html .=    '<div>Last access date: <b>'.date("Y-m-d", fileatime($fileLang)).'</b>.</div>';
+                        $html .= '</div>';
+                    } else {
+                        $html .= '<div class="box box-red mb-20">';
+                        $html .=    '<div>The <b>sitemap-'.$language.'.xml</b> sitemap file for the language <b>'.$language.'</b> does not exist.</div>';
+                        $html .= '</div>';
+                    }
+                }
+                return $html;
+            } else {
+                $html .= '<div class="box box-red mb-20">';
+                $html .=    '<div>The main sitemap <b>sitemap-index.xml</b> does not exist.</div>';
+                $html .= '</div>';
+                return $html;
+            }
         }
 
         public function get_products($page = 1, $per_page = 20) {
