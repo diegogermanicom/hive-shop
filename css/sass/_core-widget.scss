@@ -428,7 +428,7 @@ body.dark-mode {
                 display: block;
                 padding: 8px 5px 8px 26px;
                 &.active {
-                    background-color: $black;
+                    background-color: #d1d1d1;
                 }
                 &:hover {
                     background-color: #c5c5c5;
@@ -468,16 +468,6 @@ body.dark-mode {
                     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='24' height='32' viewBox='0 0 24 32'><polygon points='0,0 24,16 0,32' style='fill: rgb%28100, 100, 100%29'></polygon></svg>");
                 }
             }
-            .options {
-                & > a {
-                    &.active {
-                        background-color: #d1d1d1;
-                    }
-                    &:hover {
-                        background-color: #c5c5c5;
-                    }
-                }
-            }
             &.active {
                 .label {
                     &:not(.no-pointer) {
@@ -501,6 +491,9 @@ body.dark-mode {
             .options {
                 background-color: #232323;
                 & > a {
+                    &.active {
+                        background-color: #393939;
+                    }
                     &:hover {
                         background-color: #313131;
                     }

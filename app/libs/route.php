@@ -73,11 +73,22 @@
                         if(count($route) < 2 || count($route) > 5) {
                             Utils::error('The values passed to the function to manage the route are invalid. ('.count($route).')');
                         }
-                        // If there is an indexing configuration in the sitemap, I save it.
-                        if(isset($route[4])) {
-                            if(!is_bool($route[4])) {
-                                Utils::error('The value to define the indexing of a route must be boolean.');
+                        if(isset($route[3])) {
+                            if(!Utils::validateISOLanguage($route[2])) {
+                                Utils::error('The language value of the route must be an ISO language code.');
                             }
+                            if(!is_string($route[3]) || $route[3] == '' || strlen($route[3] > 50)) {
+                                Utils::error('The alias value of the route must be a string of maximum 50 characters in <b>'.$route[3].'</b>.');
+                            }
+                            if($route[3] == 'root') {
+                                Utils::error('The alias <b>root</b> cannot be used because it is reserved for the system.');
+                            }
+                        }
+                        // If there is an indexing configuration in the sitemap, I save it.
+                        if(count($route) == 3) {
+                            $objRoute['index'] = $route[2];
+                        }
+                        if(isset($route[4])) {
                             $objRoute['index'] = $route[4];
                         }
                     } else {
@@ -86,12 +97,12 @@
                         }
                         // If there is an indexing configuration in the sitemap, I save it.
                         if(isset($route[2])) {
-                            if(!is_bool($route[2])) {
-                                Utils::error('The value to define the indexing of a route must be boolean.');
-                            }
                             $objRoute['index'] = $route[2];
                         }
                     }    
+                    if(count($route) == 3 && !is_bool($route[2]) || count($route) == 5 && !is_bool($route[4])) {
+                        Utils::error('The value to define the indexing of a route must be boolean.');
+                    }
                 } else {
                     if(count($route) != 2) {
                         Utils::errorPost('The values passed to the function to manage the route are invalid. ('.count($route).')');
@@ -100,19 +111,32 @@
                 if(!is_string($route[0])) {
                     Utils::error('The route value must be a string '.$route[0].'.');
                 }
-                if(!is_string($route[1])) {
+                if($route[1] == '' || !is_string($route[1])) {
                     Utils::error('The controller value must be a string '.$route[1].'.');
                 }
                 // I check if a default controller has been selected
+                $parts = explode("@", $route[1]);
+                if(count($parts) > 2) {
+                    Utils::error('An error occurred while processing the route handler '.$route[0].'.');
+                }
                 if($this->controller == null) {
-                    $parts = explode("#", $route[1]);
                     if(count($parts) != 2) {
                         Utils::error('An error occurred while processing the route handler '.$route[0].'.');
                     }
                     list($objRoute['controller'], $objRoute['function']) = $parts;
                 } else {
-                    $objRoute['controller'] = $this->controller;
-                    $objRoute['function'] = $route[1];
+                    if(count($parts) == 2) {
+                        list($objRoute['controller'], $objRoute['function']) = $parts;
+                    } else {
+                        $objRoute['controller'] = $this->controller;
+                        $objRoute['function'] = $route[1];
+                    }
+                }
+                if($objRoute['controller'] == '' || is_numeric($objRoute['controller'][0])) {
+                    Utils::error('An error occurred while processing the route handler '.$route[0].'.');
+                }
+                if($objRoute['function'] == '' || is_numeric($objRoute['function'][0])) {
+                    Utils::error('An error occurred while processing the route function '.$route[0].'.');
                 }
                 // If you specify a language
                 if(MULTILANGUAGE == true && isset($route[3])) {
@@ -122,11 +146,13 @@
                     } else {
                         $objRoute['route'] = $this->root.'/'.$route[2].$this->prefix.$route[0];
                     }
-                    $objRoute['language'] = $route[2];
+                    $objRoute['language'] = strtolower($route[2]);
                     // If the alias does not exist
                     if(!isset($this->routes[$this->method][$route[3]])) {
                         $this->routes[$this->method][$route[3]] = array();
                     }
+                    // I check that the route is not repeated
+                    $this->checkRepeat($objRoute['route']);
                     array_push($this->routes[$this->method][$route[3]], $objRoute);
                 } else {
                     //If you specify a specific route
@@ -139,7 +165,21 @@
                     if(!isset($this->routes[$this->method]['root'])) {
                         $this->routes[$this->method]['root'] = array();
                     }
+                    // I check that the route is not repeated
+                    $this->checkRepeat($objRoute['route']);
                     array_push($this->routes[$this->method]['root'], $objRoute);
+                }
+            }
+        }
+
+        private function checkRepeat($checkRoute) {
+            foreach($this->routes as $method => $methods) {
+                foreach($methods as $alias) {
+                    foreach($alias as $route) {
+                        if($route['route'] == $checkRoute) {
+                            Utils::error('The <b>'.$checkRoute.'</b> route is repeated.');
+                        }
+                    }
                 }
             }
         }
@@ -152,6 +192,10 @@
                     }
                 }
             }
+            $this->get_categories();
+            $this->get_products();
+            $this->get_categories_custom_routes();
+            $this->get_products_custom_routes();
             $this->empty();
         }
 

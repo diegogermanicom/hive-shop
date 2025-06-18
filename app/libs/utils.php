@@ -28,6 +28,11 @@
             return $result;
         }
 
+        public static function validateISOLanguage($language) {
+            $result = preg_match('/^[a-zA-Z]{2}$/', $language);
+            return $result;
+        }
+
         public static function error($message) {
             $html = '<html>';
             $html .=    '<head>';
@@ -145,11 +150,19 @@
             if(!Utils::validateSlug($settings['ADMIN_NAME'])) {
                 Utils::error('The value of the ADMIN_NAME constant is incorrect. Must be a valid slug.');
             }
+            if(!Utils::validateISOLanguage($settings['LANGUAGE'])) {
+                Utils::error('The value of the LANGUAGE constant is incorrect. Must be a valid ISO language value');
+            }
             if(!is_bool($settings['MULTILANGUAGE'])) {
                 Utils::error('The value of the MULTILANGUAGE constant is incorrect. It has to be a boolean variable.');
             }
             if(!is_array($settings['LANGUAGES'])) {
                 Utils::error('The value of the LANGUAGES constant is incorrect. It has to be a array variable.');
+            }
+            foreach($settings['LANGUAGES'] as $lang) {
+                if(!Utils::validateISOLanguage($lang)) {
+                    Utils::error('The value of the LANGUAGE constant is incorrect. Must be a valid ISO language value');
+                }    
             }
             if(!is_bool($settings['HAS_DDBB'])) {
                 Utils::error('The value of the HAS_DDBB constant is incorrect. It has to be a boolean variable.');
