@@ -61,26 +61,66 @@
 
         public function add($routes) {
             foreach($routes as $route) {
+                $objRoute = array(
+                    'route' => null,
+                    'controller' => null,
+                    'function' => null,
+                    'language' => LANG,
+                    'index' => true
+                );
+                if($this->method == 'get') {
+                    if(MULTILANGUAGE == true) {
+                        if(count($route) < 2 || count($route) > 5) {
+                            Utils::error('The values passed to the function to manage the route are invalid. ('.count($route).')');
+                        }
+                        // If there is an indexing configuration in the sitemap, I save it.
+                        if(isset($route[4])) {
+                            if(!is_bool($route[4])) {
+                                Utils::error('The value to define the indexing of a route must be boolean.');
+                            }
+                            $objRoute['index'] = $route[4];
+                        }
+                    } else {
+                        if(count($route) < 2 || count($route) > 3) {
+                            Utils::error('The values passed to the function to manage the route are invalid. ('.count($route).')');
+                        }
+                        // If there is an indexing configuration in the sitemap, I save it.
+                        if(isset($route[2])) {
+                            if(!is_bool($route[2])) {
+                                Utils::error('The value to define the indexing of a route must be boolean.');
+                            }
+                            $objRoute['index'] = $route[2];
+                        }
+                    }    
+                } else {
+                    if(count($route) != 2) {
+                        Utils::errorPost('The values passed to the function to manage the route are invalid. ('.count($route).')');
+                    }
+                }
+                if(!is_string($route[0])) {
+                    Utils::error('The route value must be a string '.$route[0].'.');
+                }
+                if(!is_string($route[1])) {
+                    Utils::error('The controller value must be a string '.$route[1].'.');
+                }
                 // I check if a default controller has been selected
                 if($this->controller == null) {
-                    list($controller, $function) = explode("#", $route[1]);
+                    $parts = explode("#", $route[1]);
+                    if(count($parts) != 2) {
+                        Utils::error('An error occurred while processing the route handler '.$route[0].'.');
+                    }
+                    list($objRoute['controller'], $objRoute['function']) = $parts;
                 } else {
-                    $controller = $this->controller;
-                    $function = $route[1];
+                    $objRoute['controller'] = $this->controller;
+                    $objRoute['function'] = $route[1];
                 }
-                $objRoute = array(
-                    'route' => PUBLIC_PATH.$this->prefix.$route[0],
-                    'controller' => $controller,
-                    'function' => $function,
-                    'language' => LANG
-                );
                 // If you specify a language
-                if(MULTILANGUAGE == true && isset($route[2])) {
+                if(MULTILANGUAGE == true && isset($route[3])) {
                     //If you specify a specific route
-                    if($this->root != null) {
-                        $objRoute['route'] = $this->root.'/'.$route[2].$this->prefix.$route[0];
-                    } else {
+                    if($this->root == null) {
                         $objRoute['route'] = PUBLIC_PATH.'/'.$route[2].$this->prefix.$route[0];
+                    } else {
+                        $objRoute['route'] = $this->root.'/'.$route[2].$this->prefix.$route[0];
                     }
                     $objRoute['language'] = $route[2];
                     // If the alias does not exist
@@ -90,7 +130,9 @@
                     array_push($this->routes[$this->method][$route[3]], $objRoute);
                 } else {
                     //If you specify a specific route
-                    if($this->root != null) {
+                    if($this->root == null) {
+                        $objRoute['route'] = PUBLIC_PATH.$this->prefix.$route[0];
+                    } else {
                         $objRoute['route'] = $this->root.$this->prefix.$route[0];
                     }
                     // If the alias does not exist
@@ -106,14 +148,10 @@
             foreach($this->routes as $method => $methods) {
                 foreach($methods as $alias) {
                     foreach($alias as $route) {
-                        $this->call($method, $route['route'], $route['controller'], $route['function']);
+                        $this->call($method, $route);
                     }
                 }
             }
-            $this->get_categories();
-            $this->get_products();
-            $this->get_categories_custom_routes();
-            $this->get_products_custom_routes();
             $this->empty();
         }
 
@@ -146,18 +184,21 @@
             }
         }
 
-        public function call($type, $route, $controller, $function) {
-            list($scan_route, $args) = $this->scan_route($route);
+        public function call($type, $route) {
+            list($scan_route, $args) = $this->scan_route($route['route']);
             if(METHOD == $type && ROUTE == $scan_route) {
                 // I save the call details
-                $args['_route'] = $route;
+                $args['_route'] = $route['route'];
+                $args['_controller'] = $route['controller'];
+                $args['_function'] = $route['function'];
+                $args['_index'] = $route['index'];
                 // If the object exists
-                $class_exist = class_exists($controller);
+                $class_exist = class_exists($route['controller']);
                 if($class_exist == true) {
-                    $obj = eval('return new '.$controller.'();');
+                    $obj = eval('return new '.$route['controller'].'();');
                     // If the function exists in the object
-                    if(method_exists($obj, $function)) {
-                        eval('$obj->'.$function.'($args);');    
+                    if(method_exists($obj, $route['function'])) {
+                        eval('$obj->'.$route['function'].'($args);');    
                         exit;
                     }
                 }
@@ -205,8 +246,7 @@
             } else {
                 echo json_encode(array(
                     'status' => '404',
-                    'error' => 'Route not found',
-                    'route' => ROUTE
+                    'error' => 'Route not found'
                 ));
             }
             exit;

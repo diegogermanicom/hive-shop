@@ -129,6 +129,9 @@
                 $data['meta']['title'] = $app->setTitle('Servicio caído');
                 $data['meta']['description'] = 'Estamos realizando mejoras en nuestra aplicación. En muy poco tiempo estaremos de vuelta.';
             }
+            if($args['_index'] == false) {
+                $data['head']['robots'] = 'noindex, noimageindex, nofollow';
+            }
             $data['routes'] = ROUTES['service-down'];
             $this->view('/service-down', $data);
         }
@@ -173,6 +176,9 @@
             } else if(LANG == 'es') {
                 $data['meta']['description'] = 'Si has llegado hasta aquí es porque no tenemos la página que buscas.';
                 $data['meta']['keywords'] .= ', 404, no encontrado, pedido';
+            }
+            if($args['_index'] == false) {
+                $data['head']['robots'] = 'noindex, noimageindex, follow';
             }
             $this->view('/404', $data);
         }

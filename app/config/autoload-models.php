@@ -7,6 +7,7 @@
      * Last Update: 2025
     */
 
+    // I make sure that the necessary constant is declared
     Utils::checkDefined('MODELS_PATH');
     // I add classes that are prioritized in order
     $priorityModels = array(

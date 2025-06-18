@@ -9,9 +9,10 @@
             <?php include VIEWS_PUBLIC.'/partials/header.php'; ?>
             <section>
                 <div class="container">
-                    <div class="text-center pt-50">
-                        <a href="<?= PUBLIC_ROUTE ?>/home"><img src="<?= PUBLIC_PATH.'/img/website-logo.png'; ?>" width="60" alt="Hive Framework"></a>
+                    <div class="text-center pt-100">
+                        <a href="<?= PUBLIC_ROUTE ?>/home"><img src="<?= PUBLIC_PATH.'/img/website-logo.png'; ?>" width="80" alt="Hive Framework"></a>
                     </div>
+                    <div class="text-center pt-30 pb-100">Privacy policy.</div>
                 </div>
             </section>
             <?php include VIEWS_PUBLIC.'/partials/footer.php'; ?>

@@ -60,6 +60,22 @@
             exit;
         }
         
+        public static function errorPost($message) {
+            http_response_code(500);
+            header('Content-Type: application/json');
+            echo json_encode(array(
+                'message' => $message
+            ));
+            exit;
+        }
+
+        public static function debug($var) {
+            echo '<pre>';
+            var_dump($var);
+            echo '</pre>';
+            exit;
+        }
+
         public static function query($sql, $params = null) {
             Utils::checkDefined('HAS_DDBB', 'LANGTXT');
             if(HAS_DDBB == true) {

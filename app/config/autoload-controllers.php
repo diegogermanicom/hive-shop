@@ -7,11 +7,12 @@
      * Last Update: 2025
     */
 
+    // I make sure that the necessary constant is declared
     Utils::checkDefined('CONTROLLERS_PATH');
     $classBefore = get_declared_classes();
     // I add files that are prioritized in order
-    $priorityFiles = array();
-    foreach($priorityFiles as $value) {
+    $priorityControllers = array();
+    foreach($priorityControllers as $value) {
         if(file_exists(CONTROLLERS_PATH.'/'.$value)) {
             require_once CONTROLLERS_PATH.'/'.$value;
         } else {
@@ -22,7 +23,7 @@
     $ignoreControllers = array();
     // I automatically include each controller
     $scandir = scandir(CONTROLLERS_PATH);
-    $files = array_diff($scandir, array('.', '..'), $ignoreControllers, $priorityFiles);
+    $files = array_diff($scandir, array('.', '..'), $ignoreControllers, $priorityControllers);
     foreach($files as $value) {
         require_once CONTROLLERS_PATH.'/'.$value;
     }
