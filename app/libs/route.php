@@ -52,11 +52,29 @@
         }
 
         public function getRoutes() {
-            return $this->routes['get'];
+            // I need to make a dump because routes with associated functions cannot belong to a constant variable.
+            $routes = array_merge([], $this->routes['get']);
+            foreach($routes as $indexAlias => $alias) {
+                foreach($alias as $indexRoute => $route) {
+                    if(is_callable($route['function'])) {
+                        $routes[$indexAlias][$indexRoute]['function'] = null;
+                    }
+                }
+            }
+            return $routes;
         }
 
         public function postRoutes() {
-            return $this->routes['post'];
+            // I need to make a dump because routes with associated functions cannot belong to a constant variable.
+            $routes = array_merge([], $this->routes['post']);
+            foreach($routes as $indexAlias => $alias) {
+                foreach($alias as $indexRoute => $route) {
+                    if(is_callable($route['function'])) {
+                        $routes[$indexAlias][$indexRoute]['function'] = null;
+                    }
+                }
+            }
+            return $routes;
         }
 
         private function add($routes) {
@@ -111,32 +129,36 @@
                 if(!is_string($route[0])) {
                     Utils::error('The route value must be a string '.$route[0].'.');
                 }
-                if($route[1] == '' || !is_string($route[1])) {
-                    Utils::error('The controller value must be a string '.$route[1].'.');
-                }
-                // I check if a default controller has been selected
-                $parts = explode("@", $route[1]);
-                if(count($parts) > 2) {
-                    Utils::error('An error occurred while processing the route handler '.$route[0].'.');
-                }
-                if($this->controller == null) {
-                    if(count($parts) != 2) {
-                        Utils::error('An error occurred while processing the route handler '.$route[0].'.');
+                if(!is_callable($route[1])) {
+                    if($route[1] == '' || !is_string($route[1])) {
+                        Utils::error('The controller value must be a string '.$route[1].'.');
                     }
-                    list($objRoute['controller'], $objRoute['function']) = $parts;
-                } else {
-                    if(count($parts) == 2) {
+                    // I check if a default controller has been selected
+                    $parts = explode("@", $route[1]);
+                    if(count($parts) > 2) {
+                        Utils::error('An error occurred while processing the route handler '.$route[0].'.');
+                    }    
+                    if($this->controller == null) {
+                        if(count($parts) != 2) {
+                            Utils::error('An error occurred while processing the route handler '.$route[0].'.');
+                        }
                         list($objRoute['controller'], $objRoute['function']) = $parts;
                     } else {
-                        $objRoute['controller'] = $this->controller;
-                        $objRoute['function'] = $route[1];
+                        if(count($parts) == 2) {
+                            list($objRoute['controller'], $objRoute['function']) = $parts;
+                        } else {
+                            $objRoute['controller'] = $this->controller;
+                            $objRoute['function'] = $route[1];
+                        }
                     }
-                }
-                if($objRoute['controller'] == '' || is_numeric($objRoute['controller'][0])) {
-                    Utils::error('An error occurred while processing the route handler '.$route[0].'.');
-                }
-                if($objRoute['function'] == '' || is_numeric($objRoute['function'][0])) {
-                    Utils::error('An error occurred while processing the route function '.$route[0].'.');
+                    if($objRoute['controller'] == '' || is_numeric($objRoute['controller'][0])) {
+                        Utils::error('An error occurred while processing the route handler '.$route[0].'.');
+                    }
+                    if($objRoute['function'] == '' || is_numeric($objRoute['function'][0])) {
+                        Utils::error('An error occurred while processing the route function '.$route[0].'.');
+                    }
+                } else {
+                    $objRoute['function'] = $route[1];
                 }
                 // If you specify a language
                 if(MULTILANGUAGE == true && isset($route[3])) {
@@ -236,14 +258,19 @@
                 $args['_controller'] = $route['controller'];
                 $args['_function'] = $route['function'];
                 $args['_index'] = $route['index'];
-                // If the object exists
-                $class_exist = class_exists($route['controller']);
-                if($class_exist == true) {
-                    $obj = new $route['controller']();
-                    // If the function exists in the object
-                    if(method_exists($obj, $route['function'])) {
-                        call_user_func([$obj, $route['function']], $args);
-                        exit;
+                // If you pass it a function instead of a controller and a function
+                if(is_callable($route['function'])) {
+                    call_user_func($route['function']);
+                } else {
+                    // If the object exists
+                    $class_exist = class_exists($route['controller']);
+                    if($class_exist == true) {
+                        $obj = new $route['controller']();
+                        // If the function exists in the object
+                        if(method_exists($obj, $route['function'])) {
+                            call_user_func([$obj, $route['function']], $args);
+                            exit;
+                        }
                     }
                 }
             } 
