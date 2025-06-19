@@ -18,8 +18,7 @@
         }
 
         public function set_cookies() {
-            setcookie("acepto_cookies", 'accepted cookies', time() + (60 * 60 * 24 * 30 * 4), PUBLIC_PATH.'/'); // 4 meses
-            $_COOKIE["acepto_cookies"] = 'accepted cookies';
+            Utils::initCookie('acepto_cookies', 'accepted cookies', Utils::ONEYEAR);
             return array('response' => 'ok');
         }
 
@@ -75,8 +74,7 @@
         }
 
         public function choose_language($language) {
-            setcookie('lang', $language, time() + Utils::ONEYEAR, PUBLIC_PATH.'/'); // 1 año
-            $_COOKIE['lang'] = $language;
+            Utils::initCookie('lang', $language, Utils::ONEYEAR);
             return array('response' => 'ok');
         }
 

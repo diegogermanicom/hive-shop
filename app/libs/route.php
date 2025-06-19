@@ -59,7 +59,7 @@
             return $this->routes['post'];
         }
 
-        public function add($routes) {
+        private function add($routes) {
             foreach($routes as $route) {
                 $objRoute = array(
                     'route' => null,
@@ -199,7 +199,7 @@
             $this->empty();
         }
 
-        public function scan_route($route): array {
+        private function scan_route($route): array {
             // Is dynamic
             if(strpos($route, '$') !== false) {
                 $args = [];
@@ -228,7 +228,7 @@
             }
         }
 
-        public function call($type, $route) {
+        private function call($type, $route) {
             list($scan_route, $args) = $this->scan_route($route['route']);
             if(METHOD == $type && ROUTE == $scan_route) {
                 // I save the call details
@@ -239,10 +239,10 @@
                 // If the object exists
                 $class_exist = class_exists($route['controller']);
                 if($class_exist == true) {
-                    $obj = eval('return new '.$route['controller'].'();');
+                    $obj = new $route['controller']();
                     // If the function exists in the object
                     if(method_exists($obj, $route['function'])) {
-                        eval('$obj->'.$route['function'].'($args);');    
+                        call_user_func([$obj, $route['function']], $args);
                         exit;
                     }
                 }

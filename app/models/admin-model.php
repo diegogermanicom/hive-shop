@@ -71,7 +71,7 @@
                         $this->query($sql, array($row["remember_code"], $row['id_admin']));
                     }
                     if($remember == 1) {
-                        setcookie("admin_remember", $row["remember_code"], time() + (60 * 60 * 24 * 7), PUBLIC_PATH.'/'); // 7 dias
+                        Utils::initCookie('admin_remember', $row["remember_code"], Utils::ONEMONTH);
                     }
                     return array('response' => 'ok');                    
                 } else {

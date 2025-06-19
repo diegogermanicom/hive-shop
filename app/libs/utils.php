@@ -114,7 +114,7 @@
             }
         }
 
-        public static function error_log($message) {
+        public static function errorLog($message) {
             $sql = 'INSERT INTO error_log (message) VALUES (?)';
             Utils::query($sql, array($message));
         }
@@ -173,8 +173,13 @@
             if(!is_array($settings['MAINTENANCE_IPS'])) {
                 Utils::error('The value of the MAINTENANCE_IPS constant is incorrect. It has to be a array variable.');
             }
+            foreach($settings['MAINTENANCE_IPS'] as $ip) {
+                if(!filter_var($ip, FILTER_VALIDATE_IP)) {
+                    Utils::error('Invalid IP <b>'.$ip.'</b> in DEV > MAINTENANCE_IPS');
+                }
+            }
             if($settings['EMAIL_FROM'] != '' && !filter_var($settings['EMAIL_FROM'], FILTER_VALIDATE_EMAIL)) {
-                Utils::error('The value of the DEV > PUBLIC_PATH constant is incorrect. Must be a valid email.');
+                Utils::error('The value of the DEV > EMAIL_FROM constant is incorrect. Must be a valid email.');
             }
             if($settings['FTP_UPLOAD_SERVER_PATH'] != '' && !Utils::validateRelativePath($settings['FTP_UPLOAD_SERVER_PATH'])) {
                 Utils::error('The value of the FTP_UPLOAD_SERVER_PATH constant is incorrect. Must be a valid relative path.');
@@ -255,17 +260,29 @@
                     Utils::error('The configuration file of the default language of the app does not exist. Check the <b>langs</b> folder.');
                 }
             }
-            setcookie('lang', $lang, time() + Utils::ONEYEAR, PUBLIC_PATH.'/'); // 1 año
-            $_COOKIE['lang'] = $lang;
+            // I declare the cookie
+            Utils::initCookie('lang', $lang, Utils::ONEYEAR);
             return $lang;
         }
 
-        public static function setThemeColor() {
+        public static function setThemeColor($colorTheme = null) {
             Utils::checkDefined('PUBLIC_PATH');
-            if(!isset($_COOKIE['color-mode'])) {
-                setcookie('color-mode', 'light-mode', time() + Utils::ONEYEAR, PUBLIC_PATH.'/'); // 1 año
-                $_COOKIE['color-mode'] = 'light-mode';
-            }        
+            if($colorTheme != null) {
+                $theme = $colorTheme;
+            } else {
+                if(isset($_COOKIE['color-mode'])) {
+                    $theme = $_COOKIE['color-mode'];
+                } else {
+                    $theme = 'light-mode';
+                }
+            }
+            // I check that it receives a valid value
+            $validThemes = array('light-mode', 'dark-mode');
+            if(!in_array($theme, $validThemes)) {
+                $theme = 'light-mode';
+            }
+            // I declare the cookie
+            Utils::initCookie('color-mode', $theme, Utils::ONEYEAR);
         }
 
         public static function checkServiceDownView() {
@@ -274,6 +291,27 @@
                 header('Location: '.PUBLIC_ROUTE);
                 exit;
             }        
+        }
+
+        public static function initCookie($name, $value, $time) {
+            setcookie($name, $value, [
+                'expires' => time() + $time,
+                'path' => PUBLIC_PATH.'/',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);
+            $_COOKIE[$name] = $value;
+        }
+
+        public static function killCookie($name) {
+            setcookie($name, '', [
+                'expires' => time() - 3600,
+                'path' => PUBLIC_PATH . '/',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);            
         }
 
     }

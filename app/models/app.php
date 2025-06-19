@@ -57,8 +57,7 @@
                 // I create a random value for the cart id
                 $random = rand(1000, 9999);
                 $id_cart = uniqid().$random;
-				setcookie("id_cart", $id_cart, time() + (60 * 60 * 24 * 30 * 4), PUBLIC_PATH.'/'); // 4 meses
-                $_COOKIE["id_cart"] = $id_cart;
+                Utils::initCookie('id_cart', $id_cart, Utils::ONEYEAR);
                 // If logged in, save the user id in the cart.
                 if(isset($_SESSION['user'])) {
                     $id_user = $_SESSION['user']['id_user'];
@@ -72,8 +71,7 @@
 
         public function set_cart_items() {
 			if(!(isset($_COOKIE["cart_items"]))) {
-				setcookie("cart_items", 0, time() + (60 * 60 * 24 * 30 * 4), PUBLIC_PATH.'/'); // 4 meses
-                $_COOKIE["cart_items"] = 0;
+                Utils::initCookie('cart_items', 0, Utils::ONEYEAR);
 			}
             // I check how many products you have in your cart
             $sql = 'SELECT SUM(amount) AS num_items FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ?';
@@ -93,7 +91,7 @@
                         $row = $result->fetch_assoc();
                         $this->login($row['email'], $row['pass'], 1);
                     } else {
-                        setcookie('user_remember', '', time() -3600, PUBLIC_PATH.'/');
+                        Utils::killCookie('user_remember');
                     }
                 } else {
                     // If the remember code does not match it is because the user has been kicked out
@@ -110,7 +108,7 @@
 
         public function logout() {
             unset($_SESSION['user']);
-            setcookie('user_remember', '', time() -3600, PUBLIC_PATH.'/');
+            Utils::killCookie('user_remember');
         }
 
         public function validate_email($code) {

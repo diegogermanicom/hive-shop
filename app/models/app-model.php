@@ -66,7 +66,7 @@
                         $this->query($sql, array($row["remember_code"], $row['id_user']));
                     }
                     if($remember == 1) {
-                        setcookie("user_remember", $row["remember_code"], time() + (60 * 60 * 24 * 7), PUBLIC_PATH.'/'); // 7 dias
+                        Utils::initCookie('user_remember', $row["remember_code"], Utils::ONEMONTH);
                     }
                     // I associate the cart to the user
                     $sql = 'UPDATE '.DDBB_PREFIX.'carts SET id_user = ? WHERE id_cart = ? AND id_user = 0 LIMIT 1';

@@ -39,7 +39,7 @@
                         $row = $result->fetch_assoc();
                         $this->login($row['email'], $row['pass']);
                     } else {
-                        setcookie('admin_remember', '', time() -3600, PUBLIC_PATH.'/');
+                        Utils::killCookie('admin_remember');
                     }
                 } else {
                     // If the remember code does not match it is because the user has been kicked out
@@ -56,7 +56,7 @@
         
         public function logout() {
             unset($_SESSION['admin']);
-            setcookie('admin_remember', '', time() -3600, PUBLIC_PATH.'/');
+            Utils::killCookie('admin_remember');
         }
 
         public function getSitemapInfo() {
