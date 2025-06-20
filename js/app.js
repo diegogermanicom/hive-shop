@@ -365,7 +365,7 @@ var APP = {
                             btn.addClass('btn-ok');
                             window.location.href = data.login.url;
                         } else {
-                            UTILS.showInfo('Uups', data.login.mensaje);
+                            UTILS.showInfo('Uups', data.login.message);
                             btn.removeClass('disabled');
                         }
                     }
@@ -417,7 +417,7 @@ var APP = {
                             btn.addClass('btn-ok');
                             window.location.href = data.register.url;
                         } else {
-                            UTILS.showInfo('Uups', data.register.mensaje);
+                            UTILS.showInfo('Uups', data.register.message);
                             btn.removeClass('disabled');
                         }
                     }
@@ -536,7 +536,7 @@ var APP = {
                         success: function(data) {
                             if(data.send_notify_stock.response == 'ok') {
                                 UTILS.closePopup('#popup-notify-stock');
-                                UTILS.showInfo('Correct!', data.send_notify_stock.mensaje);
+                                UTILS.showInfo('Correct!', data.send_notify_stock.message);
                             }
                             btn.removeClass('disabled');
                         }

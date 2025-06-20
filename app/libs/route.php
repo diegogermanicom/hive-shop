@@ -123,7 +123,7 @@
                     }
                 } else {
                     if(count($route) != 2) {
-                        Utils::errorPost('The values passed to the function to manage the route are invalid. ('.count($route).')');
+                        Utils::error('The values passed to the function to manage the route are invalid. ('.count($route).')');
                     }
                 }
                 if(!is_string($route[0])) {
@@ -249,9 +249,9 @@
                 return array($route, null);
             }
         }
-
         private function call($type, $route) {
             list($scan_route, $args) = $this->scan_route($route['route']);
+            // The route is valid
             if(METHOD == $type && ROUTE == $scan_route) {
                 // I save the call details
                 $args['_route'] = $route['route'];
@@ -270,6 +270,20 @@
                         if(method_exists($obj, $route['function'])) {
                             call_user_func([$obj, $route['function']], $args);
                             exit;
+                        } else {
+                            $message = 'The function you are trying to access via the <b>'.$route['route'].'</b> route does not exist.';
+                            if(METHOD == 'get') {
+                                Utils::error($message);
+                            } else {
+                                Utils::errorPost($message);
+                            }
+                        }
+                    } else {
+                        $message = 'The controller you are trying to access via the <b>'.$route['route'].'</b> route does not exist.';
+                        if(METHOD == 'get') {
+                            Utils::error($message);
+                        } else {
+                            Utils::errorPost($message);
                         }
                     }
                 }

@@ -103,7 +103,7 @@
                     if(!(@ftp_chdir($this->conn, $dir))) {
                         return array(
                             'response' => 'error',
-                            'mensaje' => 'Could not switch to directory "'.$dir.'".'
+                            'message' => 'Could not switch to directory "'.$dir.'".'
                         );    
                     }
                     // Obtengo la información de los ficheros del ftp
@@ -153,13 +153,13 @@
                 } else {
                     return array(
                         'response' => 'error',
-                        'mensaje' => $this->mensajes[0]
+                        'message' => $this->mensajes[0]
                     );
                 }
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => $this->mensajes[1]
+                    'message' => $this->mensajes[1]
                 );
             }
         }
@@ -170,12 +170,12 @@
             if(ftp_put($this->conn, $dir.$file, $folder.'/'.$file, FTP_BINARY)) {
                 return array(
                     'response' => 'ok',
-                    'mensaje' => $this->mensajes[4]
+                    'message' => $this->mensajes[4]
                 );
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => $this->mensajes[2]
+                    'message' => $this->mensajes[2]
                 );
             }
         }
@@ -192,12 +192,12 @@
             if($errors == 0) {
                 return array(
                     'response' => 'ok',
-                    'mensaje' => $this->mensajes[4]
+                    'message' => $this->mensajes[4]
                 );
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => $this->mensajes[2]
+                    'message' => $this->mensajes[2]
                 );
             }
         }
@@ -208,12 +208,12 @@
             if(ftp_mkdir($this->conn, $dir.$name)) {
                 return array(
                     'response' => 'ok',
-                    'mensaje' => $this->mensajes[5]
+                    'message' => $this->mensajes[5]
                 );
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => $this->mensajes[6]
+                    'message' => $this->mensajes[6]
                 );                
             }
         }
@@ -243,7 +243,7 @@
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => $this->mensajes[7]
+                    'message' => $this->mensajes[7]
                 );                
             }
         }

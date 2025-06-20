@@ -39,13 +39,28 @@
                     }
                 }
                 $xmlLang .= '</urlset>';
-                file_put_contents(SERVER_PATH.'/sitemap-'.$lang.'.xml', $xmlLang);
+                $file = 'sitemap-'.$lang.'.xml';
+                $result = file_put_contents(SERVER_PATH.'/'.$file, $xmlLang);
+                if($result === false) {
+                    return array(
+                        'response' => 'error',
+                        'title' => 'Error!',
+                        'message' => 'An error occurred while saving the file '.$file.'.'
+                    );        
+                }
             }
             $xml .= '</sitemapindex>';
-            file_put_contents(SERVER_PATH.'/sitemap-index.xml', $xml);
+            $result = file_put_contents(SERVER_PATH.'/sitemap-index.xml', $xml);
+            if($result === false) {
+                return array(
+                    'response' => 'error',
+                    'title' => 'Error!',
+                    'message' => 'An error occurred while saving the file <b>sitemap-index.xml</b>.'
+                );        
+            }
             return array(
                 'response' => 'ok',
-                'title' => 'Correct!',
+                'title' => 'Error!',
                 'message' => 'The sitemap files have been created successfully.'
             );
         }
@@ -201,7 +216,7 @@
                 if($this->check_product_slug($_POST['categories'], $value['slug'])) {
                     return array(
                         'response' => 'error',
-                        'mensaje' => 'The slug already exists in the selected categories.'
+                        'message' => 'The slug already exists in the selected categories.'
                     );
                 }
             }
@@ -317,7 +332,7 @@
             $this->check_product_main_hover_image($id_product);
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The image has been set as main successfully!'
+                'message' => 'The image has been set as main successfully!'
             );
         }
 
@@ -330,7 +345,7 @@
             $this->check_product_main_hover_image($id_product);
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The image has been set as hover successfully!'
+                'message' => 'The image has been set as hover successfully!'
             );
         }
 
@@ -436,7 +451,7 @@
                 if($this->check_product_slug($_POST['categories'], $value['slug'], $_POST['id_product'])) {
                     return array(
                         'response' => 'error',
-                        'mensaje' => 'The slug already exists in the selected categories.'
+                        'message' => 'The slug already exists in the selected categories.'
                     );
                 }
             }
@@ -515,7 +530,7 @@
             $this->create_all_product_routes($_POST['id_product']);
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The product has been successfully updated!',
+                'message' => 'The product has been successfully updated!',
                 'properties' => $_POST['properties']
             );
         }
@@ -751,7 +766,7 @@
             }
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The related product has been successfully updated!'
+                'message' => 'The related product has been successfully updated!'
             );
         }
 
@@ -774,7 +789,7 @@
                         if($result_exist->num_rows == count($_POST['attributes'])) {
                             return array(
                                 'response' => 'error',
-                                'mensaje' => 'The related product already exists.'
+                                'message' => 'The related product already exists.'
                             );        
                         }
                     }
@@ -782,7 +797,7 @@
                     // Already have a product with no attributes
                     return array(
                         'response' => 'error',
-                        'mensaje' => 'The related product without attributes already exists.'
+                        'message' => 'The related product without attributes already exists.'
                     );
                 }
             }
@@ -862,7 +877,7 @@
             return array(
                 'response' => 'ok',
                 'html' => $html,
-                'mensaje' => 'The related product has been successfully added!'
+                'message' => 'The related product has been successfully added!'
             );
         }
 
@@ -986,7 +1001,7 @@
                 if($this->check_category_slug($_POST['id_parent'], $value['slug'])) {
                     return array(
                         'response' => 'error',
-                        'mensaje' => 'The slug already exists in the selected category level.'
+                        'message' => 'The slug already exists in the selected category level.'
                     );
                 }
             }
@@ -1021,7 +1036,7 @@
                 if($this->check_category_slug($_POST['id_parent'], $value['slug'], $_POST['id_category'])) {
                     return array(
                         'response' => 'error',
-                        'mensaje' => 'The slug already exists in the selected category level.'
+                        'message' => 'The slug already exists in the selected category level.'
                     );
                 }
             }
@@ -1045,7 +1060,7 @@
             $this->create_all_product_routes();
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The product has been successfully updated!'
+                'message' => 'The product has been successfully updated!'
             );
         }
 
@@ -1180,7 +1195,7 @@
             }
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The product has been successfully updated!'
+                'message' => 'The product has been successfully updated!'
             );
         }
 
@@ -1245,7 +1260,7 @@
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => 'No values found for this attribute type.'
+                    'message' => 'No values found for this attribute type.'
                 );
             }
         }
@@ -1303,7 +1318,7 @@
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => 'No properties found for this value.'
+                    'message' => 'No properties found for this value.'
                 );
             }
         }
@@ -1318,7 +1333,7 @@
             }
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The properties has been successfully updated!'
+                'message' => 'The properties has been successfully updated!'
             );
         }
 
@@ -1383,7 +1398,7 @@
             ));
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The code has been successfully updated!'
+                'message' => 'The code has been successfully updated!'
             );
         }
 
@@ -1457,7 +1472,7 @@
             }
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The rule has been successfully updated!'
+                'message' => 'The rule has been successfully updated!'
             );
         }
 
@@ -1894,12 +1909,12 @@
                 $this->query($sql, array($_POST['id_address_main'], $_POST['id_user']));
                 return array(
                     'response' => 'ok',
-                    'mensaje' => 'The user has been successfully updated!'
+                    'message' => 'The user has been successfully updated!'
                 );
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => 'The email you are trying to save is already being used by another user.'
+                    'message' => 'The email you are trying to save is already being used by another user.'
                 );
             }
         }
@@ -2011,7 +2026,7 @@
             ));
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The user address has been successfully saved!'
+                'message' => 'The user address has been successfully saved!'
             );
         }
 
@@ -2026,7 +2041,7 @@
             $this->query($sql, array(uniqid(), $id_user));
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The user sessions has been successfully closed!'
+                'message' => 'The user sessions has been successfully closed!'
             );
         }
 
@@ -2041,7 +2056,7 @@
             $this->send_email($row['email'], $title, $body);
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The validation email has been sent correctly!',
+                'message' => 'The validation email has been sent correctly!',
                 'link' => $link
             );
         }
@@ -2063,7 +2078,7 @@
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => 'The indicated email is already in use by another user'
+                    'message' => 'The indicated email is already in use by another user'
                 );
             }
         }
@@ -2077,7 +2092,7 @@
             }
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The admin user has been update correctly!',
+                'message' => 'The admin user has been update correctly!',
             );
         }
 
@@ -2086,7 +2101,7 @@
             $this->query($sql, array(uniqid(), $id_admin));
             return array(
                 'response' => 'ok',
-                'mensaje' => 'The admin user sessions has been successfully closed!'
+                'message' => 'The admin user sessions has been successfully closed!'
             );
         }
 

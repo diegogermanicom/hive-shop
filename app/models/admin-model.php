@@ -29,7 +29,7 @@
                 } else {
                     return json_encode(array(
                         'response' => 'error',
-                        'mensaje' => 'You do not have permissions to perform this action.'
+                        'message' => 'You do not have permissions to perform this action.'
                     ));
                 }
             }
@@ -44,7 +44,7 @@
                 } else {
                     return json_encode(array(
                         'response' => 'error',
-                        'mensaje' => 'You do not have permissions to perform this action.'
+                        'message' => 'You do not have permissions to perform this action.'
                     ));
                 }                
             }
@@ -77,13 +77,13 @@
                 } else {
                     return array(
                         'response' => 'error',
-                        'mensaje' => LANGTXT['user-admin-fail']
+                        'message' => LANGTXT['user-admin-fail']
                     );                    
                 }
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => LANGTXT['error-login-admin']
+                    'message' => LANGTXT['error-login-admin']
                 );
             }
         }

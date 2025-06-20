@@ -68,7 +68,7 @@
             } else {
                 return array(
                     'response' => 'error',
-                    'mensaje' => LANGTXT['error-register']
+                    'message' => LANGTXT['error-register']
                 );    
             }
         }
@@ -133,7 +133,7 @@
             }
             return array(
                 'response' => 'error',
-                'mensaje' => 'There is no product with those attributes'                    
+                'message' => 'There is no product with those attributes'                    
             );
         }
 
@@ -219,7 +219,7 @@
             }
             return array(
                 'response' => 'ok',
-                'mensaje' => LANGTXT['send-notify-stock']
+                'message' => LANGTXT['send-notify-stock']
             );
         }
 

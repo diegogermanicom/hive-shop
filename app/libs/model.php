@@ -41,7 +41,7 @@
                 } else {
                     return json_encode(array(
                         'response' => 'error',
-                        'mensaje' => 'The website is under maintenance.'
+                        'message' => 'The website is under maintenance.'
                     ));
                 }
             }
