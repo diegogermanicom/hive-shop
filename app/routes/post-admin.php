@@ -56,7 +56,7 @@
         ['/save-new-shipping-zone'          , 'save_new_shipping_zone'],
         ['/save-edit-shipping-zone'         , 'save_edit_shipping_zone'],
         ['/get-shipping-zone-countries'     , 'get_shipping_zone_countries'],
-        ['/get-shipping-zone-provinces'     , 'get_shipping_zone_providnces'],
+        ['/get-shipping-zone-provinces'     , 'get_shipping_zone_provinces'],
         ['/save-new-payment'                , 'save_new_payment'],
         ['/save-edit-payment'               , 'save_edit_payment'],
         ['/save-new-payment-zone'           , 'save_new_payment_zone'],
