@@ -619,9 +619,9 @@
                             // I check the zone covers the weight of the order
                             $sql = 'SELECT p.price AS price FROM shipping_methods_weights AS w
                                         INNER JOIN shipping_methods_prices AS p ON p.id_shipping_method_weight = w.id_shipping_method_weight
-                                    WHERE w.id_shipping_method = ? AND w.min_weight < ? AND w.max_weight >= ?
+                                    WHERE w.id_shipping_method = ? AND w.max_weight >= ?
                                         AND p.id_shipping_zone = ?
-                                    LIMIT 1';
+                                    ORDER BY w.max_weight LIMIT 1';
                             $result_weight = $this->query($sql, array($row['id_shipping_method'], $cart_weight, $cart_weight, $row_zone['id_shipping_zone']));
                             if($result_weight->num_rows != 0 && $valid == true) {
                                 $row_weight = $result_weight->fetch_assoc();

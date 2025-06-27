@@ -12,7 +12,7 @@
                     <div class="container">
                         <div class="title-container underline text-left">New shipping zone</div>
                     </div>
-                    <div class="container-lg" id="form-new-shipping-zone">
+                    <div class="container-xl" id="form-new-shipping-zone">
                         <div class="row pb-20">
                             <div class="col-12 col-sm-9 pr-10 pr-sm-0">
                                 <div class="pb-10"><b>Shipping zone name *</b></div>

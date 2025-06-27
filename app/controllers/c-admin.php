@@ -577,7 +577,8 @@
                 exit;
             }
             $data['languages'] = $admin->get_languages_shipment($_GET['id_shipping_method']);
-            $data['product_states'] = $admin->get_states_list($data['shipping_method']['id_state']);
+            $data['states'] = $admin->get_states_list($data['shipping_method']['id_state']);
+            $data['zones'] = $admin->get_shipping_method_zones($_GET['id_shipping_method']);
             $this->viewAdmin('/shipments/edit-shipping-method', $data);
         }
 

@@ -51,12 +51,16 @@
         ['/get-code-rule'                   , 'get_code_rule'],
         ['/get-code-rules'                  , 'get_code_rules'],
         ['/get-code-rule-elements-list'     , 'get_code_rule_elements_list'],
+        // Shipment
         ['/save-new-shipment'               , 'save_new_shipment'],
         ['/save-edit-shipment'              , 'save_edit_shipment'],
+        ['/delete-shipment'                 , 'delete_shipment'],
         ['/save-new-shipping-zone'          , 'save_new_shipping_zone'],
         ['/save-edit-shipping-zone'         , 'save_edit_shipping_zone'],
+        ['/delete-shipping-zone'            , 'delete_shipping_zone'],
         ['/get-shipping-zone-countries'     , 'get_shipping_zone_countries'],
         ['/get-shipping-zone-provinces'     , 'get_shipping_zone_provinces'],
+        // Payment
         ['/save-new-payment'                , 'save_new_payment'],
         ['/save-edit-payment'               , 'save_edit_payment'],
         ['/save-new-payment-zone'           , 'save_new_payment_zone'],

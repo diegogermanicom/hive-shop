@@ -332,7 +332,7 @@
         }
 
         public function save_new_shipment() {
-            $admin = new AdminAjax('ajax-save-new-shipment');
+            $admin = new AdminShippingAjax('ajax-save-new-shipment');
             $admin->security_admin_login();
             $result = [];
             $result['save_new_shipment'] = $admin->save_new_shipment();
@@ -340,15 +340,23 @@
         }
 
         public function save_edit_shipment() {
-            $admin = new AdminAjax('ajax-save-edit-shipment');
+            $admin = new AdminShippingAjax('ajax-save-edit-shipment');
             $admin->security_admin_login();
             $result = [];
             $result['save_edit_shipment'] = $admin->save_edit_shipment();
             echo json_encode($result);
         }
 
+        public function delete_shipment() {
+            $admin = new AdminShippingAjax('ajax-delete-shipment');
+            $admin->security_admin_login();
+            $result = [];
+            $result['delete_shipment'] = $admin->delete_shipment($_POST['id_shipping_method']);
+            echo json_encode($result);
+        }
+
         public function save_new_shipping_zone() {
-            $admin = new AdminAjax('ajax-save-new-shipping-zone');
+            $admin = new AdminShippingAjax('ajax-save-new-shipping-zone');
             $admin->security_admin_login();
             $result = [];
             $result['save_new_shipping_zone'] = $admin->save_new_shipping_zone();
@@ -356,26 +364,34 @@
         }
 
         public function save_edit_shipping_zone() {
-            $admin = new AdminAjax('ajax-save-edit-shipping-zone');
+            $admin = new AdminShippingAjax('ajax-save-edit-shipping-zone');
             $admin->security_admin_login();
             $result = [];
             $result['save_edit_shipping_zone'] = $admin->save_edit_shipping_zone();
             echo json_encode($result);            
         }
 
-        public function get_shipping_zone_countries() {
-            $admin = new AdminAjax('ajax-get-shipping-zone-countries');
+        public function delete_shipping_zone() {
+            $admin = new AdminShippingAjax('ajax-delete-shipping-zone');
             $admin->security_admin_login();
             $result = [];
-            $result['get_shipping_zone_countries'] = $admin->get_shipping_zone_countries($_POST['id_shipping_zone'], $_POST['id_continent']);
+            $result['delete_shipping_zone'] = $admin->delete_shipping_zone($_POST['id_shipping_zone']);
+            echo json_encode($result);            
+        }
+
+        public function get_shipping_zone_countries() {
+            $admin = new AdminShippingAjax('ajax-get-shipping-zone-countries');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_shipping_zone_countries'] = $admin->get_shipping_zone_countries($_POST['id_shipping_zone'], $_POST['id_continent'], $_POST['page']);
             echo json_encode($result);            
         }
 
         public function get_shipping_zone_provinces() {
-            $admin = new AdminAjax('ajax-get-shipping-zone-provinces');
+            $admin = new AdminShippingAjax('ajax-get-shipping-zone-provinces');
             $admin->security_admin_login();
             $result = [];
-            $result['get_shipping_zone_provinces'] = $admin->get_shipping_zone_provinces($_POST['id_shipping_zone'], $_POST['id_country']);
+            $result['get_shipping_zone_provinces'] = $admin->get_shipping_zone_provinces($_POST['id_shipping_zone'], $_POST['id_country'], $_POST['page']);
             echo json_encode($result);            
         }
 

@@ -8,16 +8,18 @@
 var ADMIN_SHIPMENT = {
     // Init
     init: function() {
-        this.newShipmentEvent();
-        this.editShipmentEvent();
-        this.newShippingZoneEvent();
-        this.editShippingZoneEvent();
+        this.newEvents();
+        this.editEvents();
+        this.newZoneEvents();
+        this.editZoneEvents();
     },
     // Functions not related to page events
-    getShippingZoneCountries: function(id_continent) {
+    getZoneCountries: function(id_continent, page = 1) {
+        var self = this;
         var obj = {
             id_shipping_zone: parseInt($('#input-id-shipping-zone').val()),
-            id_continent: id_continent
+            id_continent: id_continent,
+            page: page
         };
         $.ajax({
             url: ADMIN_PATH + '/get-shipping-zone-countries',
@@ -25,14 +27,25 @@ var ADMIN_SHIPMENT = {
             success: function(data) {
                 if(data.get_shipping_zone_countries.response == 'ok') {
                     $('#shipping-zone-countries').html(data.get_shipping_zone_countries.html);
+                    $('#shipping-zone-countries-pager').html(data.get_shipping_zone_countries.pager);
+                    $('#shipping-zone-countries-pager .btn').off().on('click', function() {
+                        let loadPage = $(this).data('page');
+                        self.getZoneCountries(id_continent, loadPage);
+                    });
+                    self.checkAllInput('#shipping-zone-countries');
+                    $('#shipping-zone-countries input[type="checkbox"]').off().on('click', function() {
+                        self.checkAllInput('#shipping-zone-countries');
+                    });
                 }
             }
         });
     },
-    getShippingZoneProvinces: function(id_country) {
+    getZoneProvinces: function(id_country, page = 1) {
+        var self = this;
         var obj = {
             id_shipping_zone: parseInt($('#input-id-shipping-zone').val()),
-            id_country: id_country
+            id_country: id_country,
+            page: page
         };
         $.ajax({
             url: ADMIN_PATH + '/get-shipping-zone-provinces',
@@ -40,12 +53,32 @@ var ADMIN_SHIPMENT = {
             success: function(data) {
                 if(data.get_shipping_zone_provinces.response == 'ok') {
                     $('#shipping-zone-provinces').html(data.get_shipping_zone_provinces.html);
+                    $('#shipping-zone-provinces-pager').html(data.get_shipping_zone_provinces.pager);
+                    $('#shipping-zone-provinces-pager .btn').off().on('click', function() {
+                        let loadPage = $(this).data('page');
+                        self.getZoneProvinces(id_country, loadPage);
+                    });
+                    self.checkAllInput('#shipping-zone-provinces');
+                    $('#shipping-zone-provinces input[type="checkbox"]').off().on('click', function() {
+                        self.checkAllInput('#shipping-zone-provinces');
+                    });
                 }
             }
         });
     },
+    checkAllInput: function(name) {
+        // I check if everything is selected to mark the Select all check box.
+        var parent = $(name).closest('div[id-tab]');
+        var allChecked = true;
+        $(name + ' input[type="checkbox"]').each(function() {
+            if(!$(this).is(':checked')) {
+                allChecked = false;
+            }
+        });
+        parent.find('.btn-select-all').prop('checked', allChecked);
+    },
     // Events
-    newShipmentEvent: function() {
+    newEvents: function() {
         if($('body#admin-new-shipping-method-page').length == 1) {
             $('#btn-save-new-shipment').on("click", function() {
                 var btn = $(this);
@@ -87,8 +120,26 @@ var ADMIN_SHIPMENT = {
             });
         }
     },
-    editShipmentEvent: function() {
+    editEvents: function() {
         if($('body#admin-edit-shipping-method-page').length == 1) {
+            $('#btn-delete-shipment').on("click", function() {
+                var btn = $(this);
+                var obj = {
+                    id_shipping_method: parseInt($('#input-id-shipping-method').val()),
+                }
+                if(!btn.hasClass('disabled')) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: ADMIN_PATH + '/delete-shipment',
+                        data: obj,
+                        success: function(data) {
+                            if(data.delete_shipment.response == 'ok') {
+                                window.location.href = ADMIN_PATH + '/shipments?delete';
+                            }
+                        }
+                    });
+                }
+            });
             $('#btn-save-edit-shipment').on("click", function() {
                 var btn = $(this);
                 var obj = {
@@ -99,7 +150,8 @@ var ADMIN_SHIPMENT = {
                     min_weight: parseInt($('#input-min-weight').val()),
                     max_weight: parseInt($('#input-max-weight').val()),
                     id_state: parseInt($('#select-state').val()),
-                    languages: []
+                    languages: [],
+                    zones: []
                 }
                 $('#languages .menu > div').each(function() {
                     let id_tab = $(this).attr('id-tab');
@@ -109,6 +161,22 @@ var ADMIN_SHIPMENT = {
                         'name': $(content).find('.input-language-name').val().trim()
                     }
                     obj.languages.push(data);
+                });
+                $('#shipping-method-zones .shipping-zone').each(function() {
+                    let active = ($(this).find('input[type="checkbox"]').prop('checked')) ? 1 : 0;
+                    var zone = {
+                        id_shipping_zone: $(this).data('id-shipping-zone'),
+                        active: active,
+                        prices: []
+                    }
+                    $(this).find('input[type="text"]').each(function() {
+                        let price = {
+                            id_shipping_method_weight: $(this).data('id-shipping-method-weight'),
+                            price: $(this).val().trim()
+                        }
+                        zone.prices.push(price);
+                    });
+                    obj.zones.push(zone);
                 });
                 var form = UTILS.validateForm('#form-edit-shipment');
                 if(!btn.hasClass('disabled') && form.response == true) {
@@ -129,7 +197,7 @@ var ADMIN_SHIPMENT = {
             });
         }
     },
-    newShippingZoneEvent: function() {
+    newZoneEvents: function() {
         if($('body#admin-new-shipping-zone-page').length == 1) {
             $('#btn-save-new-shipping-zone').on("click", function() {
                 var btn = $(this);
@@ -158,10 +226,16 @@ var ADMIN_SHIPMENT = {
             });
         }
     },
-    editShippingZoneEvent: function() {
+    editZoneEvents: function() {
         if($('body#admin-edit-shipping-zone-page').length == 1) {
-            this.getShippingZoneCountries(null);
-            this.getShippingZoneProvinces(null);
+            var self = this;
+            this.getZoneCountries(0);
+            this.getZoneProvinces(0);
+            this.checkAllInput('#shipping-zone-continents');
+            $('#shipping-zone-continents input[type="checkbox"]').on('click', function() {
+                self.checkAllInput('#shipping-zone-continents');
+            });
+            // I create the events for the Select all buttons
             $('#btn-select-all-continents').on("click", function() {
                 var check = $(this).prop('checked');
                 $('#shipping-zone-continents input').each(function() {
@@ -182,11 +256,29 @@ var ADMIN_SHIPMENT = {
             });
             $('#select-countries-continents').on("change", function() {
                 let id_continent = parseInt($(this).val());
-                ADMIN_SHIPMENT.getShippingZoneCountries(id_continent);
+                self.getZoneCountries(id_continent);
             });
             $('#select-provinces-countries').on("change", function() {
                 let id_country = parseInt($(this).val());
-                ADMIN_SHIPMENT.getShippingZoneProvinces(id_country);
+                self.getZoneProvinces(id_country);
+            });
+            $('#btn-delete-shipping-zone').on("click", function() {
+                var btn = $(this);
+                var obj = {
+                    id_shipping_zone: parseInt($('#input-id-shipping-zone').val())
+                }
+                if(!btn.hasClass('disabled')) {
+                    btn.addClass('disabled');
+                    $.ajax({
+                        url: ADMIN_PATH + '/delete-shipping-zone',
+                        data: obj,
+                        success: function(data) {
+                            if(data.delete_shipping_zone.response == 'ok') {
+                                window.location.href = ADMIN_PATH + '/shipping-zones?delete';
+                            }
+                        }
+                    });
+                }
             });
             $('#btn-save-edit-shipping-zone').on("click", function() {
                 var btn = $(this);

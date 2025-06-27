@@ -212,8 +212,8 @@
                 if($link == null) {
                     $gets = '';
                     foreach($_GET as $index => $value) {
-                        if($index != 'page') {
-                            $gets .= $index.'='.$value.'&';                        
+                        if($index != 'page' && $index != 'per_page') {
+                            $gets .= $index.'='.$value.'&';
                         }
                     }
                     $link = ROUTE.'?'.$gets;
@@ -232,11 +232,11 @@
                 if($range_max > $result->num_rows) {
                     $range_max = $result->num_rows;
                 }
-                $html = '<div class="pb-20">';
+                $html = '<div class="pager-info pb-20">';
                 $html .=    '<span>'.$range_init.'-'.$range_max.' of '.$result->num_rows.' items</span>';
                 $html .= '</div>';
                 // I paint the buttons
-                $html .= '<div>';
+                $html .= '<div class="pager-pages">';
                 if($page > 1) {
                     $html .= '<a href="'.$link.'page=1" class="btn btn-trans btn-sm"><i class="fa-solid fa-angles-left"></i></a>';
                     $html .= '<a href="'.$link.'page='.($page - 1).'" class="btn btn-trans btn-sm"><i class="fa-solid fa-chevron-left"></i> Last</a>';
@@ -251,7 +251,7 @@
                 }
                 for($i = $min; $i <= $max; $i++) {
                     if($i == $page) {
-                        $class = 'btn-black';
+                        $class = 'btn-black active';
                         $link_temp = '#';
                     } else {
                         $class = 'btn-white';
@@ -262,6 +262,73 @@
                 if($result->num_rows > ($page * $per_page)) {
                     $html .= '<a href="'.$link.'page='.($page + 1).'" class="btn btn-trans btn-sm">Next <i class="fa-solid fa-angle-right"></i></a>';
                     $html .= '<a href="'.$link.'page='.$total_pages.'" class="btn btn-trans btn-sm"><i class="fa-solid fa-angles-right"></i></a>';
+                }
+                $html .= '</div>';
+                $result->data_seek(0);
+                return array(
+                    'result' => $rows,
+                    'pager' => $html
+                );    
+            } else {
+                return array(
+                    'result' => array(),
+                    'pager' => ''
+                );
+            }
+        }
+
+        public function pagerAjax($result, $page = 1, $per_page = 20) {
+            if($result->num_rows != 0) {
+                $result->data_seek(($page - 1) * $per_page);
+                $rows = array();
+                $row_count = 1;
+                while($row = $result->fetch_assoc()) {
+                    array_push($rows, $row);
+                    if($row_count == $per_page) {
+                        break;
+                    } else {
+                        $row_count++;
+                    }
+                }
+                // Total number of pages
+                $total_pages = ceil($result->num_rows / $per_page);
+                if($page > $total_pages) {
+                    $page = $total_pages;
+                }
+                // Record range on current page and total
+                $range_init = ((($page - 1) * $per_page) + 1);
+                $range_max = ((($page - 1) * $per_page) + $per_page);
+                if($range_max > $result->num_rows) {
+                    $range_max = $result->num_rows;
+                }
+                $html = '<div class="pager-info pb-20">';
+                $html .=    '<span>'.$range_init.'-'.$range_max.' of '.$result->num_rows.' items</span>';
+                $html .= '</div>';
+                // I paint the buttons
+                $html .= '<div class="pager-pages">';
+                if($page > 1) {
+                    $html .= '<div data-page="1" class="btn btn-trans btn-sm"><i class="fa-solid fa-angles-left"></i></div>';
+                    $html .= '<div data-page="'.($page - 1).'" class="btn btn-trans btn-sm"><i class="fa-solid fa-chevron-left"></i> Last</div>';
+                }
+                $min = ($page - 2);
+                if($min < 1) {
+                    $min = 1;
+                }
+                $max = ($page + 2);
+                if($max > $total_pages) {
+                    $max = $total_pages;
+                }
+                for($i = $min; $i <= $max; $i++) {
+                    if($i == $page) {
+                        $class = 'btn-black active';
+                    } else {
+                        $class = 'btn-white';
+                    }
+                    $html .= '<div data-page="'.$i.'" class="btn btn-sm '.$class.'">'.$i.'</div>';
+                }
+                if($result->num_rows > ($page * $per_page)) {
+                    $html .= '<div data-page="'.($page + 1).'" class="btn btn-trans btn-sm">Next <i class="fa-solid fa-angle-right"></i></div>';
+                    $html .= '<div data-page="'.$total_pages.'" class="btn btn-trans btn-sm"><i class="fa-solid fa-angles-right"></i></div>';
                 }
                 $html .= '</div>';
                 $result->data_seek(0);

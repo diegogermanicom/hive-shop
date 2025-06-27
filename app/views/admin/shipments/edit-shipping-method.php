@@ -12,7 +12,7 @@
                     <div class="container">
                         <div class="title-container underline text-left">Edit shipping method</div>
                     </div>
-                    <div class="container-lg" id="form-edit-shipment">
+                    <div class="container-xl" id="form-edit-shipment">
                         <input type="hidden" id="input-id-shipping-method" value="<?= $data['shipping_method']['id_shipping_method']; ?>">
                         <div class="row pb-20">
                             <div class="col-12 col-sm-9 pr-10 pr-sm-0">
@@ -24,7 +24,7 @@
                             <div class="col-12 col-sm-3">
                                 <div class="pb-10"><b>State</b></div>
                                 <div>
-                                    <select id="select-state" class="w-100"><?= $data['product_states']; ?></select>
+                                    <select id="select-state" class="w-100"><?= $data['states']; ?></select>
                                 </div>
                             </div>
                         </div>
@@ -89,8 +89,9 @@
                             ?></div>
                         </div>
                         <div class="pb-10"><b>Zones</b></div>
-                        <div></div>
+                        <div id="shipping-method-zones"><?= $data['zones']['html']; ?></div>
                         <div class="text-center pt-40">
+                            <div id="btn-delete-shipment" class="btn btn-red">Delete</div>
                             <div id="btn-save-edit-shipment" class="btn btn-black">Save Shipment</div>
                         </div>
                     </div>

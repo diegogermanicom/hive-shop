@@ -1183,6 +1183,52 @@
             return $result->fetch_all(MYSQLI_ASSOC);
         }
 
+        public function get_shipping_method_zones($id_shipping_method) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'shipping_zones ORDER BY -id_shipping_zone';
+            $result_zones = $this->query($sql);
+            if($result_zones->num_rows != 0) {
+                $sql = 'SELECT * FROM '.DDBB_PREFIX.'shipping_methods_weights WHERE id_shipping_method = ?';
+                $result_weights = $this->query($sql, array($id_shipping_method));
+                $html = '<table>';
+                $html .=    '<thead>';
+                $html .=        '<tr>';
+                $html .=            '<th></th>';
+                while($row_weights = $result_weights->fetch_assoc()) {
+                    $html .= '<th style="width: 100px;"><'.$row_weights['max_weight'].'kg</th>';
+                }
+                $html .=        '</tr>';
+                $html .=    '</thead>';
+                $html .=    '<tbody>';
+                while($row_zones = $result_zones->fetch_assoc()) {
+                    // I check if you have it selected
+                    $sql = 'SELECT id_shipping_zone FROM '.DDBB_PREFIX.'shipping_methods_zones WHERE id_shipping_method = ? AND id_shipping_zone = ? LIMIT 1';
+                    $result_select = $this->query($sql, array($id_shipping_method, $row_zones['id_shipping_zone']));
+                    if($result_select->num_rows > 0) {
+                        $checked = ' checked';
+                    } else {
+                        $checked = '';
+                    }
+                    $sql = 'SELECT * FROM shipping_methods_prices WHERE id_shipping_zone = ? AND id_shipping_method = ?';
+                    $result_prices = $this->query($sql, array($row_zones['id_shipping_zone'], $id_shipping_method));
+                    $html .= '<tr class="shipping-zone" data-id-shipping-zone="'.$row_zones['id_shipping_zone'].'">';
+                    $html .=    '<td>';
+                    $html .=        '<label class="checkbox"><input type="checkbox" value="'.$row_zones['id_shipping_zone'].'"'.$checked.'><span class="checkmark"></span>'.$row_zones['name'].'</label>';
+                    $html .=    '</td>';
+                    while($row_prices = $result_prices->fetch_assoc()) {
+                        $html .= '<td><input type="text" value="'.$row_prices['price'].'" style="width: 100%;" class="text-center" data-id-shipping-method-weight="'.$row_prices['id_shipping_method_weight'].'"></td>';
+                    }
+                    $html .= '</tr>';
+                }
+                $html .=    '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No shipping zones.';
+            }
+            return array(
+                'html' => $html
+            );
+        }
+
         public function get_shipping_zones($page = 1, $per_page = 20) {
             $sql = 'SELECT m.*, s.name AS state_name FROM '.DDBB_PREFIX.'shipping_zones AS m
                         INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = m.id_state

@@ -1306,25 +1306,8 @@ INSERT INTO `shipping_methods_prices` (`id_shipping_method_price`, `id_shipping_
 CREATE TABLE `shipping_methods_weights` (
   `id_shipping_method_weight` smallint(5) UNSIGNED NOT NULL,
   `id_shipping_method` smallint(5) UNSIGNED NOT NULL DEFAULT '0',
-  `min_weight` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
   `max_weight` tinyint(3) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `shipping_methods_weights`
---
-
-INSERT INTO `shipping_methods_weights` (`id_shipping_method_weight`, `id_shipping_method`, `min_weight`, `max_weight`) VALUES
-(1, 1, 0, 2),
-(2, 1, 2, 5),
-(3, 1, 5, 10),
-(4, 1, 10, 20),
-(5, 1, 20, 40),
-(6, 1, 40, 70),
-(7, 1, 70, 100),
-(8, 1, 100, 150),
-(9, 1, 150, 200),
-(10, 1, 200, 250);
 
 -- --------------------------------------------------------
 
