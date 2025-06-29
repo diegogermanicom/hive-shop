@@ -632,7 +632,7 @@
             $data['continents'] = $admin->get_shipping_zone_continents($_GET['id_shipping_zone']);
             $data['continents_select'] = $admin->get_continents_active_options();
             $data['countries_select'] = $admin->get_countries_active_options();
-            $data['product_states'] = $admin->get_states_list($data['shipping_zone']['id_state']);
+            $data['states'] = $admin->get_states_list($data['shipping_zone']['id_state']);
             $this->viewAdmin('/shipments/edit-shipping-zone', $data);
         }
 
@@ -685,7 +685,8 @@
                 exit;
             }
             $data['languages'] = $admin->get_languages_payment($_GET['id_payment_method']);
-            $data['product_states'] = $admin->get_states_list($data['payment_method']['id_state']);
+            $data['states'] = $admin->get_states_list($data['payment_method']['id_state']);
+            $data['zones'] = $admin->get_payment_method_zones($_GET['id_payment_method']);
             $this->viewAdmin('/payments/edit-payment-method', $data);
         }
 
@@ -736,7 +737,10 @@
                 header('Location: '.ADMIN_PATH.'/payments');
                 exit;
             }
-            $data['product_states'] = $admin->get_states_list($data['payment_zone']['id_state']);
+            $data['continents'] = $admin->get_payment_zone_continents($_GET['id_payment_zone']);
+            $data['continents_select'] = $admin->get_continents_active_options();
+            $data['countries_select'] = $admin->get_countries_active_options();
+            $data['states'] = $admin->get_states_list($data['payment_zone']['id_state']);
             $this->viewAdmin('/payments/edit-payment-zone', $data);
         }
 

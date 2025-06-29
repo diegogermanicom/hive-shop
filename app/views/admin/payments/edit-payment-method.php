@@ -12,7 +12,7 @@
                     <div class="container">
                         <div class="title-container underline text-left">Edit payment method</div>
                     </div>
-                    <div class="container-lg" id="form-edit-payment">
+                    <div class="container-xl" id="form-edit-payment">
                         <input type="hidden" id="input-id-payment-method" value="<?= $data['payment_method']['id_payment_method']; ?>">
                         <div class="row pb-20">
                             <div class="col-12 col-sm-9 pr-10 pr-sm-0">
@@ -24,7 +24,7 @@
                             <div class="col-12 col-sm-3">
                                 <div class="pb-10"><b>State</b></div>
                                 <div>
-                                    <select id="select-state" class="w-100"><?= $data['product_states']; ?></select>
+                                    <select id="select-state" class="w-100"><?= $data['states']; ?></select>
                                 </div>
                             </div>
                         </div>
@@ -77,8 +77,9 @@
                             ?></div>
                         </div>
                         <div class="pb-10"><b>Zones</b></div>
-                        <div></div>
+                        <div id="payment-method-zones"><?= $data['zones']['html']; ?></div>
                         <div class="text-center pt-40">
+                            <div id="btn-delete-payment" class="btn btn-red">Delete</div>
                             <div id="btn-save-edit-payment" class="btn btn-black">Save Payment</div>
                         </div>
                     </div>

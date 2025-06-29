@@ -134,7 +134,7 @@
             return array(
                 'response' => 'ok'
             );
-    }
+        }
 
         public function save_new_shipping_zone() {
             // I check that this alias no longer exists.

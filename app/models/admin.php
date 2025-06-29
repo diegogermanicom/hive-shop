@@ -1192,7 +1192,7 @@
                 $html = '<table>';
                 $html .=    '<thead>';
                 $html .=        '<tr>';
-                $html .=            '<th></th>';
+                $html .=            '<th class="text-left">Name</th>';
                 while($row_weights = $result_weights->fetch_assoc()) {
                     $html .= '<th style="width: 100px;"><'.$row_weights['max_weight'].'kg</th>';
                 }
@@ -1379,6 +1379,42 @@
             return $result->fetch_all(MYSQLI_ASSOC);
         }
 
+        public function get_payment_method_zones($id_payment_method) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'payment_zones ORDER BY -id_payment_zone';
+            $result_zones = $this->query($sql);
+            if($result_zones->num_rows != 0) {
+                $html = '<table>';
+                $html .=    '<thead>';
+                $html .=        '<tr>';
+                $html .=            '<th class="text-left">Name</th>';
+                $html .=        '</tr>';
+                $html .=    '</thead>';
+                $html .=    '<tbody>';
+                while($row_zones = $result_zones->fetch_assoc()) {
+                    // I check if you have it selected
+                    $sql = 'SELECT id_payment_zone FROM '.DDBB_PREFIX.'payment_methods_zones WHERE id_payment_method = ? AND id_payment_zone = ? LIMIT 1';
+                    $result_select = $this->query($sql, array($id_payment_method, $row_zones['id_payment_zone']));
+                    if($result_select->num_rows > 0) {
+                        $checked = ' checked';
+                    } else {
+                        $checked = '';
+                    }
+                    $html .= '<tr class="payment-zone" data-id-payment-zone="'.$row_zones['id_payment_zone'].'">';
+                    $html .=    '<td>';
+                    $html .=        '<label class="checkbox"><input type="checkbox" value="'.$row_zones['id_payment_zone'].'"'.$checked.'><span class="checkmark"></span>'.$row_zones['name'].'</label>';
+                    $html .=    '</td>';
+                    $html .= '</tr>';
+                }
+                $html .=    '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No payment zones.';
+            }
+            return array(
+                'html' => $html
+            );
+        }
+
         public function get_payment_zones($page = 1, $per_page = 20) {
             $sql = 'SELECT z.*, s.name AS state_name FROM '.DDBB_PREFIX.'payment_zones AS z
                         INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = z.id_state
@@ -1434,6 +1470,38 @@
             }
         }
 
+        public function get_payment_zone_continents($id_payment_zone) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'payment_zone_continents WHERE id_payment_zone = ?';
+            $result = $this->query($sql, $id_payment_zone);
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'ct_continents WHERE id_state = 2 ORDER BY id_continent';
+            $result_continents = $this->query($sql);
+            if($result_continents->num_rows != 0) {
+                $html = '<table>';
+                $html .= '<tbody>';
+                while($row_continent = $result_continents->fetch_assoc()) {
+                    $checked = '';
+                    while($row = $result->fetch_assoc()) {
+                        if($row_continent['id_continent'] == $row['id_continent']) {
+                            $checked = ' checked';
+                        }
+                    }
+                    $result->data_seek(0);
+                    $html .= '<tr>';
+                    $html .=    '<td>';
+                    $html .=        '<label class="checkbox">';
+                    $html .=            '<input type="checkbox" value="'.$row_continent['id_continent'].'"'.$checked.'>';
+                    $html .=            '<span class="checkmark"></span>'.$row_continent['en'];
+                    $html .=        '</label>';
+                    $html .=    '</td>';
+                    $html .= '</tr>';
+                }
+                $html .= '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No continents found.';
+            }
+            return $html;
+        }
     }
 
 ?>

@@ -63,8 +63,13 @@
         // Payment
         ['/save-new-payment'                , 'save_new_payment'],
         ['/save-edit-payment'               , 'save_edit_payment'],
+        ['/delete-payment'                  , 'delete_payment'],
         ['/save-new-payment-zone'           , 'save_new_payment_zone'],
         ['/save-edit-payment-zone'          , 'save_edit_payment_zone'],
+        ['/delete-payment-zone'             , 'delete_payment_zone'],
+        ['/get-payment-zone-countries'      , 'get_payment_zone_countries'],
+        ['/get-payment-zone-provinces'      , 'get_payment_zone_provinces'],
+        // User
         ['/save-edit-user'                  , 'save_edit_user'],
         ['/get-user-addresses'              , 'get_user_addresses'],
         ['/get-user-address'                , 'get_user_address'],

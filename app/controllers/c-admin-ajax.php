@@ -396,7 +396,7 @@
         }
 
         public function save_new_payment() {
-            $admin = new AdminAjax('ajax-save-new-payment');
+            $admin = new AdminPaymentAjax('ajax-save-new-payment');
             $admin->security_admin_login();
             $result = [];
             $result['save_new_payment'] = $admin->save_new_payment();
@@ -404,15 +404,23 @@
         }
 
         public function save_edit_payment() {
-            $admin = new AdminAjax('ajax-save-edit-payment');
+            $admin = new AdminPaymentAjax('ajax-save-edit-payment');
             $admin->security_admin_login();
             $result = [];
             $result['save_edit_payment'] = $admin->save_edit_payment();
             echo json_encode($result);
         }
 
+        public function delete_payment() {
+            $admin = new AdminPaymentAjax('ajax-delete-payment');
+            $admin->security_admin_login();
+            $result = [];
+            $result['delete_payment'] = $admin->delete_payment($_POST['id_payment_method']);
+            echo json_encode($result);
+        }
+
         public function save_new_payment_zone() {
-            $admin = new AdminAjax('ajax-save-new-payment-zone');
+            $admin = new AdminPaymentAjax('ajax-save-new-payment-zone');
             $admin->security_admin_login();
             $result = [];
             $result['save_new_payment_zone'] = $admin->save_new_payment_zone();
@@ -420,10 +428,34 @@
         }
 
         public function save_edit_payment_zone() {
-            $admin = new AdminAjax('ajax-save-edit-payment-zone');
+            $admin = new AdminPaymentAjax('ajax-save-edit-payment-zone');
             $admin->security_admin_login();
             $result = [];
             $result['save_edit_payment_zone'] = $admin->save_edit_payment_zone();
+            echo json_encode($result);            
+        }
+
+        public function delete_payment_zone() {
+            $admin = new AdminPaymentAjax('ajax-delete-payment-zone');
+            $admin->security_admin_login();
+            $result = [];
+            $result['delete_payment_zone'] = $admin->delete_payment_zone($_POST['id_payment_zone']);
+            echo json_encode($result);            
+        }
+
+        public function get_payment_zone_countries() {
+            $admin = new AdminPaymentAjax('ajax-get-payment-zone-countries');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_payment_zone_countries'] = $admin->get_payment_zone_countries($_POST['id_payment_zone'], $_POST['id_continent'], $_POST['page']);
+            echo json_encode($result);            
+        }
+
+        public function get_payment_zone_provinces() {
+            $admin = new AdminPaymentAjax('ajax-get-payment-zone-provinces');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_payment_zone_provinces'] = $admin->get_payment_zone_provinces($_POST['id_payment_zone'], $_POST['id_country'], $_POST['page']);
             echo json_encode($result);            
         }
 

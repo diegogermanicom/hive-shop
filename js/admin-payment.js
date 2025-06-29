@@ -5,7 +5,7 @@
 * Last Update: 2025
 */   
 
-var ADMIN_SHIPMENT = {
+var ADMIN_PAYMENT = {
     // Init
     init: function() {
         this.newEvents();
@@ -17,24 +17,24 @@ var ADMIN_SHIPMENT = {
     getZoneCountries: function(id_continent, page = 1) {
         var self = this;
         var obj = {
-            id_shipping_zone: parseInt($('#input-id-shipping-zone').val()),
+            id_payment_zone: parseInt($('#input-id-payment-zone').val()),
             id_continent: id_continent,
             page: page
         };
         $.ajax({
-            url: ADMIN_PATH + '/get-shipping-zone-countries',
+            url: ADMIN_PATH + '/get-payment-zone-countries',
             data: obj,
             success: function(data) {
-                if(data.get_shipping_zone_countries.response == 'ok') {
-                    $('#shipping-zone-countries').html(data.get_shipping_zone_countries.html);
-                    $('#shipping-zone-countries-pager').html(data.get_shipping_zone_countries.pager);
-                    $('#shipping-zone-countries-pager .btn').off().on('click', function() {
+                if(data.get_payment_zone_countries.response == 'ok') {
+                    $('#payment-zone-countries').html(data.get_payment_zone_countries.html);
+                    $('#payment-zone-countries-pager').html(data.get_payment_zone_countries.pager);
+                    $('#payment-zone-countries-pager .btn').off().on('click', function() {
                         let loadPage = $(this).data('page');
                         self.getZoneCountries(id_continent, loadPage);
                     });
-                    self.checkAllInput('#shipping-zone-countries');
-                    $('#shipping-zone-countries input[type="checkbox"]').off().on('click', function() {
-                        self.checkAllInput('#shipping-zone-countries');
+                    self.checkAllInput('#payment-zone-countries');
+                    $('#payment-zone-countries input[type="checkbox"]').off().on('click', function() {
+                        self.checkAllInput('#payment-zone-countries');
                     });
                 }
             }
@@ -43,24 +43,24 @@ var ADMIN_SHIPMENT = {
     getZoneProvinces: function(id_country, page = 1) {
         var self = this;
         var obj = {
-            id_shipping_zone: parseInt($('#input-id-shipping-zone').val()),
+            id_payment_zone: parseInt($('#input-id-payment-zone').val()),
             id_country: id_country,
             page: page
         };
         $.ajax({
-            url: ADMIN_PATH + '/get-shipping-zone-provinces',
+            url: ADMIN_PATH + '/get-payment-zone-provinces',
             data: obj,
             success: function(data) {
-                if(data.get_shipping_zone_provinces.response == 'ok') {
-                    $('#shipping-zone-provinces').html(data.get_shipping_zone_provinces.html);
-                    $('#shipping-zone-provinces-pager').html(data.get_shipping_zone_provinces.pager);
-                    $('#shipping-zone-provinces-pager .btn').off().on('click', function() {
+                if(data.get_payment_zone_provinces.response == 'ok') {
+                    $('#payment-zone-provinces').html(data.get_payment_zone_provinces.html);
+                    $('#payment-zone-provinces-pager').html(data.get_payment_zone_provinces.pager);
+                    $('#payment-zone-provinces-pager .btn').off().on('click', function() {
                         let loadPage = $(this).data('page');
                         self.getZoneProvinces(id_country, loadPage);
                     });
-                    self.checkAllInput('#shipping-zone-provinces');
-                    $('#shipping-zone-provinces input[type="checkbox"]').off().on('click', function() {
-                        self.checkAllInput('#shipping-zone-provinces');
+                    self.checkAllInput('#payment-zone-provinces');
+                    $('#payment-zone-provinces input[type="checkbox"]').off().on('click', function() {
+                        self.checkAllInput('#payment-zone-provinces');
                     });
                 }
             }
@@ -79,18 +79,16 @@ var ADMIN_SHIPMENT = {
     },
     // Events
     newEvents: function() {
-        if($('body#admin-new-shipping-method-page').length == 1) {
-            $('#btn-save-new-shipment').on("click", function() {
+        if($('body#admin-new-payment-method-page').length == 1) {
+            $('#btn-save-new-payment').on("click", function() {
                 var btn = $(this);
                 var obj = {
                     alias: $('#input-alias').val().trim(),
                     min_value: parseInt($('#input-min-value').val()),
                     max_value: parseInt($('#input-max-value').val()),
-                    min_weight: parseInt($('#input-min-weight').val()),
-                    max_weight: parseInt($('#input-max-weight').val()),
                     id_state: parseInt($('#select-state').val()),
                     languages: []
-                }                
+                }
                 $('#languages .menu > div').each(function() {
                     let id_tab = $(this).attr('id-tab');
                     let content = $(this).closest('#languages').find('.content > div[id-tab="' + id_tab + '"]');
@@ -100,18 +98,18 @@ var ADMIN_SHIPMENT = {
                     }
                     obj.languages.push(data);
                 });
-                var form = UTILS.validateForm('#form-new-shipment');
+                var form = UTILS.validateForm('#form-new-payment');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
-                        url: ADMIN_PATH + '/save-new-shipment',
+                        url: ADMIN_PATH + '/save-new-payment',
                         data: obj,
                         success: function(data) {
-                            if(data.save_new_shipment.response == 'ok') {
+                            if(data.save_new_payment.response == 'ok') {
                                 btn.addClass('btn-ok');
-                                window.location.href = ADMIN_PATH + '/shipments?new';
-                            } else {s
-                                UTILS.showInfo('Error', data.save_new_shipment.message);
+                                window.location.href = ADMIN_PATH + '/payments?new';
+                            } else {
+                                UTILS.showInfo('Error', data.save_new_payment.message);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -121,34 +119,32 @@ var ADMIN_SHIPMENT = {
         }
     },
     editEvents: function() {
-        if($('body#admin-edit-shipping-method-page').length == 1) {
-            $('#btn-delete-shipment').on("click", function() {
+        if($('body#admin-edit-payment-method-page').length == 1) {
+            $('#btn-delete-payment').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_shipping_method: parseInt($('#input-id-shipping-method').val()),
+                    id_payment_method: parseInt($('#input-id-payment-method').val()),
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
                     $.ajax({
-                        url: ADMIN_PATH + '/delete-shipment',
+                        url: ADMIN_PATH + '/delete-payment',
                         data: obj,
                         success: function(data) {
-                            if(data.delete_shipment.response == 'ok') {
-                                window.location.href = ADMIN_PATH + '/shipments?delete';
+                            if(data.delete_payment.response == 'ok') {
+                                window.location.href = ADMIN_PATH + '/payments?delete';
                             }
                         }
                     });
                 }
             });
-            $('#btn-save-edit-shipment').on("click", function() {
+            $('#btn-save-edit-payment').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_shipping_method: parseInt($('#input-id-shipping-method').val()),
+                    id_payment_method: parseInt($('#input-id-payment-method').val()),
                     alias: $('#input-alias').val().trim(),
                     min_value: parseInt($('#input-min-value').val()),
                     max_value: parseInt($('#input-max-value').val()),
-                    min_weight: parseInt($('#input-min-weight').val()),
-                    max_weight: parseInt($('#input-max-weight').val()),
                     id_state: parseInt($('#select-state').val()),
                     languages: [],
                     zones: []
@@ -162,33 +158,25 @@ var ADMIN_SHIPMENT = {
                     }
                     obj.languages.push(data);
                 });
-                $('#shipping-method-zones .shipping-zone').each(function() {
+                $('#payment-method-zones .payment-zone').each(function() {
                     let active = ($(this).find('input[type="checkbox"]').prop('checked')) ? 1 : 0;
                     var zone = {
-                        id_shipping_zone: $(this).data('id-shipping-zone'),
-                        active: active,
-                        prices: []
+                        id_payment_zone: $(this).data('id-payment-zone'),
+                        active: active
                     }
-                    $(this).find('input[type="text"]').each(function() {
-                        let price = {
-                            id_shipping_method_weight: $(this).data('id-shipping-method-weight'),
-                            price: $(this).val().trim()
-                        }
-                        zone.prices.push(price);
-                    });
                     obj.zones.push(zone);
                 });
-                var form = UTILS.validateForm('#form-edit-shipment');
+                var form = UTILS.validateForm('#form-edit-payment');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
-                        url: ADMIN_PATH + '/save-edit-shipment',
+                        url: ADMIN_PATH + '/save-edit-payment',
                         data: obj,
                         success: function(data) {
-                            if(data.save_edit_shipment.response == 'ok') {
-                                UTILS.showInfo('Correct!', data.save_edit_shipment.message);
+                            if(data.save_edit_payment.response == 'ok') {
+                                UTILS.showInfo('Correct!', data.save_edit_payment.message);
                             } else {
-                                UTILS.showInfo('Error', data.save_edit_shipment.message);
+                                UTILS.showInfo('Error', data.save_edit_payment.message);
                             }
                             btn.removeClass('disabled');
                         }
@@ -198,25 +186,25 @@ var ADMIN_SHIPMENT = {
         }
     },
     newZoneEvents: function() {
-        if($('body#admin-new-shipping-zone-page').length == 1) {
-            $('#btn-save-new-shipping-zone').on("click", function() {
+        if($('body#admin-new-payment-zone-page').length == 1) {
+            $('#btn-save-new-payment-zone').on("click", function() {
                 var btn = $(this);
                 var obj = {
                     name: $('#input-name').val().trim(),
                     id_state: parseInt($('#select-state').val())
                 }
-                var form = UTILS.validateForm('#form-new-shipping-zone');
+                var form = UTILS.validateForm('#form-new-payment-zone');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
-                        url: ADMIN_PATH + '/save-new-shipping-zone',
+                        url: ADMIN_PATH + '/save-new-payment-zone',
                         data: obj,
                         success: function(data) {
-                            if(data.save_new_shipping_zone.response == 'ok') {
+                            if(data.save_new_payment_zone.response == 'ok') {
                                 btn.addClass('btn-ok');
-                                window.location.href = ADMIN_PATH + '/shipping-zones?new';
+                                window.location.href = ADMIN_PATH + '/payment-zones?new';
                             } else {
-                                UTILS.showInfo('Error', data.save_new_shipping_zone.message);
+                                UTILS.showInfo('Error', data.save_new_payment_zone.message);
                                 btn.removeClass('disabled');
                             }
                         }
@@ -226,30 +214,30 @@ var ADMIN_SHIPMENT = {
         }
     },
     editZoneEvents: function() {
-        if($('body#admin-edit-shipping-zone-page').length == 1) {
+        if($('body#admin-edit-payment-zone-page').length == 1) {
             var self = this;
             this.getZoneCountries(0);
-            this.getZoneProvinces(0);
-            this.checkAllInput('#shipping-zone-continents');
-            $('#shipping-zone-continents input[type="checkbox"]').on('click', function() {
-                self.checkAllInput('#shipping-zone-continents');
+            this.getZoneProvinces(0);        
+            this.checkAllInput('#payment-zone-continents');
+            $('#payment-zone-continents input[type="checkbox"]').on('click', function() {
+                self.checkAllInput('#payment-zone-continents');
             });
             // I create the events for the Select all buttons
             $('#btn-select-all-continents').on("click", function() {
                 var check = $(this).prop('checked');
-                $('#shipping-zone-continents input').each(function() {
+                $('#payment-zone-continents input').each(function() {
                     $(this).prop('checked', check);
                 });
             });
             $('#btn-select-all-countries').on("click", function() {
                 var check = $(this).prop('checked');
-                $('#shipping-zone-countries input').each(function() {
+                $('#payment-zone-countries input').each(function() {
                     $(this).prop('checked', check);
                 });
             });
             $('#btn-select-all-provinces').on("click", function() {
                 var check = $(this).prop('checked');
-                $('#shipping-zone-provinces input').each(function() {
+                $('#payment-zone-provinces input').each(function() {
                     $(this).prop('checked', check);
                 });
             });
@@ -261,28 +249,28 @@ var ADMIN_SHIPMENT = {
                 let id_country = parseInt($(this).val());
                 self.getZoneProvinces(id_country);
             });
-            $('#btn-delete-shipping-zone').on("click", function() {
+            $('#btn-delete-payment-zone').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_shipping_zone: parseInt($('#input-id-shipping-zone').val())
+                    id_payment_zone: parseInt($('#input-id-payment-zone').val())
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');
                     $.ajax({
-                        url: ADMIN_PATH + '/delete-shipping-zone',
+                        url: ADMIN_PATH + '/delete-payment-zone',
                         data: obj,
                         success: function(data) {
-                            if(data.delete_shipping_zone.response == 'ok') {
-                                window.location.href = ADMIN_PATH + '/shipping-zones?delete';
+                            if(data.delete_payment_zone.response == 'ok') {
+                                window.location.href = ADMIN_PATH + '/payment-zones?delete';
                             }
                         }
                     });
                 }
             });
-            $('#btn-save-edit-shipping-zone').on("click", function() {
+            $('#btn-save-edit-payment-zone').on("click", function() {
                 var btn = $(this);
                 var obj = {
-                    id_shipping_zone: parseInt($('#input-id-shipping-zone').val()),
+                    id_payment_zone: parseInt($('#input-id-payment-zone').val()),
                     name: $('#input-name').val().trim(),
                     id_state: parseInt($('#select-state').val()),
                     continents: [],
@@ -292,7 +280,7 @@ var ADMIN_SHIPMENT = {
                     provinces: [],
                     provinces_add: []
                 }
-                $('#shipping-zone-continents input').each(function() {
+                $('#payment-zone-continents input').each(function() {
                     let value = parseInt($(this).val());
                     if(value != 0) {
                         obj.continents.push(value);
@@ -301,7 +289,7 @@ var ADMIN_SHIPMENT = {
                         }    
                     }
                 });
-                $('#shipping-zone-countries input').each(function() {
+                $('#payment-zone-countries input').each(function() {
                     let value = parseInt($(this).val());
                     if(value != 0) {
                         obj.countries.push(value);
@@ -310,7 +298,7 @@ var ADMIN_SHIPMENT = {
                         }
                     }
                 });
-                $('#shipping-zone-provinces input').each(function() {
+                $('#payment-zone-provinces input').each(function() {
                     let value = parseInt($(this).val());
                     if(value != 0) {
                         obj.provinces.push(value);
@@ -319,17 +307,17 @@ var ADMIN_SHIPMENT = {
                         }
                     }
                 });
-                var form = UTILS.validateForm('#form-edit-shipping-zone');
+                var form = UTILS.validateForm('#form-edit-payment-zone');
                 if(!btn.hasClass('disabled') && form.response == true) {
                     btn.addClass('disabled');
                     $.ajax({
-                        url: ADMIN_PATH + '/save-edit-shipping-zone',
+                        url: ADMIN_PATH + '/save-edit-payment-zone',
                         data: obj,
                         success: function(data) {
-                            if(data.save_edit_shipping_zone.response == 'ok') {
-                                UTILS.showInfo('Correct!', data.save_edit_shipping_zone.message);
+                            if(data.save_edit_payment_zone.response == 'ok') {
+                                UTILS.showInfo('Correct!', data.save_edit_payment_zone.message);
                             } else {
-                                UTILS.showInfo('Error', data.save_edit_shipping_zone.message);
+                                UTILS.showInfo('Error', data.save_edit_payment_zone.message);
                             }
                             btn.removeClass('disabled');
                         }
@@ -341,5 +329,5 @@ var ADMIN_SHIPMENT = {
 }
 
 $(window).ready(function() {
-    ADMIN_SHIPMENT.init();
+    ADMIN_PAYMENT.init();
 });

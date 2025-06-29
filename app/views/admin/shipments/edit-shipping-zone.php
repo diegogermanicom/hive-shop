@@ -24,7 +24,7 @@
                             <div class="col-12 col-sm-3">
                                 <div class="pb-10"><b>State</b></div>
                                 <div>
-                                    <select id="select-state" class="w-100"><?= $data['product_states']; ?></select>
+                                    <select id="select-state" class="w-100"><?= $data['states']; ?></select>
                                 </div>
                             </div>
                         </div>
@@ -84,6 +84,7 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         <div class="text-center pt-40">
                             <div id="btn-delete-shipping-zone" class="btn btn-red">Delete</div>
                             <div id="btn-save-edit-shipping-zone" class="btn btn-black">Save shipping zone</div>
