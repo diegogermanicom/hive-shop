@@ -1420,7 +1420,7 @@
                         INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = z.id_state
                     ORDER BY -z.id_payment_zone';
             $result = $this->query($sql);
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 $pager = $this->pager($result, $page, $per_page);
                 // Painted table head
                 $html = '<table>';
@@ -1460,7 +1460,7 @@
         }
 
         public function get_payment_zone($id_payment_zone) {
-            $sql = 'SELECT * FROM payment_zones WHERE id_payment_zone = ? LIMIT 1';
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'payment_zones WHERE id_payment_zone = ? LIMIT 1';
             $result = $this->query($sql, $id_payment_zone);
             if($result->num_rows != 0) {
                 $row = $result->fetch_assoc();
@@ -1477,7 +1477,7 @@
             $result_continents = $this->query($sql);
             if($result_continents->num_rows != 0) {
                 $html = '<table>';
-                $html .= '<tbody>';
+                $html .=    '<tbody>';
                 while($row_continent = $result_continents->fetch_assoc()) {
                     $checked = '';
                     while($row = $result->fetch_assoc()) {
@@ -1495,13 +1495,99 @@
                     $html .=    '</td>';
                     $html .= '</tr>';
                 }
-                $html .= '</tbody>';
+                $html .=    '</tbody>';
                 $html .= '</table>';
             } else {
                 $html = 'No continents found.';
             }
             return $html;
         }
+
+        public function get_tax_types($page = 1, $per_page = 20) {
+            $sql = 'SELECT t.*, s.name AS state_name FROM '.DDBB_PREFIX.'tax_types AS t
+                        INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = t.id_state
+                    ORDER BY -t.id_tax_type';
+            $result = $this->query($sql);
+            if($result->num_rows > 0) {
+                $pager = $this->pager($result, $page, $per_page);
+                $html = '<table>';
+                $html .=    '<thead>';
+                $html .=        '<tr>';
+                $html .=            '<th style="width: 160px;">Id</th>';
+                $html .=            '<th class="text-left">Name</th>';
+                $html .=            '<th style="width: 150px;">State</th>';
+                $html .=            '<th style="width: 120px;"></th>';
+                $html .=        '</tr>';
+                $html .=    '</thead>';
+                $html .=    '<tbody>';
+                while($row = $result->fetch_assoc()) {
+                    $html .= '<tr>';
+                    $html .=    '<td class="text-center">'.$row['id_tax_type'].'</td>';
+                    $html .=    '<td>'.$row['name'].'</td>';
+                    $html .=    '<td class="text-center">'.$row['state_name'].'</td>';
+                    $html .=    '<td class="text-center">';
+                    $html .=        '<a href="edit-tax-type?id_tax_type='.$row['id_tax_type'].'" class="btn btn-black btn-sm mr-5">Edit</a>';
+                    $html .=    '</td>';
+                    $html .= '</tr>';
+                }
+                $html .=    '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No tax types.';
+            }
+            return array(
+                'html' => $html,
+                'pager' => (isset($pager)) ? $pager['pager'] : ''
+            );
+        }
+
+        public function get_tax_type($id_tax_type) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'tax_types WHERE id_tax_type = ? LIMIT 1';
+            $result = $this->query($sql, $id_tax_type);
+            if($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                return $row;
+            } else {
+                return 'error';
+            }
+        }
+
+        public function get_tax_type_zones($id_tax_type) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'tax_zones ORDER BY -id_tax_zone';
+            $result_zones = $this->query($sql);
+            if($result_zones->num_rows != 0) {
+                $html = '<table>';
+                $html .=    '<thead>';
+                $html .=        '<tr>';
+                $html .=            '<th class="text-left">Name</th>';
+                $html .=        '</tr>';
+                $html .=    '</thead>';
+                $html .=    '<tbody>';
+                while($row_zones = $result_zones->fetch_assoc()) {
+                    // I check if you have it selected
+                    $sql = 'SELECT id_tax_zone FROM '.DDBB_PREFIX.'tax_types_zones WHERE id_tax_type = ? AND id_tax_zone = ? LIMIT 1';
+                    $result_select = $this->query($sql, array($id_tax_type, $row_zones['id_tax_zone']));
+                    if($result_select->num_rows > 0) {
+                        $checked = ' checked';
+                    } else {
+                        $checked = '';
+                    }
+                    $html .= '<tr class="tax-zone" data-id-tax-zone="'.$row_zones['id_tax_zone'].'">';
+                    $html .=    '<td>';
+                    $html .=        '<label class="checkbox"><input type="checkbox" value="'.$row_zones['id_tax_zone'].'"'.$checked.'><span class="checkmark"></span>'.$row_zones['name'].'</label>';
+                    $html .=    '</td>';
+                    $html .= '</tr>';
+                }
+                $html .=    '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No tax zones.';
+            }
+            return array(
+                'html' => $html
+            );
+        }
+
     }
 
 ?>

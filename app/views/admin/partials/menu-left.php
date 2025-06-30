@@ -71,8 +71,11 @@
             <li <?php if(in_array('taxes-menu', $data['admin']['tags'])) echo 'class="active"'; ?>>
                 <div class="label"><i class="fa-solid fa-coins"></i>&nbsp;&nbsp;Taxes</div>
                 <div class="options">
-                    <a href="<?= ADMIN_PATH ?>/taxes"<?php if(in_array('taxes', $data['admin']['tags'])) echo ' class="active"'; ?>>
-                    <i class="fa-solid fa-receipt"></i>&nbsp;&nbsp;Taxes
+                    <a href="<?= ADMIN_PATH ?>/tax-types"<?php if(in_array('taxes', $data['admin']['tags'])) echo ' class="active"'; ?>>
+                        <i class="fa-solid fa-receipt"></i>&nbsp;&nbsp;Taxes
+                    </a>
+                    <a href="<?= ADMIN_PATH ?>/tax-zones"<?php if(in_array('tax-zones', $data['admin']['tags'])) echo ' class="active"'; ?>>
+                        <i class="fa-solid fa-map-location-dot"></i>&nbsp;&nbsp;Tax zones
                     </a>
                 </div>
             </li>

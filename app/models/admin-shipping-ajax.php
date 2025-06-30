@@ -154,7 +154,7 @@
             }            
         }
 
-        public function createDefaultPricesZone($id_shipping_zone) {
+        private function createDefaultPricesZone($id_shipping_zone) {
             $sql = 'SELECT id_shipping_method FROM '.DDBB_PREFIX.'shipping_methods';
             $result_method = $this->query($sql);
             if($result_method->num_rows > 0) {

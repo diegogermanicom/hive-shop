@@ -94,24 +94,6 @@
             return $text;
         }
 
-        public function get_related_attributes_string($id_product_related) {
-            $sql = 'SELECT r.*, a.alias AS alias_attribute, v.alias AS alias_value FROM '.DDBB_PREFIX.'products_related_attributes AS r
-                        INNER JOIN '.DDBB_PREFIX.'attributes AS a ON a.id_attribute  = r.id_attribute
-                        INNER JOIN '.DDBB_PREFIX.'attributes_value AS v ON v.id_attribute_value = r.id_attribute_value
-                    WHERE r.id_product_related = ?';
-            $result = $this->query($sql, array($id_product_related));
-            $html = '';
-            if($result->num_rows != 0) {
-                while($row = $result->fetch_assoc()) {
-                    $html .= $row['alias_attribute'].' '.$row['alias_value'].' - ';
-                }
-                $html = substr($html, 0, -3);
-            } else {
-                $html .= 'No attributes';
-            }
-            return $html;
-        }
-
         public function get_states_list($id_state = 1) {
             $sql = 'SELECT * FROM '.DDBB_PREFIX.'ct_states ORDER BY id_state';
             $result = $this->query($sql);
@@ -172,6 +154,48 @@
                 }
             }
             return $html;
+        }
+
+        public function create_all_product_routes($id_product = null) {
+            // I create the routes of a product or of all the products
+            if($id_product == null) {
+                $sql = 'DELETE FROM '.DDBB_PREFIX.'products_routes';
+                $this->query($sql);
+                $sql = 'SELECT * FROM '.DDBB_PREFIX.'products_categories';
+                $result_categories = $this->query($sql);
+            } else {
+                $sql = 'DELETE FROM '.DDBB_PREFIX.'products_routes WHERE id_product = ?';
+                $this->query($sql, array($id_product));
+                $sql = 'SELECT * FROM '.DDBB_PREFIX.'products_categories WHERE id_product = ?';
+                $result_categories = $this->query($sql, array($id_product));
+            }
+            while($row_category = $result_categories->fetch_assoc()) {
+                $sql = 'SELECT * FROM '.DDBB_PREFIX.'products_language WHERE id_product = ?';
+                $result_languages = $this->query($sql, array($row_category['id_product']));
+                while($row_language = $result_languages->fetch_assoc()) {
+                    $category_route = $this->get_category_route($row_category['id_category'], $row_language['id_language']);
+                    $product_route = $category_route.'/'.$row_language['slug'];
+                    $sql = 'INSERT INTO '.DDBB_PREFIX.'products_routes (id_product, id_category, id_language, route) VALUES (?, ?, ?, ?)';
+                    $this->query($sql, array($row_language['id_product'], $row_category['id_category'], $row_language['id_language'], $product_route));
+                }
+            }
+        }
+
+        public function get_category_route($id_category, $id_lang, $route = '') {
+            // I get the complete route of the category
+            $sql = 'SELECT c.id_parent, l.slug FROM '.DDBB_PREFIX.'categories AS c
+                        INNER JOIN '.DDBB_PREFIX.'categories_language AS l ON l.id_category = c.id_category
+                    WHERE c.id_category = ? AND l.id_language = ? LIMIT 1';
+            $result = $this->query($sql, array($id_category, $id_lang));
+            if($result->num_rows != 0) {
+                $row = $result->fetch_assoc();
+                if($row['id_parent'] != 1) {
+                    return $this->get_category_route($row['id_parent'], $id_lang, '/'.$row['slug'].$route);
+                }
+                return '/'.$row['slug'].$route;
+            } else {
+                return '';
+            }
         }
 
     }

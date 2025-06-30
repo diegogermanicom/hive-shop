@@ -10,7 +10,7 @@
             <div id="container-admin">
                 <section>
                     <div class="container">
-                        <div class="title-container underline text-left">Tax list</div>
+                        <div class="title-container underline text-left">Tax zones</div>
                     </div>
                 </section>
                 <?php include VIEWS_ADMIN.'/partials/footer.php'; ?>

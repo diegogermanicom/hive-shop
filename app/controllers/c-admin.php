@@ -554,7 +554,7 @@
             ];
             $data['meta']['title'] = $admin->setTitle('New shipping method');
             $data['languages'] = $admin->get_languages_array();
-            $data['product_states'] = $admin->get_states_list();
+            $data['states'] = $admin->get_states_list();
             $this->viewAdmin('/shipments/new-shipping-method', $data);
         }
 
@@ -607,7 +607,7 @@
                 'shipping-zones'
             ];
             $data['meta']['title'] = $admin->setTitle('New shipping zone');
-            $data['product_states'] = $admin->get_states_list();
+            $data['states'] = $admin->get_states_list();
             $this->viewAdmin('/shipments/new-shipping-zone', $data);
         }
 
@@ -662,7 +662,7 @@
             ];
             $data['meta']['title'] = $admin->setTitle('New payment method');
             $data['languages'] = $admin->get_languages_array();
-            $data['product_states'] = $admin->get_states_list();
+            $data['states'] = $admin->get_states_list();
             $this->viewAdmin('/payments/new-payment-method', $data);
         }
 
@@ -715,7 +715,7 @@
                 'payment-zones'
             ];
             $data['meta']['title'] = $admin->setTitle('New payment zone');
-            $data['product_states'] = $admin->get_states_list();
+            $data['states'] = $admin->get_states_list();
             $this->viewAdmin('/payments/new-payment-zone', $data);
         }
 
@@ -744,16 +744,67 @@
             $this->viewAdmin('/payments/edit-payment-zone', $data);
         }
 
-        public function taxes($args) {
-            $admin = new Admin('admin-taxes-page');
+        public function tax_types($args) {
+            $admin = new Admin('admin-tax-types-page');
             $admin->security_admin_login();
             $data = $admin->getAdminData();
             $data['admin']['tags'] = [
                 'taxes-menu',
                 'taxes'
             ];
-            $data['meta']['title'] = $admin->setTitle('Taxes');
-            $this->viewAdmin('/taxes', $data);
+            $data['meta']['title'] = $admin->setTitle('Tax types');
+            if(!isset($_GET['page'])) {
+                $_GET['page'] = 1;
+            }
+            $data['taxes'] = $admin->get_tax_types($_GET['page']);
+            $this->viewAdmin('/tax-types', $data);
+        }
+
+        public function new_tax_type($args) {
+            $admin = new Admin('admin-new-tax-type-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'taxes-menu',
+                'taxes'
+            ];
+            $data['meta']['title'] = $admin->setTitle('New tax type');
+            $data['states'] = $admin->get_states_list();
+            $this->viewAdmin('/new-tax-type', $data);
+        }
+
+        public function edit_tax_type($args) {
+            if(!isset($_GET['id_tax_type'])) {
+                header('Location: '.ADMIN_PATH.'/tax-types');
+                exit;
+            }
+            $admin = new Admin('admin-edit-tax-type-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'taxes-menu',
+                'taxes'
+            ];
+            $data['meta']['title'] = $admin->setTitle('Edit tax type');
+            $data['tax'] = $admin->get_tax_type($_GET['id_tax_type']);
+            $data['states'] = $admin->get_states_list($data['tax']['id_state']);
+            $data['zones'] = $admin->get_tax_type_zones($_GET['id_tax_type']);
+            $this->viewAdmin('/edit-tax-type', $data);
+        }
+
+        public function tax_zones($args) {
+            $admin = new Admin('admin-tax-types-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'taxes-menu',
+                'tax-zones'
+            ];
+            $data['meta']['title'] = $admin->setTitle('Tax zones');
+            if(!isset($_GET['page'])) {
+                $_GET['page'] = 1;
+            }
+            $this->viewAdmin('/tax-zones', $data);
         }
 
         public function locations($args) {

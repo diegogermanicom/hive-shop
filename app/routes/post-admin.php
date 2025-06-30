@@ -18,7 +18,7 @@
         ['/save-product-main-image'         , 'save_product_main_image'],
         ['/save-product-hover-image'        , 'save_product_hover_image'],
         ['/delete-product-image'            , 'delete_product_image'],
-        ['/delete-server-image'             , 'delete_server_image'],
+        ['/delete-server-image'             , 'delete_product_server_image'],
         ['/save-edit-product'               , 'save_edit_product'],
         ['/get-add-images'                  , 'get_add_images'],
         ['/get-related'                     , 'get_related'],
@@ -69,6 +69,10 @@
         ['/delete-payment-zone'             , 'delete_payment_zone'],
         ['/get-payment-zone-countries'      , 'get_payment_zone_countries'],
         ['/get-payment-zone-provinces'      , 'get_payment_zone_provinces'],
+        // Taxes
+        ['/save-new-tax-type'               , 'save_new_tax_type'],
+        ['/save-edit-tax-type'              , 'save_edit_tax_type'],
+        ['/delete-tax-type'                 , 'delete_tax_type'],
         // User
         ['/save-edit-user'                  , 'save_edit_user'],
         ['/get-user-addresses'              , 'get_user_addresses'],

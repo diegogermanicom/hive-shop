@@ -28,7 +28,7 @@
         }
 
         public function save_new_product() {
-            $admin = new AdminAjax('ajax-save-new-product');
+            $admin = new AdminProductAjax('ajax-save-new-product');
             $admin->security_admin_login();
             $result = [];
             $result['save_new_product'] = $admin->save_new_product();
@@ -36,7 +36,7 @@
         }
 
         public function get_product_images() {
-            $admin = new AdminAjax('ajax-get-product-images');
+            $admin = new AdminProductAjax('ajax-get-product-images');
             $admin->security_admin_login();
             $result = [];
             $result['get_product_images'] = $admin->get_product_images($_POST['id_product']);
@@ -44,7 +44,7 @@
         }
 
         public function save_product_main_image() {
-            $admin = new AdminAjax('ajax-save-product-main-image');
+            $admin = new AdminProductAjax('ajax-save-product-main-image');
             $admin->security_admin_login();
             $result = [];
             $result['save_product_main_image'] = $admin->save_product_main_image($_POST['id_product'], $_POST['id_product_image']);
@@ -52,7 +52,7 @@
         }
 
         public function save_product_hover_image() {
-            $admin = new AdminAjax('ajax-save-product-hover-image');
+            $admin = new AdminProductAjax('ajax-save-product-hover-image');
             $admin->security_admin_login();
             $result = [];
             $result['save_product_hover_image'] = $admin->save_product_hover_image($_POST['id_product'], $_POST['id_product_image']);
@@ -60,23 +60,23 @@
         }
 
         public function delete_product_image() {
-            $admin = new AdminAjax('ajax-delete-product-image');
+            $admin = new AdminProductAjax('ajax-delete-product-image');
             $admin->security_admin_login();
             $result = [];
             $result['delete_product_image'] = $admin->delete_product_image($_POST['id_product_image'], $_POST['id_product']);
             echo json_encode($result);
         }
         
-        public function delete_server_image() {
-            $admin = new AdminAjax('ajax-delete-server-image');
+        public function delete_product_server_image() {
+            $admin = new AdminProductAjax('ajax-delete-server-image');
             $admin->security_admin_login();
             $result = [];
-            $result['delete_server_image'] = $admin->delete_server_image($_POST['id_image']);
+            $result['delete_product_server_image'] = $admin->delete_product_server_image($_POST['id_image']);
             echo json_encode($result);
         }
 
         public function save_edit_product() {
-            $admin = new AdminAjax('ajax-save-edit-product');
+            $admin = new AdminProductAjax('ajax-save-edit-product');
             $admin->security_admin_login();
             $result = [];
             $result['save_edit_product'] = $admin->save_edit_product();
@@ -84,7 +84,7 @@
         }
 
         public function get_add_images() {
-            $admin = new AdminAjax('ajax-get-images');
+            $admin = new AdminProductAjax('ajax-get-images');
             $admin->security_admin_login();
             $result = [];
             $result['images'] = $admin->get_add_images($_POST['id_product']);
@@ -92,7 +92,7 @@
         }
         
         public function get_related() {
-            $admin = new AdminAjax('ajax-get-related');
+            $admin = new AdminProductAjax('ajax-get-related');
             $admin->security_admin_login();
             $result = [];
             $result['get_related'] = $admin->get_related($_POST['id_product']);
@@ -100,7 +100,7 @@
         }
 
         public function get_add_related() {
-            $admin = new AdminAjax('ajax-get-add-related');
+            $admin = new AdminProductAjax('ajax-get-add-related');
             $admin->security_admin_login();
             $result = [];
             $result['get_add_related'] = $admin->get_add_related($_POST['id_product']);
@@ -108,7 +108,7 @@
         }
 
         public function add_related() {
-            $admin = new AdminAjax('ajax-add-related');
+            $admin = new AdminProductAjax('ajax-add-related');
             $admin->security_admin_login();
             $result = [];
             $result['add_related'] = $admin->add_related();
@@ -116,7 +116,7 @@
         }
 
         public function get_edit_related() {
-            $admin = new AdminAjax('ajax-get-edit-related');
+            $admin = new AdminProductAjax('ajax-get-edit-related');
             $admin->security_admin_login();
             $result = [];
             $result['get_edit_related'] = $admin->get_edit_related($_POST['id_product_related']);
@@ -124,7 +124,7 @@
         }
 
         public function save_related() {
-            $admin = new AdminAjax('ajax-save-related');
+            $admin = new AdminProductAjax('ajax-save-related');
             $admin->security_admin_login();
             $result = [];
             $result['save_related'] = $admin->save_related();
@@ -132,7 +132,7 @@
         }
 
         public function delete_related() {
-            $admin = new AdminAjax('ajax-delete-related');
+            $admin = new AdminProductAjax('ajax-delete-related');
             $admin->security_admin_login();
             $result = [];
             $result['delete_related'] = $admin->delete_related($_POST['id_product_related']);
@@ -140,23 +140,15 @@
         }
 
         public function delete_product() {
-            $admin = new AdminAjax('ajax-delete-product');
+            $admin = new AdminProductAjax('ajax-delete-product');
             $admin->security_admin_login();
             $result = [];
             $result['delete_product'] = $admin->delete_product($_POST['id_product']);
             echo json_encode($result);
         }
 
-        public function delete_product_custom_route() {
-            $admin = new AdminAjax('ajax-delete-product-custom-route');
-            $admin->security_admin_login();
-            $result = [];
-            $result['delete_product_custom_route'] = $admin->delete_product_custom_route($_POST['id_product_custom_route']);
-            echo json_encode($result);
-        }
-
         public function get_product_categories_list() {
-            $admin = new AdminAjax('ajax-get-product-categories-list');
+            $admin = new AdminProductAjax('ajax-get-product-categories-list');
             $admin->security_admin_login();
             $result = [];
             $result['get_product_categories_list'] = $admin->get_product_categories_list($_POST['id_product']);
@@ -164,10 +156,18 @@
         }
 
         public function save_new_product_custom_route() {
-            $admin = new AdminAjax('ajax-save-new-product-custom-route');
+            $admin = new AdminProductAjax('ajax-save-new-product-custom-route');
             $admin->security_admin_login();
             $result = [];
             $result['save_new_product_custom_route'] = $admin->save_new_product_custom_route();
+            echo json_encode($result);
+        }
+
+        public function delete_product_custom_route() {
+            $admin = new AdminProductAjax('ajax-delete-product-custom-route');
+            $admin->security_admin_login();
+            $result = [];
+            $result['delete_product_custom_route'] = $admin->delete_product_custom_route($_POST['id_product_custom_route']);
             echo json_encode($result);
         }
 
@@ -576,6 +576,30 @@
             $admin->security_admin_login();
             $result = [];
             $result['delete_admin_user'] = $admin->delete_admin_user($_POST['id_admin']);
+            echo json_encode($result);
+        }
+
+        public function save_new_tax_type() {
+            $admin = new AdminTaxAjax('ajax-save-new-tax-type');
+            $admin->security_admin_login();
+            $result = [];
+            $result['save_new_tax_type'] = $admin->save_new_tax_type();
+            echo json_encode($result);
+        }
+
+        public function save_edit_tax_type() {
+            $admin = new AdminTaxAjax('ajax-save-edit-tax-type');
+            $admin->security_admin_login();
+            $result = [];
+            $result['save_edit_tax_type'] = $admin->save_edit_tax_type();
+            echo json_encode($result);
+        }
+
+        public function delete_tax_type() {
+            $admin = new AdminTaxAjax('ajax-delete-tax-type');
+            $admin->security_admin_login();
+            $result = [];
+            $result['delete_tax_type'] = $admin->delete_tax_type($_POST['id_tax_type']);
             echo json_encode($result);
         }
 
