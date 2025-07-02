@@ -1,9 +1,10 @@
-/*
-* Author: Diego Martin
-* Copyright: Hive®
-* Version: 1.0
-* Last Update: 2024
-*/   
+
+/**
+ * @author Diego Martín
+ * @copyright Hive®
+ * @version 1.0
+ * @lastUpdated 2025
+ */
 
 var ADMIN = {
     // Init
@@ -31,8 +32,6 @@ var ADMIN = {
         this.adminUsersEvent();
         this.newAdminUserEvent();
         this.editAdminUserEvents();
-        this.newTaxTypeEvents();
-        this.editTaxTypeEvents();
     },
     // Functions not related to page events
     editProductRelatedEvents: function() {
@@ -2171,81 +2170,6 @@ var ADMIN = {
             });
         }    
     },
-    newTaxTypeEvents: function() {
-        if($('body#admin-new-tax-type-page').length == 1) {
-            $('#btn-save-new-tax-type').on("click", function() {
-                var btn = $(this);
-                var obj = {
-                    name: $('#input-name').val().trim(),
-                    id_state: parseInt($('#select-state').val())
-                };
-                $('.form-new-tax-type *').removeClass('error');
-                var form = UTILS.validateForm('#form-new-tax-type');
-                if(!btn.hasClass('disabled') && form.response == true) {
-                    btn.addClass('disabled');
-                    $.ajax({
-                        url: ADMIN_PATH + '/save-new-tax-type',
-                        data: obj,
-                        success: function(data) {
-                            if(data.save_new_tax_type.response == 'ok') {
-                                btn.addClass('btn-ok');
-                                window.location.href = ADMIN_PATH + '/tax-types?new';
-                            } else {s
-                                UTILS.showInfo('Error', data.save_new_tax_type.message);
-                                btn.removeClass('disabled');
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    },
-    editTaxTypeEvents: function() {
-        if($('body#admin-edit-tax-type-page').length == 1) {
-            $('#btn-delete-tax-type').on("click", function() {
-                var btn = $(this);
-                var obj = {
-                    id_tax_type: parseInt($('#input-id-tax-type').val()),
-                }
-                if(!btn.hasClass('disabled')) {
-                    btn.addClass('disabled');
-                    $.ajax({
-                        url: ADMIN_PATH + '/delete-tax-type',
-                        data: obj,
-                        success: function(data) {
-                            if(data.delete_tax_type.response == 'ok') {
-                                window.location.href = ADMIN_PATH + '/tax-types?delete';
-                            }
-                        }
-                    });
-                }
-            });
-            $('#btn-save-edit-tax-type').on("click", function() {
-                var btn = $(this);
-                var obj = {
-                    name: $('#input-name').val().trim(),
-                    id_state: parseInt($('#select-state').val())
-                };
-                $('.form-edit-tax-type *').removeClass('error');
-                var form = UTILS.validateForm('#form-edit-tax-type');
-                if(!btn.hasClass('disabled') && form.response == true) {
-                    btn.addClass('disabled');
-                    $.ajax({
-                        url: ADMIN_PATH + '/save-edit-tax-type',
-                        data: obj,
-                        success: function(data) {
-                            if(data.save_edit_tax_type.response == 'ok') {
-                                UTILS.showInfo('Correct!', data.save_edit_tax_type.message);
-                            } else {
-                                UTILS.showInfo('Error', data.save_edit_tax_type.message);
-                            }
-                            btn.removeClass('disabled');
-                        }
-                    });
-                }
-            });
-        }
-    }
 }
 
 $(window).ready(function() {

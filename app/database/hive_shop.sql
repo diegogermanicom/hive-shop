@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 24, 2025 at 06:54 AM
+-- Generation Time: Jul 02, 2025 at 04:48 AM
 -- Server version: 5.7.23-0ubuntu0.16.04.1
 -- PHP Version: 7.4.16
 
@@ -187,7 +187,9 @@ INSERT INTO `carts` (`id`, `id_cart`, `id_user`, `id_user_address`, `id_user_bil
 (8, '66eff9d713d4f', 1, 0, 0, 0, 0, '', NULL, 0, '2024-09-22 07:04:55'),
 (9, '66f1401936965', 1, 0, 0, 0, 0, '', NULL, 0, '2024-09-23 06:16:57'),
 (10, '678f92a4d476e', 1, 0, 0, 0, 0, '', NULL, 0, '2025-01-21 07:27:16'),
-(11, '67a1360b06783', 1, 0, 0, 0, 0, '', NULL, 0, '2025-02-03 16:32:59');
+(11, '67a1360b06783', 1, 0, 0, 0, 0, '', NULL, 0, '2025-02-03 16:32:59'),
+(12, '68475f1f85fc48588', 1, 0, 0, 0, 0, '', NULL, 0, '2025-06-09 18:24:31'),
+(13, '6855817e87ac84904', 0, 0, 0, 0, 0, '', NULL, 0, '2025-06-20 11:42:54');
 
 -- --------------------------------------------------------
 
@@ -253,7 +255,13 @@ INSERT INTO `carts_products` (`id`, `id_cart`, `id_product`, `id_product_related
 (25, '678f92a4d476e', 10, 37, 18, 1),
 (26, '678f92a4d476e', 9, 50, 19, 1),
 (27, '67a1360b06783', 10, 34, 18, 1),
-(29, '67a1360b06783', 9, 50, 19, 2);
+(29, '67a1360b06783', 9, 50, 19, 2),
+(30, '682f42896e2c14304', 10, 40, 18, 1),
+(31, '682f42896e2c14304', 10, 34, 18, 1),
+(32, '68475f1f85fc48588', 10, 34, 18, 1),
+(33, '682f42896e2c14304', 10, 37, 18, 1),
+(34, '6855817e87ac84904', 10, 40, 18, 1),
+(35, '6855817e87ac84904', 10, 32, 18, 1);
 
 -- --------------------------------------------------------
 
@@ -279,7 +287,7 @@ INSERT INTO `categories` (`id_category`, `id_parent`, `id_category_view`, `visit
 (13, 1, 1, 1, 'Men', 2),
 (14, 1, 1, 0, 'Women', 2),
 (17, 18, 1, 1, 'Helmets', 2),
-(18, 1, 1, 1, 'Equipment', 2),
+(18, 1, 1, 2, 'Equipment', 2),
 (19, 13, 1, 9, 'Sweatshirt', 2),
 (20, 18, 1, 35, 'Air Jordan mujer', 2);
 
@@ -569,10 +577,9 @@ CREATE TABLE `ct_continents` (
 INSERT INTO `ct_continents` (`id_continent`, `en`, `es`, `id_state`) VALUES
 (1, 'Europe', 'Europa', 2),
 (2, 'America', 'América', 1),
-(3, 'Asia', 'Asia', 1),
+(3, 'Asia', 'Asia', 2),
 (4, 'Africa', 'África', 1),
-(5, 'Oceanía', 'Oceanía', 1),
-(6, 'Antarctica', 'Antártida', 1);
+(5, 'Oceanía', 'Oceanía', 1);
 
 -- --------------------------------------------------------
 
@@ -593,55 +600,210 @@ CREATE TABLE `ct_countries` (
 --
 
 INSERT INTO `ct_countries` (`id_country`, `id_continent`, `en`, `es`, `id_state`) VALUES
-(1, 1, 'Albanian', 'Albania', 2),
-(2, 1, 'Germany', 'Alemania', 2),
-(3, 1, 'Andorra', 'Andorra', 2),
-(4, 1, 'Armenia', 'Armenia', 2),
-(5, 1, 'Austria', 'Austria', 2),
-(6, 1, 'Azerbaijan', 'Azerbaiyán', 2),
-(7, 1, 'Belgium', 'Bélgica', 2),
-(8, 1, 'Belarus', 'Bielorrusia', 2),
-(9, 1, 'Bosnia and Herzegovina', 'Bosnia y Herzegovina', 2),
-(10, 1, 'Bulgaria', 'Bulgaria', 2),
-(11, 1, 'Cyprus', 'Chipre', 2),
-(12, 1, 'Croatia', 'Croacia', 2),
-(13, 1, 'Denmark', 'Dinamarca', 2),
-(14, 1, 'Slovakia', 'Eslovaquia', 2),
-(15, 1, 'Slovenia', 'Eslovenia', 2),
-(16, 1, 'Spain', 'España', 2),
-(17, 1, 'Estonia', 'Estonia', 2),
-(18, 1, 'Finland', 'Finlandia', 2),
-(19, 1, 'France', 'Francia', 2),
-(20, 1, 'Georgia', 'Georgia', 2),
-(21, 1, 'Greece', 'Grecia', 2),
-(22, 1, 'Hungary', 'Hungría', 2),
-(23, 1, 'Ireland', 'Irlanda', 2),
-(24, 1, 'Iceland', 'Islandia', 2),
-(25, 1, 'Italy', 'Italia', 2),
-(26, 1, 'Latvia', 'Letonia', 2),
-(27, 1, 'Liechtenstein', 'Liechtenstein', 2),
-(28, 1, 'Lithuania', 'Lituania', 2),
-(29, 1, 'Luxembourg', 'Luxemburgo', 2),
-(30, 1, 'North Macedonia', 'Macedonia del Norte', 2),
+(1, 1, 'Albania', 'Albania', 2),
+(2, 1, 'Andorra', 'Andorra', 2),
+(3, 1, 'Austria', 'Austria', 2),
+(4, 1, 'Belarus', 'Bielorrusia', 2),
+(5, 1, 'Belgium', 'Bélgica', 2),
+(6, 1, 'Bosnia and Herzegovina', 'Bosnia y Herzegovina', 2),
+(7, 1, 'Bulgaria', 'Bulgaria', 2),
+(8, 1, 'Croatia', 'Croacia', 2),
+(9, 1, 'Cyprus', 'Chipre', 2),
+(10, 1, 'Czech Republic', 'República Checa', 2),
+(11, 1, 'Denmark', 'Dinamarca', 2),
+(12, 1, 'Estonia', 'Estonia', 2),
+(13, 1, 'Faroe Islands', 'Islas Feroe', 2),
+(14, 1, 'Finland', 'Finlandia', 2),
+(15, 1, 'France', 'Francia', 2),
+(16, 1, 'Germany', 'Alemania', 2),
+(17, 1, 'Gibraltar', 'Gibraltar', 2),
+(18, 1, 'Greece', 'Grecia', 2),
+(19, 1, 'Guernsey', 'Guernsey', 2),
+(20, 1, 'Hungary', 'Hungría', 2),
+(21, 1, 'Iceland', 'Islandia', 2),
+(22, 1, 'Ireland', 'Irlanda', 2),
+(23, 1, 'Isle of Man', 'Isla de Man', 2),
+(24, 1, 'Italy', 'Italia', 2),
+(25, 1, 'Jersey', 'Jersey', 2),
+(26, 1, 'Kosovo', 'Kosovo', 2),
+(27, 1, 'Latvia', 'Letonia', 2),
+(28, 1, 'Liechtenstein', 'Liechtenstein', 2),
+(29, 1, 'Lithuania', 'Lituania', 2),
+(30, 1, 'Luxembourg', 'Luxemburgo', 2),
 (31, 1, 'Malta', 'Malta', 2),
 (32, 1, 'Moldova', 'Moldavia', 2),
 (33, 1, 'Monaco', 'Mónaco', 2),
 (34, 1, 'Montenegro', 'Montenegro', 2),
-(35, 1, 'Norway', 'Noruega', 2),
-(36, 1, 'Netherlands', 'Países Bajos', 2),
-(37, 1, 'Poland', 'Polonia', 2),
-(38, 1, 'Portugal', 'Portugal', 2),
-(39, 1, 'United Kingdom', 'Reino Unido', 2),
-(40, 1, 'Czech Republic', 'República Checa', 2),
-(41, 1, 'Romania', 'Rumania', 2),
-(42, 1, 'Russia', 'Rusia', 2),
-(43, 1, 'San Marino', 'San Marino', 2),
-(44, 1, 'Serbian', 'Serbia', 2),
-(45, 1, 'Sweden', 'Suecia', 2),
-(46, 1, 'Swiss', 'Suiza', 2),
-(47, 1, 'Turkey', 'Turquía', 2),
-(48, 1, 'Ukraine', 'Ucrania', 2),
-(49, 1, 'Vatican', 'Vaticano', 2);
+(35, 1, 'Netherlands', 'Países Bajos', 2),
+(36, 1, 'North Macedonia', 'Macedonia del Norte', 2),
+(37, 1, 'Norway', 'Noruega', 2),
+(38, 1, 'Poland', 'Polonia', 2),
+(39, 1, 'Portugal', 'Portugal', 2),
+(40, 1, 'Romania', 'Rumania', 2),
+(41, 1, 'Russia', 'Rusia', 2),
+(42, 1, 'San Marino', 'San Marino', 2),
+(43, 1, 'Serbia', 'Serbia', 2),
+(44, 1, 'Slovakia', 'Eslovaquia', 2),
+(45, 1, 'Slovenia', 'Eslovenia', 2),
+(46, 1, 'Spain', 'España', 2),
+(47, 1, 'Svalbard and Jan Mayen', 'Svalbard y Jan Mayen', 2),
+(48, 1, 'Sweden', 'Suecia', 2),
+(49, 1, 'Switzerland', 'Suiza', 2),
+(50, 1, 'Ukraine', 'Ucrania', 2),
+(51, 1, 'United Kingdom', 'Reino Unido', 2),
+(52, 1, 'Vatican City', 'Ciudad del Vaticano', 2),
+(53, 2, 'Antigua and Barbuda', 'Antigua y Barbuda', 2),
+(54, 2, 'Argentina', 'Argentina', 2),
+(55, 2, 'Bahamas', 'Bahamas', 2),
+(56, 2, 'Barbados', 'Barbados', 2),
+(57, 2, 'Belize', 'Belice', 2),
+(58, 2, 'Bolivia', 'Bolivia', 2),
+(59, 2, 'Brazil', 'Brasil', 2),
+(60, 2, 'Canada', 'Canadá', 2),
+(61, 2, 'Chile', 'Chile', 2),
+(62, 2, 'Colombia', 'Colombia', 2),
+(63, 2, 'Costa Rica', 'Costa Rica', 2),
+(64, 2, 'Cuba', 'Cuba', 2),
+(65, 2, 'Dominica', 'Dominica', 2),
+(66, 2, 'Dominican Republic', 'República Dominicana', 2),
+(67, 2, 'Ecuador', 'Ecuador', 2),
+(68, 2, 'El Salvador', 'El Salvador', 2),
+(69, 2, 'Grenada', 'Granada', 2),
+(70, 2, 'Guatemala', 'Guatemala', 2),
+(71, 2, 'Guyana', 'Guyana', 2),
+(72, 2, 'Haiti', 'Haití', 2),
+(73, 2, 'Honduras', 'Honduras', 2),
+(74, 2, 'Jamaica', 'Jamaica', 2),
+(75, 2, 'Mexico', 'México', 2),
+(76, 2, 'Nicaragua', 'Nicaragua', 2),
+(77, 2, 'Panama', 'Panamá', 2),
+(78, 2, 'Paraguay', 'Paraguay', 2),
+(79, 2, 'Peru', 'Perú', 2),
+(80, 2, 'Saint Kitts and Nevis', 'San Cristóbal y Nieves', 2),
+(81, 2, 'Saint Lucia', 'Santa Lucía', 2),
+(82, 2, 'Saint Vincent and the Grenadines', 'San Vicente y las Granadinas', 2),
+(83, 2, 'Suriname', 'Surinam', 2),
+(84, 2, 'Trinidad and Tobago', 'Trinidad y Tobago', 2),
+(85, 2, 'United States', 'Estados Unidos', 2),
+(86, 2, 'Uruguay', 'Uruguay', 2),
+(87, 2, 'Venezuela', 'Venezuela', 2),
+(88, 3, 'Afghanistan', 'Afganistán', 2),
+(89, 3, 'Armenia', 'Armenia', 2),
+(90, 3, 'Azerbaijan', 'Azerbaiyán', 2),
+(91, 3, 'Bahrain', 'Bahréin', 2),
+(92, 3, 'Bangladesh', 'Bangladesh', 2),
+(93, 3, 'Bhutan', 'Bután', 2),
+(94, 3, 'Brunei', 'Brunéi', 2),
+(95, 3, 'Cambodia', 'Camboya', 2),
+(96, 3, 'China', 'China', 2),
+(97, 3, 'Cyprus', 'Chipre', 2),
+(98, 3, 'Georgia', 'Georgia', 2),
+(99, 3, 'India', 'India', 2),
+(100, 3, 'Indonesia', 'Indonesia', 2),
+(101, 3, 'Iran', 'Irán', 2),
+(102, 3, 'Iraq', 'Irak', 2),
+(103, 3, 'Israel', 'Israel', 2),
+(104, 3, 'Japan', 'Japón', 2),
+(105, 3, 'Jordan', 'Jordania', 2),
+(106, 3, 'Kazakhstan', 'Kazajistán', 2),
+(107, 3, 'Kuwait', 'Kuwait', 2),
+(108, 3, 'Kyrgyzstan', 'Kirguistán', 2),
+(109, 3, 'Laos', 'Laos', 2),
+(110, 3, 'Lebanon', 'Líbano', 2),
+(111, 3, 'Malaysia', 'Malasia', 2),
+(112, 3, 'Maldives', 'Maldivas', 2),
+(113, 3, 'Mongolia', 'Mongolia', 2),
+(114, 3, 'Myanmar', 'Birmania', 2),
+(115, 3, 'Nepal', 'Nepal', 2),
+(116, 3, 'North Korea', 'Corea del Norte', 2),
+(117, 3, 'Oman', 'Omán', 2),
+(118, 3, 'Pakistan', 'Pakistán', 2),
+(119, 3, 'Palestine', 'Palestina', 2),
+(120, 3, 'Philippines', 'Filipinas', 2),
+(121, 3, 'Qatar', 'Catar', 2),
+(122, 3, 'Russia', 'Rusia', 2),
+(123, 3, 'Saudi Arabia', 'Arabia Saudita', 2),
+(124, 3, 'Singapore', 'Singapur', 2),
+(125, 3, 'South Korea', 'Corea del Sur', 2),
+(126, 3, 'Sri Lanka', 'Sri Lanka', 2),
+(127, 3, 'Syria', 'Siria', 2),
+(128, 3, 'Tajikistan', 'Tayikistán', 2),
+(129, 3, 'Thailand', 'Tailandia', 2),
+(130, 3, 'Timor-Leste', 'Timor Oriental', 2),
+(131, 3, 'Turkey', 'Turquía', 2),
+(132, 3, 'Turkmenistan', 'Turkmenistán', 2),
+(133, 3, 'United Arab Emirates', 'Emiratos Árabes Unidos', 2),
+(134, 3, 'Uzbekistan', 'Uzbekistán', 2),
+(135, 3, 'Vietnam', 'Vietnam', 2),
+(136, 3, 'Yemen', 'Yemen', 2),
+(137, 4, 'Algeria', 'Argelia', 2),
+(138, 4, 'Angola', 'Angola', 2),
+(139, 4, 'Benin', 'Benín', 2),
+(140, 4, 'Botswana', 'Botsuana', 2),
+(141, 4, 'Burkina Faso', 'Burkina Faso', 2),
+(142, 4, 'Burundi', 'Burundi', 2),
+(143, 4, 'Cabo Verde', 'Cabo Verde', 2),
+(144, 4, 'Cameroon', 'Camerún', 2),
+(145, 4, 'Central African Republic', 'República Centroafricana', 2),
+(146, 4, 'Chad', 'Chad', 2),
+(147, 4, 'Comoros', 'Comoras', 2),
+(148, 4, 'Congo', 'Congo', 2),
+(149, 4, 'Democratic Republic of the Congo', 'República Democrática del Congo', 2),
+(150, 4, 'Djibouti', 'Yibuti', 2),
+(151, 4, 'Egypt', 'Egipto', 2),
+(152, 4, 'Equatorial Guinea', 'Guinea Ecuatorial', 2),
+(153, 4, 'Eritrea', 'Eritrea', 2),
+(154, 4, 'Eswatini', 'Eswatini', 2),
+(155, 4, 'Ethiopia', 'Etiopía', 2),
+(156, 4, 'Gabon', 'Gabón', 2),
+(157, 4, 'Gambia', 'Gambia', 2),
+(158, 4, 'Ghana', 'Ghana', 2),
+(159, 4, 'Guinea', 'Guinea', 2),
+(160, 4, 'Guinea-Bissau', 'Guinea-Bisáu', 2),
+(161, 4, 'Ivory Coast', 'Costa de Marfil', 2),
+(162, 4, 'Kenya', 'Kenia', 2),
+(163, 4, 'Lesotho', 'Lesoto', 2),
+(164, 4, 'Liberia', 'Liberia', 2),
+(165, 4, 'Libya', 'Libia', 2),
+(166, 4, 'Madagascar', 'Madagascar', 2),
+(167, 4, 'Malawi', 'Malawi', 2),
+(168, 4, 'Mali', 'Mali', 2),
+(169, 4, 'Mauritania', 'Mauritania', 2),
+(170, 4, 'Mauritius', 'Mauricio', 2),
+(171, 4, 'Morocco', 'Marruecos', 2),
+(172, 4, 'Mozambique', 'Mozambique', 2),
+(173, 4, 'Namibia', 'Namibia', 2),
+(174, 4, 'Niger', 'Níger', 2),
+(175, 4, 'Nigeria', 'Nigeria', 2),
+(176, 4, 'Rwanda', 'Ruanda', 2),
+(177, 4, 'São Tomé and Príncipe', 'Santo Tomé y Príncipe', 2),
+(178, 4, 'Senegal', 'Senegal', 2),
+(179, 4, 'Seychelles', 'Seychelles', 2),
+(180, 4, 'Sierra Leone', 'Sierra Leona', 2),
+(181, 4, 'Somalia', 'Somalia', 2),
+(182, 4, 'South Africa', 'Sudáfrica', 2),
+(183, 4, 'South Sudan', 'Sudán del Sur', 2),
+(184, 4, 'Sudan', 'Sudán', 2),
+(185, 4, 'Togo', 'Togo', 2),
+(186, 4, 'Tunisia', 'Túnez', 2),
+(187, 4, 'Uganda', 'Uganda', 2),
+(188, 4, 'Zambia', 'Zambia', 2),
+(189, 4, 'Zimbabwe', 'Zimbabue', 2),
+(190, 4, 'Western Sahara', 'Sáhara Occidental', 2),
+(191, 5, 'Australia', 'Australia', 2),
+(192, 5, 'Fiji', 'Fiyi', 2),
+(193, 5, 'Kiribati', 'Kiribati', 2),
+(194, 5, 'Marshall Islands', 'Islas Marshall', 2),
+(195, 5, 'Micronesia', 'Estados Federados de Micronesia', 2),
+(196, 5, 'Nauru', 'Nauru', 2),
+(197, 5, 'New Zealand', 'Nueva Zelanda', 2),
+(198, 5, 'Palau', 'Palaos', 2),
+(199, 5, 'Papua New Guinea', 'Papúa Nueva Guinea', 2),
+(200, 5, 'Samoa', 'Samoa', 2),
+(201, 5, 'Solomon Islands', 'Islas Salomón', 2),
+(202, 5, 'Tonga', 'Tonga', 2),
+(203, 5, 'Tuvalu', 'Tuvalu', 2),
+(204, 5, 'Vanuatu', 'Vanuatu', 2);
 
 -- --------------------------------------------------------
 
@@ -671,7 +833,7 @@ INSERT INTO `ct_languages` (`id_language`, `name`, `alias`, `id_state`) VALUES
 --
 
 CREATE TABLE `ct_provinces` (
-  `id_province` tinyint(5) UNSIGNED NOT NULL,
+  `id_province` smallint(5) UNSIGNED NOT NULL,
   `id_country` smallint(5) UNSIGNED NOT NULL,
   `en` varchar(40) NOT NULL,
   `es` varchar(40) NOT NULL,
@@ -683,56 +845,56 @@ CREATE TABLE `ct_provinces` (
 --
 
 INSERT INTO `ct_provinces` (`id_province`, `id_country`, `en`, `es`, `id_state`) VALUES
-(1, 16, 'Álava', 'Álava', 2),
-(2, 16, 'Albacete', 'Albacete', 2),
-(3, 16, 'Alicante', 'Alicante', 2),
-(4, 16, 'Almería', 'Almería', 2),
-(5, 16, 'Asturias', 'Asturias', 2),
-(6, 16, 'Ávila', 'Ávila', 2),
-(7, 16, 'Badajoz', 'Badajoz', 2),
-(8, 16, 'Barcelona', 'Barcelona', 2),
-(9, 16, 'Burgos', 'Burgos', 2),
-(10, 16, 'Cáceres', 'Cáceres', 2),
-(11, 16, 'Cadiz', 'Cádiz', 2),
-(12, 16, 'Cantabria', 'Cantabria', 2),
-(13, 16, 'Castellón', 'Castellón', 2),
-(14, 16, 'Ciudad Real', 'Ciudad Real', 2),
-(15, 16, 'Córdoba', 'Córdoba', 2),
-(16, 16, 'La Coruña', 'La Coruña', 2),
-(17, 16, 'Cuenca', 'Cuenca', 2),
-(18, 16, 'Gerona', 'Gerona', 2),
-(19, 16, 'Granada', 'Granada', 2),
-(20, 16, 'Guadalajara', 'Guadalajara', 2),
-(21, 16, 'Guipúzcoa', 'Guipúzcoa', 2),
-(22, 16, 'Huelva', 'Huelva', 2),
-(23, 16, 'Huesca', 'Huesca', 2),
-(24, 16, 'The Balearic Islands', 'Islas Baleares', 2),
-(25, 16, 'Jaén', 'Jaén', 2),
-(26, 16, 'León', 'León', 2),
-(27, 16, 'Lérida', 'Lérida', 2),
-(28, 16, 'Lugo', 'Lugo', 2),
-(29, 16, 'Madrid', 'Madrid', 2),
-(30, 16, 'Málaga', 'Málaga', 2),
-(31, 16, 'Murcia', 'Murcia', 2),
-(32, 16, 'Navarre', 'Navarra', 2),
-(33, 16, 'Orense', 'Orense', 2),
-(34, 16, 'Palencia', 'Palencia', 2),
-(35, 16, 'Las Palmas', 'Las Palmas', 2),
-(36, 16, 'Pontevedra', 'Pontevedra', 2),
-(37, 16, 'La Rioja', 'La Rioja', 2),
-(38, 16, 'Salamanca', 'Salamanca', 2),
-(39, 16, 'Segovia', 'Segovia', 2),
-(40, 16, 'Seville', 'Sevilla', 2),
-(41, 16, 'Soria', 'Soria', 2),
-(42, 16, 'Tarragona', 'Tarragona', 2),
-(43, 16, 'Santa Cruz de Tenerife', 'Santa Cruz de Tenerife', 2),
-(44, 16, 'Teruel', 'Teruel', 2),
-(45, 16, 'Toledo', 'Toledo', 2),
-(46, 16, 'Valencia', 'Valencia', 2),
-(47, 16, 'Valladolid', 'Valladolid', 2),
-(48, 16, 'Vizcaya', 'Vizcaya', 2),
-(49, 16, 'Zamora', 'Zamora', 2),
-(50, 16, 'Zaragoza', 'Zaragoza', 2);
+(1, 46, 'Álava', 'Álava', 2),
+(2, 46, 'Albacete', 'Albacete', 2),
+(3, 46, 'Alicante', 'Alicante', 2),
+(4, 46, 'Almería', 'Almería', 2),
+(5, 46, 'Asturias', 'Asturias', 2),
+(6, 46, 'Ávila', 'Ávila', 2),
+(7, 46, 'Badajoz', 'Badajoz', 2),
+(8, 46, 'Barcelona', 'Barcelona', 2),
+(9, 46, 'Burgos', 'Burgos', 2),
+(10, 46, 'Cáceres', 'Cáceres', 2),
+(11, 46, 'Cadiz', 'Cádiz', 2),
+(12, 46, 'Cantabria', 'Cantabria', 2),
+(13, 46, 'Castellón', 'Castellón', 2),
+(14, 46, 'Ciudad Real', 'Ciudad Real', 2),
+(15, 46, 'Córdoba', 'Córdoba', 2),
+(16, 46, 'La Coruña', 'La Coruña', 2),
+(17, 46, 'Cuenca', 'Cuenca', 2),
+(18, 46, 'Gerona', 'Gerona', 2),
+(19, 46, 'Granada', 'Granada', 2),
+(20, 46, 'Guadalajara', 'Guadalajara', 2),
+(21, 46, 'Guipúzcoa', 'Guipúzcoa', 2),
+(22, 46, 'Huelva', 'Huelva', 2),
+(23, 46, 'Huesca', 'Huesca', 2),
+(24, 46, 'The Balearic Islands', 'Islas Baleares', 2),
+(25, 46, 'Jaén', 'Jaén', 2),
+(26, 46, 'León', 'León', 2),
+(27, 46, 'Lérida', 'Lérida', 2),
+(28, 46, 'Lugo', 'Lugo', 2),
+(29, 46, 'Madrid', 'Madrid', 2),
+(30, 46, 'Málaga', 'Málaga', 2),
+(31, 46, 'Murcia', 'Murcia', 2),
+(32, 46, 'Navarre', 'Navarra', 2),
+(33, 46, 'Orense', 'Orense', 2),
+(34, 46, 'Palencia', 'Palencia', 2),
+(35, 46, 'Las Palmas', 'Las Palmas', 2),
+(36, 46, 'Pontevedra', 'Pontevedra', 2),
+(37, 46, 'La Rioja', 'La Rioja', 2),
+(38, 46, 'Salamanca', 'Salamanca', 2),
+(39, 46, 'Segovia', 'Segovia', 2),
+(40, 46, 'Seville', 'Sevilla', 2),
+(41, 46, 'Soria', 'Soria', 2),
+(42, 46, 'Tarragona', 'Tarragona', 2),
+(43, 46, 'Santa Cruz de Tenerife', 'Santa Cruz de Tenerife', 2),
+(44, 46, 'Teruel', 'Teruel', 2),
+(45, 46, 'Toledo', 'Toledo', 2),
+(46, 46, 'Valencia', 'Valencia', 2),
+(47, 46, 'Valladolid', 'Valladolid', 2),
+(48, 46, 'Vizcaya', 'Vizcaya', 2),
+(49, 46, 'Zamora', 'Zamora', 2),
+(50, 46, 'Zaragoza', 'Zaragoza', 2);
 
 -- --------------------------------------------------------
 
@@ -752,6 +914,18 @@ CREATE TABLE `ct_states` (
 INSERT INTO `ct_states` (`id_state`, `name`) VALUES
 (1, 'Disabled'),
 (2, 'Active');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `error_log`
+--
+
+CREATE TABLE `error_log` (
+  `id_error_log` int(10) UNSIGNED NOT NULL,
+  `insert_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `message` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -878,7 +1052,264 @@ CREATE TABLE `payment_methods` (
 
 INSERT INTO `payment_methods` (`id_payment_method`, `alias`, `min_order_value`, `max_order_value`, `id_state`) VALUES
 (1, 'Tarjeta bancaria', 0, 0, 2),
-(2, 'Cetelem', 50, 4000, 2);
+(2, 'Cetelem', 1000, 5000, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_methods_language`
+--
+
+CREATE TABLE `payment_methods_language` (
+  `id_payment_method` tinyint(3) UNSIGNED NOT NULL,
+  `id_language` tinyint(3) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment_methods_language`
+--
+
+INSERT INTO `payment_methods_language` (`id_payment_method`, `id_language`, `name`) VALUES
+(1, 1, 'Bank card'),
+(1, 2, 'Tarjeta bancaria'),
+(2, 1, 'Cetelem'),
+(2, 2, 'Cetelem');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_methods_zones`
+--
+
+CREATE TABLE `payment_methods_zones` (
+  `id_payment_method` tinyint(3) UNSIGNED NOT NULL,
+  `id_payment_zone` smallint(5) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_zones`
+--
+
+CREATE TABLE `payment_zones` (
+  `id_payment_zone` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `id_state` tinyint(3) UNSIGNED NOT NULL DEFAULT '2'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment_zones`
+--
+
+INSERT INTO `payment_zones` (`id_payment_zone`, `name`, `id_state`) VALUES
+(1, 'Europe', 2),
+(2, 'Asia', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_zone_continents`
+--
+
+CREATE TABLE `payment_zone_continents` (
+  `id_payment_zone` smallint(5) UNSIGNED NOT NULL,
+  `id_continent` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment_zone_continents`
+--
+
+INSERT INTO `payment_zone_continents` (`id_payment_zone`, `id_continent`) VALUES
+(1, 1),
+(2, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_zone_countries`
+--
+
+CREATE TABLE `payment_zone_countries` (
+  `id_payment_zone` smallint(5) UNSIGNED NOT NULL,
+  `id_country` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment_zone_countries`
+--
+
+INSERT INTO `payment_zone_countries` (`id_payment_zone`, `id_country`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(1, 18),
+(1, 19),
+(1, 20),
+(1, 21),
+(1, 22),
+(1, 23),
+(1, 24),
+(1, 25),
+(1, 26),
+(1, 27),
+(1, 28),
+(1, 29),
+(1, 30),
+(1, 31),
+(1, 32),
+(1, 33),
+(1, 34),
+(1, 35),
+(1, 36),
+(1, 37),
+(1, 38),
+(1, 39),
+(1, 40),
+(1, 41),
+(1, 42),
+(1, 43),
+(1, 44),
+(1, 45),
+(1, 46),
+(1, 47),
+(1, 48),
+(1, 49),
+(1, 50),
+(1, 51),
+(1, 52),
+(2, 88),
+(2, 89),
+(2, 90),
+(2, 91),
+(2, 92),
+(2, 93),
+(2, 94),
+(2, 95),
+(2, 96),
+(2, 97),
+(2, 98),
+(2, 99),
+(2, 100),
+(2, 101),
+(2, 102),
+(2, 103),
+(2, 104),
+(2, 105),
+(2, 106),
+(2, 107),
+(2, 108),
+(2, 109),
+(2, 110),
+(2, 111),
+(2, 112),
+(2, 113),
+(2, 114),
+(2, 115),
+(2, 116),
+(2, 117),
+(2, 118),
+(2, 119),
+(2, 120),
+(2, 121),
+(2, 122),
+(2, 123),
+(2, 124),
+(2, 125),
+(2, 126),
+(2, 127),
+(2, 128),
+(2, 129),
+(2, 130),
+(2, 131),
+(2, 132),
+(2, 133),
+(2, 134),
+(2, 135),
+(2, 136);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_zone_provinces`
+--
+
+CREATE TABLE `payment_zone_provinces` (
+  `id_payment_zone` smallint(5) UNSIGNED NOT NULL,
+  `id_province` smallint(5) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `payment_zone_provinces`
+--
+
+INSERT INTO `payment_zone_provinces` (`id_payment_zone`, `id_province`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16),
+(1, 17),
+(1, 18),
+(1, 19),
+(1, 20),
+(1, 21),
+(1, 22),
+(1, 23),
+(1, 24),
+(1, 25),
+(1, 26),
+(1, 27),
+(1, 28),
+(1, 29),
+(1, 30),
+(1, 31),
+(1, 32),
+(1, 33),
+(1, 34),
+(1, 35),
+(1, 36),
+(1, 37),
+(1, 38),
+(1, 39),
+(1, 40),
+(1, 41),
+(1, 42),
+(1, 43),
+(1, 44),
+(1, 45),
+(1, 46),
+(1, 47),
+(1, 48),
+(1, 49),
+(1, 50);
 
 -- --------------------------------------------------------
 
@@ -906,8 +1337,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id_product`, `id_product_view`, `price`, `weight`, `priority`, `public_date`, `insert_date`, `alias`, `main_image`, `hover_image`, `visits`, `id_state`) VALUES
-(9, 1, 65, 0.2, 0, NULL, '2023-07-21 06:20:28', 'Sweatshirt Pyrenees', 149, 151, 90, 2),
-(10, 1, 295.9, 0.1, 0, NULL, '2023-07-21 06:30:17', 'Helmet Unit 1 FARO', 85, 86, 644, 2);
+(9, 1, 65, 0.2, 0, NULL, '2023-07-21 06:20:28', 'Sweatshirt Pyrenees', 149, 151, 92, 2),
+(10, 1, 295.9, 0.1, 0, NULL, '2023-07-21 06:30:17', 'Helmet Unit 1 FARO', 85, 86, 720, 2);
 
 -- --------------------------------------------------------
 
@@ -927,7 +1358,6 @@ CREATE TABLE `products_attributes` (
 
 INSERT INTO `products_attributes` (`id_product`, `id_attribute`, `priority`) VALUES
 (9, 2, 1),
-(9, 20, 2),
 (10, 2, 1),
 (10, 20, 2);
 
@@ -1181,9 +1611,9 @@ INSERT INTO `products_related_images` (`id_products_related_image`, `id_product_
 (613, 40, 94),
 (614, 40, 95),
 (615, 40, 96),
-(651, 50, 149),
-(652, 50, 151),
-(653, 50, 152);
+(654, 50, 149),
+(655, 50, 151),
+(656, 50, 152);
 
 -- --------------------------------------------------------
 
@@ -1235,6 +1665,20 @@ INSERT INTO `products_views` (`id_product_view`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `settings`
+--
+
+CREATE TABLE `settings` (
+  `id_setting` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `insert_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `shipping_methods`
 --
 
@@ -1253,8 +1697,7 @@ CREATE TABLE `shipping_methods` (
 --
 
 INSERT INTO `shipping_methods` (`id_shipping_method`, `alias`, `min_order_value`, `max_order_value`, `min_order_weight`, `max_order_weight`, `id_state`) VALUES
-(1, 'Standard', 0, 0, 0, 0, 2),
-(2, 'Diego', 1, 2, 10, 4, 2);
+(1, 'Standard', 0, 0, 0, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -1283,7 +1726,7 @@ INSERT INTO `shipping_methods_language` (`id_shipping_method`, `id_language`, `n
 --
 
 CREATE TABLE `shipping_methods_prices` (
-  `id_shipping_method_price` smallint(5) UNSIGNED NOT NULL,
+  `id_shipping_method` smallint(5) UNSIGNED NOT NULL,
   `id_shipping_zone` smallint(5) UNSIGNED NOT NULL,
   `id_shipping_method_weight` smallint(5) UNSIGNED NOT NULL,
   `price` float UNSIGNED NOT NULL
@@ -1293,9 +1736,34 @@ CREATE TABLE `shipping_methods_prices` (
 -- Dumping data for table `shipping_methods_prices`
 --
 
-INSERT INTO `shipping_methods_prices` (`id_shipping_method_price`, `id_shipping_zone`, `id_shipping_method_weight`, `price`) VALUES
-(1, 1, 1, 4),
-(2, 1, 2, 6);
+INSERT INTO `shipping_methods_prices` (`id_shipping_method`, `id_shipping_zone`, `id_shipping_method_weight`, `price`) VALUES
+(1, 6, 1, 5),
+(1, 6, 2, 10),
+(1, 6, 3, 15),
+(1, 6, 4, 20),
+(1, 6, 5, 25),
+(1, 6, 6, 30),
+(1, 6, 7, 35),
+(1, 6, 8, 40),
+(1, 6, 9, 45),
+(1, 7, 1, 10),
+(1, 7, 2, 20),
+(1, 7, 3, 30),
+(1, 7, 4, 40),
+(1, 7, 5, 50),
+(1, 7, 6, 60),
+(1, 7, 7, 70),
+(1, 7, 8, 80),
+(1, 7, 9, 90),
+(1, 8, 1, 0),
+(1, 8, 2, 0),
+(1, 8, 3, 0),
+(1, 8, 4, 0),
+(1, 8, 5, 0),
+(1, 8, 6, 0),
+(1, 8, 7, 0),
+(1, 8, 8, 0),
+(1, 8, 9, 0);
 
 -- --------------------------------------------------------
 
@@ -1309,6 +1777,21 @@ CREATE TABLE `shipping_methods_weights` (
   `max_weight` tinyint(3) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `shipping_methods_weights`
+--
+
+INSERT INTO `shipping_methods_weights` (`id_shipping_method_weight`, `id_shipping_method`, `max_weight`) VALUES
+(1, 1, 2),
+(2, 1, 5),
+(3, 1, 10),
+(4, 1, 20),
+(5, 1, 40),
+(6, 1, 70),
+(7, 1, 100),
+(8, 1, 150),
+(9, 1, 250);
+
 -- --------------------------------------------------------
 
 --
@@ -1316,7 +1799,6 @@ CREATE TABLE `shipping_methods_weights` (
 --
 
 CREATE TABLE `shipping_methods_zones` (
-  `id_shipping_method_zone` mediumint(8) UNSIGNED NOT NULL,
   `id_shipping_method` smallint(5) UNSIGNED NOT NULL DEFAULT '0',
   `id_shipping_zone` smallint(5) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1325,8 +1807,9 @@ CREATE TABLE `shipping_methods_zones` (
 -- Dumping data for table `shipping_methods_zones`
 --
 
-INSERT INTO `shipping_methods_zones` (`id_shipping_method_zone`, `id_shipping_method`, `id_shipping_zone`) VALUES
-(1, 1, 1);
+INSERT INTO `shipping_methods_zones` (`id_shipping_method`, `id_shipping_zone`) VALUES
+(1, 6),
+(1, 7);
 
 -- --------------------------------------------------------
 
@@ -1345,7 +1828,26 @@ CREATE TABLE `shipping_zones` (
 --
 
 INSERT INTO `shipping_zones` (`id_shipping_zone`, `name`, `id_state`) VALUES
-(1, 'Europe', 2);
+(6, 'Europe', 2),
+(7, 'Asia', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shipping_zone_continents`
+--
+
+CREATE TABLE `shipping_zone_continents` (
+  `id_shipping_zone` smallint(5) UNSIGNED NOT NULL,
+  `id_continent` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `shipping_zone_continents`
+--
+
+INSERT INTO `shipping_zone_continents` (`id_shipping_zone`, `id_continent`) VALUES
+(6, 1);
 
 -- --------------------------------------------------------
 
@@ -1354,7 +1856,6 @@ INSERT INTO `shipping_zones` (`id_shipping_zone`, `name`, `id_state`) VALUES
 --
 
 CREATE TABLE `shipping_zone_countries` (
-  `id_shipping_zone_countrie` smallint(5) UNSIGNED NOT NULL,
   `id_shipping_zone` smallint(5) UNSIGNED NOT NULL DEFAULT '0',
   `id_country` tinyint(3) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1363,9 +1864,70 @@ CREATE TABLE `shipping_zone_countries` (
 -- Dumping data for table `shipping_zone_countries`
 --
 
-INSERT INTO `shipping_zone_countries` (`id_shipping_zone_countrie`, `id_shipping_zone`, `id_country`) VALUES
-(1, 1, 16),
-(2, 1, 38);
+INSERT INTO `shipping_zone_countries` (`id_shipping_zone`, `id_country`) VALUES
+(6, 1),
+(6, 2),
+(6, 3),
+(6, 4),
+(6, 5),
+(6, 6),
+(6, 7),
+(6, 8),
+(6, 9),
+(6, 10),
+(6, 11),
+(6, 12),
+(6, 13),
+(6, 14),
+(6, 15),
+(6, 16),
+(6, 17),
+(6, 18),
+(6, 19),
+(6, 20),
+(6, 21),
+(6, 22),
+(6, 23),
+(6, 24),
+(6, 25),
+(6, 26),
+(6, 27),
+(6, 28),
+(6, 29),
+(6, 30),
+(6, 31),
+(6, 32),
+(6, 33),
+(6, 34),
+(6, 35),
+(6, 36),
+(6, 37),
+(6, 38),
+(6, 39),
+(6, 40),
+(6, 41),
+(6, 42),
+(6, 43),
+(6, 44),
+(6, 45),
+(6, 46),
+(6, 47),
+(6, 48),
+(6, 49),
+(6, 50),
+(6, 51),
+(6, 52);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `shipping_zone_provinces`
+--
+
+CREATE TABLE `shipping_zone_provinces` (
+  `id_shipping_zone` smallint(5) UNSIGNED NOT NULL,
+  `id_province` smallint(5) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1394,6 +1956,212 @@ INSERT INTO `stock_notices` (`id_stock_notice`, `id_product`, `id_product_relate
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tax_types`
+--
+
+CREATE TABLE `tax_types` (
+  `id_tax_type` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `id_state` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tax_types`
+--
+
+INSERT INTO `tax_types` (`id_tax_type`, `name`, `id_state`) VALUES
+(7, 'Standart Tax', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_types_percent`
+--
+
+CREATE TABLE `tax_types_percent` (
+  `id_tax_type` smallint(5) UNSIGNED NOT NULL,
+  `id_tax_zone` smallint(5) UNSIGNED NOT NULL,
+  `percent` tinyint(3) UNSIGNED NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tax_types_percent`
+--
+
+INSERT INTO `tax_types_percent` (`id_tax_type`, `id_tax_zone`, `percent`) VALUES
+(7, 6, 20),
+(7, 7, 10);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_types_zones`
+--
+
+CREATE TABLE `tax_types_zones` (
+  `id_tax_type` smallint(5) UNSIGNED NOT NULL,
+  `id_tax_zone` smallint(5) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tax_types_zones`
+--
+
+INSERT INTO `tax_types_zones` (`id_tax_type`, `id_tax_zone`) VALUES
+(7, 6);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_zones`
+--
+
+CREATE TABLE `tax_zones` (
+  `id_tax_zone` smallint(5) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `id_state` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tax_zones`
+--
+
+INSERT INTO `tax_zones` (`id_tax_zone`, `name`, `id_state`) VALUES
+(6, 'Europe', 1),
+(7, 'Asia', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_zone_continents`
+--
+
+CREATE TABLE `tax_zone_continents` (
+  `id_tax_zone` smallint(5) UNSIGNED NOT NULL,
+  `id_continent` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tax_zone_continents`
+--
+
+INSERT INTO `tax_zone_continents` (`id_tax_zone`, `id_continent`) VALUES
+(6, 1),
+(7, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_zone_countries`
+--
+
+CREATE TABLE `tax_zone_countries` (
+  `id_tax_zone` smallint(5) UNSIGNED NOT NULL,
+  `id_country` tinyint(3) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `tax_zone_countries`
+--
+
+INSERT INTO `tax_zone_countries` (`id_tax_zone`, `id_country`) VALUES
+(6, 1),
+(6, 2),
+(6, 3),
+(6, 4),
+(6, 5),
+(6, 6),
+(6, 7),
+(6, 8),
+(6, 9),
+(6, 10),
+(6, 11),
+(6, 12),
+(6, 13),
+(6, 14),
+(6, 15),
+(6, 16),
+(6, 17),
+(6, 18),
+(6, 19),
+(6, 20),
+(6, 21),
+(6, 22),
+(6, 23),
+(6, 24),
+(6, 25),
+(6, 26),
+(6, 27),
+(6, 28),
+(6, 29),
+(6, 30),
+(6, 31),
+(6, 32),
+(6, 33),
+(6, 34),
+(6, 35),
+(6, 36),
+(6, 37),
+(6, 38),
+(6, 39),
+(6, 40),
+(6, 41),
+(6, 42),
+(6, 43),
+(6, 44),
+(6, 45),
+(6, 46),
+(6, 47),
+(6, 48),
+(6, 49),
+(6, 50),
+(6, 51),
+(6, 52),
+(7, 88),
+(7, 89),
+(7, 90),
+(7, 91),
+(7, 92),
+(7, 93),
+(7, 94),
+(7, 95),
+(7, 96),
+(7, 97),
+(7, 98),
+(7, 99),
+(7, 100),
+(7, 101),
+(7, 102),
+(7, 103),
+(7, 104),
+(7, 105),
+(7, 106),
+(7, 107),
+(7, 108),
+(7, 109),
+(7, 110),
+(7, 111),
+(7, 112),
+(7, 113),
+(7, 114),
+(7, 115),
+(7, 116),
+(7, 117);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_zone_provinces`
+--
+
+CREATE TABLE `tax_zone_provinces` (
+  `id_tax_zone` smallint(5) UNSIGNED NOT NULL,
+  `id_province` smallint(5) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1418,7 +2186,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `email`, `pass`, `name`, `lastname`, `remember_code`, `validation_code`, `validated_email`, `last_access`, `insert_date`, `ip_register`, `ip_last_access`, `id_state`) VALUES
-(1, 'hello@hiveframework.com', 'd0ea394d5e1d47edf168685fd15fbbd2', 'Diego', 'Martin Herranz', '64a01f3804355', '6380ad1bddebb', 1, '2025-03-24 05:53:13', '2022-12-15 05:42:10', '90.171.237.131', '80.28.132.35', 2);
+(1, 'hello@hiveframework.com', 'd0ea394d5e1d47edf168685fd15fbbd2', 'Diego', 'Martin Herranz', '64a01f3804355', '6380ad1bddebb', 1, '2025-07-02 03:59:50', '2022-12-15 05:42:10', '90.171.237.131', '80.28.132.35', 2);
 
 -- --------------------------------------------------------
 
@@ -1447,7 +2215,7 @@ CREATE TABLE `users_addresses` (
 --
 
 INSERT INTO `users_addresses` (`id_user_address`, `id_user`, `name`, `lastname`, `id_continent`, `id_country`, `id_province`, `location`, `address`, `postal_code`, `telephone`, `main_address`, `update_date`) VALUES
-(1, 1, 'Diego', 'Martin Herranz', 1, 16, 29, 'Tres Cantos', 'Avenida de la Industria 3', '28071', '627878789', 1, '2024-06-19 10:27:24');
+(1, 1, 'Diego', 'Martin Herranz', 1, 46, 29, 'Tres Cantos', 'Avenida de la Industria 3', '28071', '627878789', 1, '2024-06-19 10:27:24');
 
 -- --------------------------------------------------------
 
@@ -1474,7 +2242,7 @@ CREATE TABLE `users_admin` (
 --
 
 INSERT INTO `users_admin` (`id_admin`, `email`, `pass`, `name`, `lastname`, `remember_code`, `id_admin_type`, `last_access`, `insert_date`, `ip_last_access`, `id_state`) VALUES
-(1, 'hello@hiveframework.com', 'd0ea394d5e1d47edf168685fd15fbbd2', 'Diego', 'Martin', '64b25e80ceb27', 1, '2025-03-24 05:53:16', '2022-12-09 05:42:37', '80.28.132.35', 2);
+(1, 'hello@hiveframework.com', 'd0ea394d5e1d47edf168685fd15fbbd2', 'Diego', 'Martin', '64b25e80ceb27', 1, '2025-07-02 03:59:53', '2022-12-09 05:42:37', '80.28.132.35', 2);
 
 -- --------------------------------------------------------
 
@@ -1685,6 +2453,12 @@ ALTER TABLE `ct_states`
   ADD PRIMARY KEY (`id_state`);
 
 --
+-- Indexes for table `error_log`
+--
+ALTER TABLE `error_log`
+  ADD PRIMARY KEY (`id_error_log`);
+
+--
 -- Indexes for table `images`
 --
 ALTER TABLE `images`
@@ -1715,6 +2489,42 @@ ALTER TABLE `orders_incidents`
 --
 ALTER TABLE `payment_methods`
   ADD PRIMARY KEY (`id_payment_method`);
+
+--
+-- Indexes for table `payment_methods_language`
+--
+ALTER TABLE `payment_methods_language`
+  ADD PRIMARY KEY (`id_payment_method`,`id_language`);
+
+--
+-- Indexes for table `payment_methods_zones`
+--
+ALTER TABLE `payment_methods_zones`
+  ADD PRIMARY KEY (`id_payment_method`,`id_payment_zone`);
+
+--
+-- Indexes for table `payment_zones`
+--
+ALTER TABLE `payment_zones`
+  ADD PRIMARY KEY (`id_payment_zone`);
+
+--
+-- Indexes for table `payment_zone_continents`
+--
+ALTER TABLE `payment_zone_continents`
+  ADD PRIMARY KEY (`id_payment_zone`,`id_continent`);
+
+--
+-- Indexes for table `payment_zone_countries`
+--
+ALTER TABLE `payment_zone_countries`
+  ADD PRIMARY KEY (`id_payment_zone`,`id_country`);
+
+--
+-- Indexes for table `payment_zone_provinces`
+--
+ALTER TABLE `payment_zone_provinces`
+  ADD PRIMARY KEY (`id_payment_zone`,`id_province`);
 
 --
 -- Indexes for table `products`
@@ -1783,6 +2593,12 @@ ALTER TABLE `products_views`
   ADD PRIMARY KEY (`id_product_view`);
 
 --
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id_setting`);
+
+--
 -- Indexes for table `shipping_methods`
 --
 ALTER TABLE `shipping_methods`
@@ -1798,7 +2614,7 @@ ALTER TABLE `shipping_methods_language`
 -- Indexes for table `shipping_methods_prices`
 --
 ALTER TABLE `shipping_methods_prices`
-  ADD PRIMARY KEY (`id_shipping_method_price`);
+  ADD PRIMARY KEY (`id_shipping_zone`,`id_shipping_method_weight`);
 
 --
 -- Indexes for table `shipping_methods_weights`
@@ -1810,7 +2626,7 @@ ALTER TABLE `shipping_methods_weights`
 -- Indexes for table `shipping_methods_zones`
 --
 ALTER TABLE `shipping_methods_zones`
-  ADD PRIMARY KEY (`id_shipping_method_zone`);
+  ADD PRIMARY KEY (`id_shipping_method`,`id_shipping_zone`);
 
 --
 -- Indexes for table `shipping_zones`
@@ -1819,16 +2635,70 @@ ALTER TABLE `shipping_zones`
   ADD PRIMARY KEY (`id_shipping_zone`);
 
 --
+-- Indexes for table `shipping_zone_continents`
+--
+ALTER TABLE `shipping_zone_continents`
+  ADD PRIMARY KEY (`id_shipping_zone`,`id_continent`);
+
+--
 -- Indexes for table `shipping_zone_countries`
 --
 ALTER TABLE `shipping_zone_countries`
-  ADD PRIMARY KEY (`id_shipping_zone_countrie`);
+  ADD PRIMARY KEY (`id_shipping_zone`,`id_country`);
+
+--
+-- Indexes for table `shipping_zone_provinces`
+--
+ALTER TABLE `shipping_zone_provinces`
+  ADD PRIMARY KEY (`id_shipping_zone`,`id_province`);
 
 --
 -- Indexes for table `stock_notices`
 --
 ALTER TABLE `stock_notices`
   ADD PRIMARY KEY (`id_stock_notice`);
+
+--
+-- Indexes for table `tax_types`
+--
+ALTER TABLE `tax_types`
+  ADD PRIMARY KEY (`id_tax_type`);
+
+--
+-- Indexes for table `tax_types_percent`
+--
+ALTER TABLE `tax_types_percent`
+  ADD PRIMARY KEY (`id_tax_type`,`id_tax_zone`);
+
+--
+-- Indexes for table `tax_types_zones`
+--
+ALTER TABLE `tax_types_zones`
+  ADD PRIMARY KEY (`id_tax_type`,`id_tax_zone`);
+
+--
+-- Indexes for table `tax_zones`
+--
+ALTER TABLE `tax_zones`
+  ADD PRIMARY KEY (`id_tax_zone`);
+
+--
+-- Indexes for table `tax_zone_continents`
+--
+ALTER TABLE `tax_zone_continents`
+  ADD PRIMARY KEY (`id_tax_zone`,`id_continent`);
+
+--
+-- Indexes for table `tax_zone_countries`
+--
+ALTER TABLE `tax_zone_countries`
+  ADD PRIMARY KEY (`id_tax_zone`,`id_country`);
+
+--
+-- Indexes for table `tax_zone_provinces`
+--
+ALTER TABLE `tax_zone_provinces`
+  ADD PRIMARY KEY (`id_tax_zone`,`id_province`);
 
 --
 -- Indexes for table `users`
@@ -1888,7 +2758,7 @@ ALTER TABLE `attributes_value_language`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `carts_codes`
@@ -1900,7 +2770,7 @@ ALTER TABLE `carts_codes`
 -- AUTO_INCREMENT for table `carts_products`
 --
 ALTER TABLE `carts_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1978,7 +2848,7 @@ ALTER TABLE `ct_continents`
 -- AUTO_INCREMENT for table `ct_countries`
 --
 ALTER TABLE `ct_countries`
-  MODIFY `id_country` tinyint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id_country` tinyint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
 
 --
 -- AUTO_INCREMENT for table `ct_languages`
@@ -1990,13 +2860,19 @@ ALTER TABLE `ct_languages`
 -- AUTO_INCREMENT for table `ct_provinces`
 --
 ALTER TABLE `ct_provinces`
-  MODIFY `id_province` tinyint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id_province` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `ct_states`
 --
 ALTER TABLE `ct_states`
   MODIFY `id_state` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `error_log`
+--
+ALTER TABLE `error_log`
+  MODIFY `id_error_log` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `images`
@@ -2029,6 +2905,12 @@ ALTER TABLE `payment_methods`
   MODIFY `id_payment_method` tinyint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `payment_zones`
+--
+ALTER TABLE `payment_zones`
+  MODIFY `id_payment_zone` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
@@ -2056,7 +2938,7 @@ ALTER TABLE `products_related`
 -- AUTO_INCREMENT for table `products_related_images`
 --
 ALTER TABLE `products_related_images`
-  MODIFY `id_products_related_image` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=654;
+  MODIFY `id_products_related_image` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=657;
 
 --
 -- AUTO_INCREMENT for table `products_views`
@@ -2065,46 +2947,46 @@ ALTER TABLE `products_views`
   MODIFY `id_product_view` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id_setting` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `shipping_methods`
 --
 ALTER TABLE `shipping_methods`
-  MODIFY `id_shipping_method` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `shipping_methods_prices`
---
-ALTER TABLE `shipping_methods_prices`
-  MODIFY `id_shipping_method_price` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_shipping_method` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `shipping_methods_weights`
 --
 ALTER TABLE `shipping_methods_weights`
-  MODIFY `id_shipping_method_weight` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `shipping_methods_zones`
---
-ALTER TABLE `shipping_methods_zones`
-  MODIFY `id_shipping_method_zone` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_shipping_method_weight` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `shipping_zones`
 --
 ALTER TABLE `shipping_zones`
-  MODIFY `id_shipping_zone` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `shipping_zone_countries`
---
-ALTER TABLE `shipping_zone_countries`
-  MODIFY `id_shipping_zone_countrie` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_shipping_zone` smallint(3) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `stock_notices`
 --
 ALTER TABLE `stock_notices`
   MODIFY `id_stock_notice` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `tax_types`
+--
+ALTER TABLE `tax_types`
+  MODIFY `id_tax_type` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `tax_zones`
+--
+ALTER TABLE `tax_zones`
+  MODIFY `id_tax_zone` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`

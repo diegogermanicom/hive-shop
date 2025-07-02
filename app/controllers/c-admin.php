@@ -1,10 +1,10 @@
 <?php
 
-    /*
-     * Author: Diego Martin
-     * Copyright: Hive®
-     * Version: 1.0
-     * Last Update: 2023
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
      */
 
     class CAdmin extends Controller {
@@ -365,6 +365,18 @@
             }
             $data['languages'] = $admin->get_languages($_GET['page']);
             $this->viewAdmin('/languages', $data);
+        }
+
+        public function new_language($args) {
+            $admin = new Admin('admin-new-language-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'settings',
+                'languages'
+            ];
+            $data['meta']['title'] = $admin->setTitle('New language');
+            $this->viewAdmin('/new-language', $data);
         }
 
         public function edit_language($args) {
@@ -757,7 +769,7 @@
                 $_GET['page'] = 1;
             }
             $data['taxes'] = $admin->get_tax_types($_GET['page']);
-            $this->viewAdmin('/tax-types', $data);
+            $this->viewAdmin('/taxes/tax-types', $data);
         }
 
         public function new_tax_type($args) {
@@ -770,7 +782,7 @@
             ];
             $data['meta']['title'] = $admin->setTitle('New tax type');
             $data['states'] = $admin->get_states_list();
-            $this->viewAdmin('/new-tax-type', $data);
+            $this->viewAdmin('/taxes/new-tax-type', $data);
         }
 
         public function edit_tax_type($args) {
@@ -789,7 +801,7 @@
             $data['tax'] = $admin->get_tax_type($_GET['id_tax_type']);
             $data['states'] = $admin->get_states_list($data['tax']['id_state']);
             $data['zones'] = $admin->get_tax_type_zones($_GET['id_tax_type']);
-            $this->viewAdmin('/edit-tax-type', $data);
+            $this->viewAdmin('/taxes/edit-tax-type', $data);
         }
 
         public function tax_zones($args) {
@@ -804,7 +816,46 @@
             if(!isset($_GET['page'])) {
                 $_GET['page'] = 1;
             }
-            $this->viewAdmin('/tax-zones', $data);
+            $data['tax_zones'] = $admin->get_tax_zones($_GET['page']);
+            $this->viewAdmin('/taxes/tax-zones', $data);
+        }
+
+        public function new_tax_zone($args) {
+            $admin = new Admin('admin-new-tax-zone-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'taxes-menu',
+                'tax-zones'
+            ];
+            $data['meta']['title'] = $admin->setTitle('New tax zone');
+            $data['states'] = $admin->get_states_list();
+            $this->viewAdmin('/taxes/new-tax-zone', $data);
+        }
+
+        public function edit_tax_zone($args) {
+            if(!isset($_GET['id_tax_zone'])) {
+                header('Location: '.ADMIN_PATH.'/taxes');
+                exit;
+            }
+            $admin = new Admin('admin-edit-tax-zone-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'taxes-menu',
+                'tax-zones'
+            ];
+            $data['meta']['title'] = $admin->setTitle('Edit tax zone');
+            $data['tax_zone'] = $admin->get_tax_zone($_GET['id_tax_zone']);
+            if($data['tax_zone'] == 'error') {
+                header('Location: '.ADMIN_PATH.'/taxes');
+                exit;
+            }
+            $data['continents'] = $admin->get_tax_zone_continents($_GET['id_tax_zone']);
+            $data['continents_select'] = $admin->get_continents_active_options();
+            $data['countries_select'] = $admin->get_countries_active_options();
+            $data['states'] = $admin->get_states_list($data['tax_zone']['id_state']);
+            $this->viewAdmin('/taxes/edit-tax-zone', $data);
         }
 
         public function locations($args) {

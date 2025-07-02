@@ -1,10 +1,10 @@
 <?php
 
-    /*
-     * Author: Diego Martin
-     * Copyright: Hive®
-     * Version: 1.0
-     * Last Update: 2025
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
      */
 
     // Admin Get
@@ -33,6 +33,7 @@
         ['/edit-code'                       , 'edit_code'],
         ['/stats'                           , 'stats'],
         ['/languages'                       , 'languages'],
+        ['/new-language'                    , 'new_language'],
         ['/edit-language'                   , 'edit_language'],
         ['/users'                           , 'users'],
         ['/edit-user'                       , 'edit_user'],
@@ -43,23 +44,29 @@
         ['/view-cart'                       , 'view_cart'],
         ['/orders'                          , 'orders'],
         ['/order'                           , 'order'],
+        // Tax
         ['/tax-types'                       , 'tax_types'],
         ['/new-tax-type'                    , 'new_tax_type'],
         ['/edit-tax-type'                   , 'edit_tax_type'],
         ['/tax-zones'                       , 'tax_zones'],
-        ['/locations'                       , 'locations'],
+        ['/new-tax-zone'                    , 'new_tax_zone'],
+        ['/edit-tax-zone'                   , 'edit_tax_zone'],
+        // Shipment
         ['/shipments'                       , 'shipments'],
         ['/new-shipping-method'             , 'new_shipping_method'],
         ['/edit-shipping-method'            , 'edit_shipping_method'],
         ['/shipping-zones'                  , 'shipping_zones'],
         ['/new-shipping-zone'               , 'new_shipping_zone'],
         ['/edit-shipping-zone'              , 'edit_shipping_zone'],
+        // Payment
         ['/payments'                        , 'payments'],
         ['/new-payment-method'              , 'new_payment_method'],
         ['/edit-payment-method'             , 'edit_payment_method'],
         ['/payment-zones'                   , 'payment_zones'],
         ['/new-payment-zone'                , 'new_payment_zone'],
         ['/edit-payment-zone'               , 'edit_payment_zone'],
+        // Other
+        ['/locations'                       , 'locations'],
         ['/sitemap'                         , 'sitemap'],
         ['/ftp-upload'                      , 'ftp_upload']
     );

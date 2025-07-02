@@ -9,7 +9,9 @@
             <?php include VIEWS_ADMIN.'/partials/menu-left.php'; ?>
             <div id="container-admin">
                 <section>
-                    <div class="container"></div>
+                    <div class="container">
+                        <div class="title-container underline text-left">New language</div>
+                    </div>
                 </section>
                 <?php include VIEWS_ADMIN.'/partials/footer.php'; ?>
             </div>

@@ -1,28 +1,30 @@
 <?php
-    /*
+
+    /**
      * Upload Ftp
-     * Copyright 2025 Diego Martin
-     * Compara los ficheros del servidor con un ftp y los sube
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
      * Dep: Font Awesome, jQuery
      * Files:
-     *      - /js/ftp-upload.js
-     *      - /app/lib/ftp-upload.php
-     *      - /app/views/admin/ftp-upload-view.php
-    */   
+     *  - /js/ftp-upload.js
+     *  - /app/lib/ftp-upload.php
+     *  - /app/views/admin/ftp-upload-view.php
+     */   
 
     class FtpUpload {
 
         public $conn;
         public $conn_success = false;
-        public $mensajes = array(
-            'El directorio no existe',
-            'Acceso denegado',
-            'Error al guardar el fichero',
-            'Error al hace login',
-            'El fichero ha sido subido correctamente',
-            'El direcctorio se ha creado correctamente',
-            'Error al crear el directorio',
-            'Error al leer el fichero de ftp'
+        public $messages = array(
+            'The directory does not exist.',
+            'Access denied.',
+            'Error saving file.',
+            'Error logging in.',
+            'The file has been uploaded successfully.',
+            'The directory has been created successfully.',
+            'Error creating directory.',
+            'Error reading file from ftp.'
         );
         public $banned_files = array(
             'ftp-upload-view.php',
@@ -153,13 +155,13 @@
                 } else {
                     return array(
                         'response' => 'error',
-                        'message' => $this->mensajes[0]
+                        'message' => $this->messages[0]
                     );
                 }
             } else {
                 return array(
                     'response' => 'error',
-                    'message' => $this->mensajes[1]
+                    'message' => $this->messages[1]
                 );
             }
         }
@@ -170,12 +172,12 @@
             if(ftp_put($this->conn, $dir.$file, $folder.'/'.$file, FTP_BINARY)) {
                 return array(
                     'response' => 'ok',
-                    'message' => $this->mensajes[4]
+                    'message' => $this->messages[4]
                 );
             } else {
                 return array(
                     'response' => 'error',
-                    'message' => $this->mensajes[2]
+                    'message' => $this->messages[2]
                 );
             }
         }
@@ -192,12 +194,12 @@
             if($errors == 0) {
                 return array(
                     'response' => 'ok',
-                    'message' => $this->mensajes[4]
+                    'message' => $this->messages[4]
                 );
             } else {
                 return array(
                     'response' => 'error',
-                    'message' => $this->mensajes[2]
+                    'message' => $this->messages[2]
                 );
             }
         }
@@ -208,12 +210,12 @@
             if(ftp_mkdir($this->conn, $dir.$name)) {
                 return array(
                     'response' => 'ok',
-                    'message' => $this->mensajes[5]
+                    'message' => $this->messages[5]
                 );
             } else {
                 return array(
                     'response' => 'error',
-                    'message' => $this->mensajes[6]
+                    'message' => $this->messages[6]
                 );                
             }
         }
@@ -243,7 +245,7 @@
             } else {
                 return array(
                     'response' => 'error',
-                    'message' => $this->mensajes[7]
+                    'message' => $this->messages[7]
                 );                
             }
         }

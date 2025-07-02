@@ -1,10 +1,10 @@
 <?php
 
-    /*
-     * Author: Diego Martin
-     * Copyright: Hive®
-     * Version: 1.0
-     * Last Update: 2023
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
      */
 
     class CAdminAjax extends Controller {
@@ -601,6 +601,46 @@
             $result = [];
             $result['delete_tax_type'] = $admin->delete_tax_type($_POST['id_tax_type']);
             echo json_encode($result);
+        }
+
+        public function save_new_tax_zone() {
+            $admin = new AdminTaxAjax('ajax-save-new-tax-zone');
+            $admin->security_admin_login();
+            $result = [];
+            $result['save_new_tax_zone'] = $admin->save_new_tax_zone();
+            echo json_encode($result);
+        }
+
+        public function save_edit_tax_zone() {
+            $admin = new AdminTaxAjax('ajax-save-edit-tax-zone');
+            $admin->security_admin_login();
+            $result = [];
+            $result['save_edit_tax_zone'] = $admin->save_edit_tax_zone();
+            echo json_encode($result);            
+        }
+
+        public function delete_tax_zone() {
+            $admin = new AdminTaxAjax('ajax-delete-tax-zone');
+            $admin->security_admin_login();
+            $result = [];
+            $result['delete_tax_zone'] = $admin->delete_tax_zone($_POST['id_tax_zone']);
+            echo json_encode($result);            
+        }
+
+        public function get_tax_zone_countries() {
+            $admin = new AdminTaxAjax('ajax-get-tax-zone-countries');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_tax_zone_countries'] = $admin->get_tax_zone_countries($_POST['id_tax_zone'], $_POST['id_continent'], $_POST['page']);
+            echo json_encode($result);            
+        }
+
+        public function get_tax_zone_provinces() {
+            $admin = new AdminTaxAjax('ajax-get-tax-zone-provinces');
+            $admin->security_admin_login();
+            $result = [];
+            $result['get_tax_zone_provinces'] = $admin->get_tax_zone_provinces($_POST['id_tax_zone'], $_POST['id_country'], $_POST['page']);
+            echo json_encode($result);            
         }
 
         public function ftpu_get_dir($args) {

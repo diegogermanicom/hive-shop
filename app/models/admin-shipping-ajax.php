@@ -1,11 +1,11 @@
 <?php
 
-    /*
-     * Author: Diego Martin
-     * Copyright: Hive®
-     * Version: 1.0
-     * Last Update: 2023
-     */   
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
+     */
 
     class AdminShippingAjax extends AdminModel {
 
@@ -97,15 +97,17 @@
                 // I save the values ​​of the zones
                 $sql = 'DELETE FROM '.DDBB_PREFIX.'shipping_methods_zones WHERE id_shipping_method = ?';
                 $this->query($sql, array($_POST['id_shipping_method']));
-                foreach($_POST['zones'] as $zone) {
-                    if($zone['active'] == 1) {
-                        $sql = 'INSERT INTO '.DDBB_PREFIX.'shipping_methods_zones (id_shipping_method, id_shipping_zone) VALUES (?, ?)';
-                        $this->query($sql, array($_POST['id_shipping_method'], $zone['id_shipping_zone']));
-                    }
-                    foreach($zone['prices'] as $price) {
-                        $sql = 'UPDATE '.DDBB_PREFIX.'shipping_methods_prices SET price = ?
-                                WHERE id_shipping_method = ? AND id_shipping_zone = ? AND id_shipping_method_weight = ? LIMIT 1';
-                        $this->query($sql, array($price['price'], $_POST['id_shipping_method'], $zone['id_shipping_zone'], $price['id_shipping_method_weight']));
+                if(isset($_POST['zones'])) {
+                    foreach($_POST['zones'] as $zone) {
+                        if($zone['active'] == 1) {
+                            $sql = 'INSERT INTO '.DDBB_PREFIX.'shipping_methods_zones (id_shipping_method, id_shipping_zone) VALUES (?, ?)';
+                            $this->query($sql, array($_POST['id_shipping_method'], $zone['id_shipping_zone']));
+                        }
+                        foreach($zone['prices'] as $price) {
+                            $sql = 'UPDATE '.DDBB_PREFIX.'shipping_methods_prices SET price = ?
+                                    WHERE id_shipping_method = ? AND id_shipping_zone = ? AND id_shipping_method_weight = ? LIMIT 1';
+                            $this->query($sql, array($price['price'], $_POST['id_shipping_method'], $zone['id_shipping_zone'], $price['id_shipping_method_weight']));
+                        }
                     }
                 }
                 return array(
@@ -165,7 +167,6 @@
                     while($row_weight = $result_weights->fetch_assoc()) {
                         $sql .= '('.$row_method['id_shipping_method'].', '.$id_shipping_zone.', '.$row_weight['id_shipping_method_weight'].', 0),';
                     }
-                    $result_weights->data_seek(0);
                     $sql = substr($sql, 0, -1);
                     $this->query($sql);
                 }

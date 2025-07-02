@@ -1,11 +1,11 @@
 <?php
 
-    /*
-     * Author: Diego Martin
-     * Copyright: Hive®
-     * Version: 1.0
-     * Last Update: 2023
-     */   
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
+     */
 
     class Admin extends AdminModel {
 
@@ -1451,7 +1451,7 @@
                 $html .= '</tbody>';
                 $html .= '</table>';
             } else {
-                $html = 'No payment methods.';
+                $html = 'No payment zones.';
             }
             return array(
                 'html' => $html,
@@ -1553,13 +1553,16 @@
         }
 
         public function get_tax_type_zones($id_tax_type) {
-            $sql = 'SELECT * FROM '.DDBB_PREFIX.'tax_zones ORDER BY -id_tax_zone';
-            $result_zones = $this->query($sql);
+            $sql = 'SELECT z.*, p.percent FROM '.DDBB_PREFIX.'tax_zones AS z
+                        INNER JOIN tax_types_percent AS p ON p.id_tax_zone = z.id_tax_zone
+                    WHERE p.id_tax_type = ? ORDER BY -z.id_tax_zone';
+            $result_zones = $this->query($sql, $id_tax_type);
             if($result_zones->num_rows != 0) {
                 $html = '<table>';
                 $html .=    '<thead>';
                 $html .=        '<tr>';
                 $html .=            '<th class="text-left">Name</th>';
+                $html .=            '<th class="text-left">Percent</th>';
                 $html .=        '</tr>';
                 $html .=    '</thead>';
                 $html .=    '<tbody>';
@@ -1576,6 +1579,7 @@
                     $html .=    '<td>';
                     $html .=        '<label class="checkbox"><input type="checkbox" value="'.$row_zones['id_tax_zone'].'"'.$checked.'><span class="checkmark"></span>'.$row_zones['name'].'</label>';
                     $html .=    '</td>';
+                    $html .=    '<td><input type="text" value="'.$row_zones['percent'].'" style="max-width: 100px;"></td>';
                     $html .= '</tr>';
                 }
                 $html .=    '</tbody>';
@@ -1586,6 +1590,94 @@
             return array(
                 'html' => $html
             );
+        }
+
+        public function get_tax_zones($page = 1, $per_page = 20) {
+            $sql = 'SELECT z.*, s.name AS state_name FROM '.DDBB_PREFIX.'tax_zones AS z
+                        INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = z.id_state
+                    ORDER BY -z.id_tax_zone';
+            $result = $this->query($sql);
+            if($result->num_rows > 0) {
+                $pager = $this->pager($result, $page, $per_page);
+                // Painted table head
+                $html = '<table>';
+                $html .= '<thead>';
+                $html .=    '<tr>';
+                $html .=        '<th style="width: 160px;">Id</th>';
+                $html .=        '<th class="text-left">Name</th>';
+                $html .=        '<th style="width: 120px;">Countries</th>';
+                $html .=        '<th style="width: 150px;">State</th>';
+                $html .=        '<th style="width: 120px;"></th>';
+                $html .=    '</tr>';
+                $html .= '</thead>';
+                $html .= '<tbody>';
+                foreach($pager['result'] as $row) {
+                    // I collect the number of countries that this area covers
+                    $sql = 'SELECT id_tax_zone FROM tax_zone_countries WHERE id_tax_zone = ?';
+                    $result_countries = $this->query($sql, $row['id_tax_zone']);
+                    $html .= '<tr>';
+                    $html .=    '<td class="text-center">'.$row['id_tax_zone'].'</td>';
+                    $html .=    '<td>'.$row['name'].'</td>';
+                    $html .=    '<td class="text-center">'.$result_countries->num_rows.'</td>';
+                    $html .=    '<td class="text-center">'.$row['state_name'].'</td>';
+                    $html .=    '<td class="text-center">';
+                    $html .=        '<a href="edit-tax-zone?id_tax_zone='.$row['id_tax_zone'].'" class="btn btn-black btn-sm">Edit</a>';
+                    $html .=    '</td>';
+                    $html .= '</tr>';
+                }
+                $html .= '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No tax zones.';
+            }
+            return array(
+                'html' => $html,
+                'pager' => (isset($pager)) ? $pager['pager'] : ''
+            );
+        }
+
+        public function get_tax_zone($id_tax_zone) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'tax_zones WHERE id_tax_zone = ? LIMIT 1';
+            $result = $this->query($sql, $id_tax_zone);
+            if($result->num_rows != 0) {
+                $row = $result->fetch_assoc();
+                return $row;
+            } else {
+                return 'error';
+            }
+        }
+
+        public function get_tax_zone_continents($id_tax_zone) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'tax_zone_continents WHERE id_tax_zone = ?';
+            $result = $this->query($sql, $id_tax_zone);
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'ct_continents WHERE id_state = 2 ORDER BY id_continent';
+            $result_continents = $this->query($sql);
+            if($result_continents->num_rows != 0) {
+                $html = '<table>';
+                $html .=    '<tbody>';
+                while($row_continent = $result_continents->fetch_assoc()) {
+                    $checked = '';
+                    while($row = $result->fetch_assoc()) {
+                        if($row_continent['id_continent'] == $row['id_continent']) {
+                            $checked = ' checked';
+                        }
+                    }
+                    $result->data_seek(0);
+                    $html .= '<tr>';
+                    $html .=    '<td>';
+                    $html .=        '<label class="checkbox">';
+                    $html .=            '<input type="checkbox" value="'.$row_continent['id_continent'].'"'.$checked.'>';
+                    $html .=            '<span class="checkmark"></span>'.$row_continent['en'];
+                    $html .=        '</label>';
+                    $html .=    '</td>';
+                    $html .= '</tr>';
+                }
+                $html .=    '</tbody>';
+                $html .= '</table>';
+            } else {
+                $html = 'No continents found.';
+            }
+            return $html;
         }
 
     }

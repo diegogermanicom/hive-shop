@@ -64,7 +64,7 @@
                         <i class="fa-solid fa-wallet"></i>&nbsp;&nbsp;Payments
                     </a>
                     <a href="<?= ADMIN_PATH ?>/payment-zones"<?php if(in_array('payment-zones', $data['admin']['tags'])) echo ' class="active"'; ?>>
-                        <i class="fa-solid fa-map-location-dot"></i>&nbsp;&nbsp;Payment zones
+                        <i class="fa-solid fa-map-location-dot"></i>&nbsp;&nbsp;Zones
                     </a>
                 </div>
             </li>
@@ -75,7 +75,7 @@
                         <i class="fa-solid fa-receipt"></i>&nbsp;&nbsp;Taxes
                     </a>
                     <a href="<?= ADMIN_PATH ?>/tax-zones"<?php if(in_array('tax-zones', $data['admin']['tags'])) echo ' class="active"'; ?>>
-                        <i class="fa-solid fa-map-location-dot"></i>&nbsp;&nbsp;Tax zones
+                        <i class="fa-solid fa-map-location-dot"></i>&nbsp;&nbsp;Zones
                     </a>
                 </div>
             </li>

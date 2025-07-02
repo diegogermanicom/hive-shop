@@ -1,11 +1,11 @@
 <?php
 
-    /*
-     * Author: Diego Martin
-     * Copyright: Hive®
-     * Version: 1.0
-     * Last Update: 2025
-    */
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
+     */
 
     // I make sure that the necessary constant is declared
     Utils::checkDefined('ROUTES_PATH');

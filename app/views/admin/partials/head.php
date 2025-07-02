@@ -37,10 +37,12 @@
                 echo '<script src="'.PUBLIC_PATH.'/js/admin.js?'.uniqid().'"></script>';    
                 echo '<script src="'.PUBLIC_PATH.'/js/admin-shipment.js?'.uniqid().'"></script>';    
                 echo '<script src="'.PUBLIC_PATH.'/js/admin-payment.js?'.uniqid().'"></script>';    
+                echo '<script src="'.PUBLIC_PATH.'/js/admin-tax.js?'.uniqid().'"></script>';    
             } else {
-                echo '<script src="'.PUBLIC_PATH.'/js/min/utils.min.js?'.uniqid().'"></script>';
-                echo '<script src="'.PUBLIC_PATH.'/js/min/admin.min.js?'.uniqid().'"></script>';                
-                echo '<script src="'.PUBLIC_PATH.'/js/min/admin-shipment.min.js?'.uniqid().'"></script>';                
-                echo '<script src="'.PUBLIC_PATH.'/js/min/admin-payment.min.js?'.uniqid().'"></script>';                
+                echo '<script src="'.PUBLIC_PATH.'/js/min/utils.min.js"></script>';
+                echo '<script src="'.PUBLIC_PATH.'/js/min/admin.min.js"></script>';                
+                echo '<script src="'.PUBLIC_PATH.'/js/min/admin-shipment.min.js"></script>';                
+                echo '<script src="'.PUBLIC_PATH.'/js/min/admin-payment.min.js"></script>';                
+                echo '<script src="'.PUBLIC_PATH.'/js/admin-tax.min.js"></script>';    
             }
         ?>

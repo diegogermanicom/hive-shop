@@ -1,5 +1,12 @@
 <?php
 
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
+     */
+
     define('LANGTXT', array(
             'select'                            => 'Select',
             'edit'                              => 'Edit',

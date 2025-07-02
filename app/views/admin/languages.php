@@ -12,7 +12,7 @@
                     <div class="container">
                         <div class="title-container underline text-left">Language list</div>
                         <div class="pb-20">
-                            <a href="#" class="btn btn-black">Create new language</a>
+                            <a href="<?= ADMIN_PATH; ?>/new-language" class="btn btn-black">Create new language</a>
                         </div>
                         <div><?= $data['languages']['html']; ?></div>
                         <div class="pager text-center pt-20"><?= $data['languages']['pager']; ?></div>

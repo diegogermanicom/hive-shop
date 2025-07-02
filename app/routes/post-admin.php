@@ -1,10 +1,10 @@
 <?php
 
-    /*
-     * Author: Diego Martin
-     * Copyright: Hive®
-     * Version: 1.0
-     * Last Update: 2025
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
      */
 
     // Admin Post
@@ -69,10 +69,15 @@
         ['/delete-payment-zone'             , 'delete_payment_zone'],
         ['/get-payment-zone-countries'      , 'get_payment_zone_countries'],
         ['/get-payment-zone-provinces'      , 'get_payment_zone_provinces'],
-        // Taxes
+        // Tax
         ['/save-new-tax-type'               , 'save_new_tax_type'],
         ['/save-edit-tax-type'              , 'save_edit_tax_type'],
         ['/delete-tax-type'                 , 'delete_tax_type'],
+        ['/save-new-tax-zone'               , 'save_new_tax_zone'],
+        ['/save-edit-tax-zone'              , 'save_edit_tax_zone'],
+        ['/delete-tax-zone'                 , 'delete_tax_zone'],
+        ['/get-tax-zone-countries'          , 'get_tax_zone_countries'],
+        ['/get-tax-zone-provinces'          , 'get_tax_zone_provinces'],
         // User
         ['/save-edit-user'                  , 'save_edit_user'],
         ['/get-user-addresses'              , 'get_user_addresses'],

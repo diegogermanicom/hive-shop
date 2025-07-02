@@ -1,11 +1,11 @@
 <?php
 
-    /*
-     * Author: Diego Martin
-     * Copyright: Hive®
-     * Version: 1.0
-     * Last Update: 2023
-     */   
+    /**
+     * @author Diego Martín
+     * @copyright Hive®
+     * @version 1.0
+     * @lastUpdated 2025
+     */
 
     class AdminPaymentAjax extends AdminModel {
 
@@ -62,10 +62,12 @@
                 // I save the values ​​of the zones
                 $sql = 'DELETE FROM '.DDBB_PREFIX.'payment_methods_zones WHERE id_payment_method = ?';
                 $this->query($sql, array($_POST['id_payment_method']));
-                foreach($_POST['zones'] as $zone) {
-                    if($zone['active'] == 1) {
-                        $sql = 'INSERT INTO '.DDBB_PREFIX.'payment_methods_zones (id_payment_method, id_payment_zone) VALUES (?, ?)';
-                        $this->query($sql, array($_POST['id_payment_method'], $zone['id_payment_zone']));
+                if(isset($_POST['zones'])) {
+                    foreach($_POST['zones'] as $zone) {
+                        if($zone['active'] == 1) {
+                            $sql = 'INSERT INTO '.DDBB_PREFIX.'payment_methods_zones (id_payment_method, id_payment_zone) VALUES (?, ?)';
+                            $this->query($sql, array($_POST['id_payment_method'], $zone['id_payment_zone']));
+                        }
                     }
                 }
                 return array(
