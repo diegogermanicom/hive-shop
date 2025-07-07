@@ -232,26 +232,27 @@
                 'valid_values_id' => array(),
                 'valid_products_related_id' => array()
             );
-            if(empty($attributes_id)) {
-                return null;
-            }
             // I go through all the related products to see which ones use the necessary attributes
             // and which values they are using to display
             $sql = 'SELECT * FROM '.DDBB_PREFIX.'products_related WHERE id_product = ? AND id_state = 2';
             $result = $this->query($sql, array($id_product));
             if($result->num_rows != 0) {
                 while($row = $result->fetch_assoc()) {
-                    $sql = 'SELECT * FROM '.DDBB_PREFIX.'products_related_attributes
-                            WHERE id_product_related = ? AND id_attribute IN ('.implode(',', $attributes_id).')';
-                    $result_attributes = $this->query($sql, array($row['id_product_related']));
-                    // This means it has the necessary attributes
-                    if($result_attributes->num_rows == count($attributes_id)) {
-                        array_push($attributes['valid_products_related_id'], $row['id_product_related']);
-                        while($row_attributes = $result_attributes->fetch_assoc()) {
-                            if(!in_array($row_attributes['id_attribute_value'], $attributes['valid_values_id'])) {
-                                array_push($attributes['valid_values_id'], $row_attributes['id_attribute_value']);
+                    if(!empty($attributes_id)) {
+                        $sql = 'SELECT * FROM '.DDBB_PREFIX.'products_related_attributes
+                                WHERE id_product_related = ? AND id_attribute IN ('.implode(',', $attributes_id).')';
+                        $result_attributes = $this->query($sql, array($row['id_product_related']));
+                        // This means it has the necessary attributes
+                        if($result_attributes->num_rows == count($attributes_id)) {
+                            array_push($attributes['valid_products_related_id'], $row['id_product_related']);
+                            while($row_attributes = $result_attributes->fetch_assoc()) {
+                                if(!in_array($row_attributes['id_attribute_value'], $attributes['valid_values_id'])) {
+                                    array_push($attributes['valid_values_id'], $row_attributes['id_attribute_value']);
+                                }
                             }
                         }
+                    } else {
+                        array_push($attributes['valid_products_related_id'], $row['id_product_related']);
                     }
                 }
             }
@@ -306,7 +307,7 @@
                     $html .=    '</div>';
                     $html .=    '<div class="col-8">';
                     $html .=        '<a href="'.$value['url'].'" class="name dots" title="'.$value['row']['product_name'].'">'.$value['row']['product_name'].'</a>';
-                    if($value['attributes'] != null) {
+                    if(!empty($value['attributes'])) {
                         $html .= '<div class="content-attributes">';
                         foreach($value['attributes'] as $valuea) {
                             $html .= '<div class="dots">'.$valuea['attribute_name'].': '.$valuea['value_name'].'</div>';
@@ -317,13 +318,13 @@
                     $html .=    '</div>';
                     $html .= '</div>';    
                 }
+                return array(
+                    'html' => $html,
+                    'total' => $cart['total_string']
+                );
             } else {
-                $html = '';
+                return null;
             }
-            return array(
-                'html' => $html,
-                'total' => $cart['total_string']
-            );
         }
 
     }

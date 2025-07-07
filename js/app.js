@@ -136,11 +136,15 @@ var APP = {
                 if(data.get_addresses.response == 'ok') {
                     $('#address-list').html(data.get_addresses.html);
                     APP.getShippingMethods();
+                    APP.getPaymentMethods();
                     $('#address-list .btn-select-address').on('click', function() {
                         $('#address-list .item').removeClass('active');
                         $('#address-list .item .btn-select-address').removeClass('hidden');
                         $(this).closest('.item').addClass('active');
                         $(this).closest('.item .btn-select-address').addClass('hidden');
+                        // I updated the shipping method options
+                        APP.getShippingMethods();
+                        APP.getPaymentMethods();
                     });
                     $('#address-list .btn-edit-address').on('click', function() {
                         var btn = $(this);
@@ -208,11 +212,13 @@ var APP = {
             success: function(data) {
                 if(data.get_billing_addresses.response == 'ok') {
                     $('#billing-list').html(data.get_billing_addresses.html);
+                    APP.getPaymentMethods();
                     $('#billing-list .btn-select-address').on('click', function() {
                         $('#billing-list .item').removeClass('active');
                         $('#billing-list .item .btn-select-address').removeClass('hidden');
                         $(this).closest('.item').addClass('active');
                         $(this).closest('.item .btn-select-address').addClass('hidden');
+                        APP.getPaymentMethods();
                     });
                     $('#billing-list .btn-edit-address').on('click', function() {
                         var btn = $(this);
@@ -273,13 +279,35 @@ var APP = {
         });    
     },
     getShippingMethods: function() {
+        var obj = {
+            id_user_address: $('#address-list .item.active').attr('id-user-address')
+        }
         $('#shipping-methods-list').html('<div class="text-center w-100"><i class="fa-solid fa-gear fa-spin"></i></div>');
         $.ajax({
             url: PUBLIC_PATH + '/get-shipping-methods',
-            data: {},
+            data: obj,
             success: function(data) {
                 if(data.get_shipping_methods.response == 'ok') {
                     $('#shipping-methods-list').html(data.get_shipping_methods.html);
+                }
+            }
+        });
+    },
+    getPaymentMethods: function() {
+        var obj = {
+            id_user_address: $('#address-list .item.active').attr('id-user-address')
+        }
+        // If you select a billing address different from the shipping address
+        if($(this).is(':checked') == true) {
+            obj.id_user_address = $('#billing-list .item.active').attr('id-user-billing-address');
+        }
+        $('#payment-methods-list').html('<div class="text-center w-100"><i class="fa-solid fa-gear fa-spin"></i></div>');
+        $.ajax({
+            url: PUBLIC_PATH + '/get-payment-methods',
+            data: obj,
+            success: function(data) {
+                if(data.get_payment_methods.response == 'ok') {
+                    $('#payment-methods-list').html(data.get_payment_methods.html);
                 }
             }
         });
@@ -738,8 +766,7 @@ var APP = {
                 }
             });
             $('#input-check-billing').on('click', function() {
-                let check = ($('#input-check-billing:checked').val() == undefined) ? false : true;
-                if(check == true) {
+                if($(this).is(':checked') == true) {
                     $('#billing-content').addClass('hidden');
                 } else {
                     $('#billing-content').removeClass('hidden');
@@ -747,8 +774,7 @@ var APP = {
                 }
             });
             $('#input-checkout-code').on('click', function() {
-                let check = ($('#input-checkout-code:checked').val() == undefined) ? false : true;
-                if(check == true) {
+                if($('#input-checkout-code:checked').is(':checked')) {
                     $('#code-content').removeClass('hidden');
                 } else {
                     $('#code-content').addClass('hidden');
@@ -778,8 +804,9 @@ var APP = {
                 var obj = {
                     id_user_address: null,
                     id_user_billing_address: null,
-                    comment: $('#textarea-comment').val().trim(),
-                    payment_method: $('.input-radio-payment').val()
+                    comments: $('#textarea-comment').val().trim(),
+                    id_shipping_method: $('.input-shipping-methods:checked').val(),
+                    id_payment_method: $('.input-payment-methods:checked').val()
                 }
                 // I check that you have an address selected
                 if($('#address-list .item.active').length == 1) {
@@ -788,15 +815,30 @@ var APP = {
                     UTILS.showInfo(APP_DATA.shippingAddressErrorTitle, APP_DATA.shippingAddressErrorText);
                     return;
                 }
-                let check_billing = ($('#input-check-billing').val() == undefined) ? false : true;
-                if(check_billing == true) {
+                if($('#input-check-billing').is(':checked')) {
+                    // I check that you have an address selected
+                    if($('#address-list .item.active').length == 1) {
+                        obj.id_user_address = parseInt($('#address-list .item.active').attr('id-user-address'));
+                    } else {
+                        UTILS.showInfo(APP_DATA.shippingAddressErrorTitle, APP_DATA.shippingAddressErrorText);
+                        return;
+                    }
+                } else {
                     // I check that you have an billing address selected
                     if($('#billing-list .item.active').length == 1) {
                         obj.id_user_billing_address = parseInt($('#billing-list .item.active').attr('id-user-billing-address'));
                     } else {
-                        UTILS.showInfo(APP_DATA.shippingAddressErrorTitle, APP_DATA.shippingAddressErrorText);
-                        return;    
+                        UTILS.showInfo(APP_DATA.billingAddressErrorTitle, APP_DATA.billingAddressErrorText);
+                        return;
                     }
+                }
+                if(obj.id_shipping_method == undefined) {
+                    UTILS.showInfo(APP_DATA.shippingMethodErrorTitle, APP_DATA.shippingMethodErrorText);
+                    return;
+                }
+                if(obj.id_payment_method == undefined) {
+                    UTILS.showInfo(APP_DATA.paymentMethodErrorTitle, APP_DATA.paymentMethodErrorText);
+                    return;
                 }
                 if(!btn.hasClass('disabled')) {
                     btn.addClass('disabled');

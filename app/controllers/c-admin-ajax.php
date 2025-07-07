@@ -459,6 +459,13 @@
             echo json_encode($result);            
         }
 
+        public function create_order_from_cart($args) {
+            $app = new AdminAjax('create-order-from-cart');
+            $result = [];
+            $result['create_order_from_cart'] = $app->create_order_from_cart($_POST['id_cart']);
+            echo json_encode($result);
+        }
+
         public function save_edit_user() {
             $admin = new AdminAjax('ajax-save-edit-user');
             $admin->security_admin_login();

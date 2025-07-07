@@ -195,6 +195,13 @@
             echo json_encode($result);
         }
 
+        public function get_payment_methods($args) {
+            $app = new AppAjax('ajax-get-payment-methods');
+            $result = [];
+            $result['get_payment_methods'] = $app->get_payment_methods($_COOKIE['id_cart']);
+            echo json_encode($result);
+        }
+
         public function apply_code($args) {
             $app = new AppAjax('ajax-apply-code');
             $result = [];

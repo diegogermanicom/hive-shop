@@ -12,6 +12,8 @@
         public const ONEYEAR = (24 * 60 * 60 * 365);
         public const ONEMONTH = (24 * 60 * 60 * 30);
         public const ONEWEEK = (24 * 60 * 60 * 7);
+        public const IDDISABLE = 1;
+        public const IDACTIVE = 2;
 
         public static function validateDomain($dominio) {
             $result = preg_match('/^(?!\-)(?:[a-zA-Z0-9\-]{1,60}\.)+[a-zA-Z]{2,20}$/', $dominio);
@@ -34,34 +36,38 @@
         }
 
         public static function error($message) {
-            $html = '<html>';
-            $html .=    '<head>';
-            $html .=        '<title>Error</title>';
-            $html .=        '<meta charset="UTF-8">';
-            $html .=        '<meta name="viewport" content="width=device-width, initial-scale=1">';
-            $html .=        '<style>';
-            $html .=            'body {';
-            $html .=                'font-size: 18px; font-family: arial; color: #494949; padding: 20px 20px 20px 20px;';
-            $html .=            '}';
-            $html .=            'div.content {';
-            $html .=                'max-width: 800px; background-color: #e7e7e7; border: 2px solid #c7c7c7; padding: 40px 50px 40px 50px; margin: auto auto;';
-            $html .=            '}';
-            $html .=            'div.title {';
-            $html .=                'font-size: 22px; border-bottom: 2px solid #c7c7c7; padding-bottom: 10px; margin-bottom: 20px;';
-            $html .=            '}';
-            $html .=        '</style>';
-            $html .=    '</head>';
-            $html .=    '<body>';
-            $html .=        '<div class="content">';
-            $html .=            '<div class="title"><b>An error has occurred</b></div>';
-            $html .=            '<div>'.$message.'</div>';
-            $html .=            '<div style="padding-top: 40px;">';
-            $html .=                '<button onclick="window.history.back()">Return to the previous page</button>';
-            $html .=            '</div>';
-            $html .=        '</div>';
-            $html .=    '</body>';
-            $html .= '</html>';
-            echo $html;
+            if(METHOD == 'get') {
+                $html = '<html>';
+                $html .=    '<head>';
+                $html .=        '<title>Error</title>';
+                $html .=        '<meta charset="UTF-8">';
+                $html .=        '<meta name="viewport" content="width=device-width, initial-scale=1">';
+                $html .=        '<style>';
+                $html .=            'body {';
+                $html .=                'font-size: 18px; font-family: arial; color: #494949; padding: 20px 20px 20px 20px;';
+                $html .=            '}';
+                $html .=            'div.content {';
+                $html .=                'max-width: 800px; background-color: #e7e7e7; border: 2px solid #c7c7c7; padding: 40px 50px 40px 50px; margin: auto auto;';
+                $html .=            '}';
+                $html .=            'div.title {';
+                $html .=                'font-size: 22px; border-bottom: 2px solid #c7c7c7; padding-bottom: 10px; margin-bottom: 20px;';
+                $html .=            '}';
+                $html .=        '</style>';
+                $html .=    '</head>';
+                $html .=    '<body>';
+                $html .=        '<div class="content">';
+                $html .=            '<div class="title"><b>An error has occurred</b></div>';
+                $html .=            '<div>'.$message.'</div>';
+                $html .=            '<div style="padding-top: 40px;">';
+                $html .=                '<button onclick="window.history.back()">Return to the previous page</button>';
+                $html .=            '</div>';
+                $html .=        '</div>';
+                $html .=    '</body>';
+                $html .= '</html>';
+                echo $html;
+            } else {
+                Utils::errorPost($message);
+            }
             exit;
         }
         

@@ -152,28 +152,6 @@
             }
         }
 
-        public function get_product_related_attributes($id_product_related) {
-            $sql = 'SELECT al.name AS attribute_name, vl.name AS value_name, a.name AS language_name
-                    FROM products_related_attributes AS r
-                        INNER JOIN attributes_language AS al ON al.id_attribute = r.id_attribute
-                        INNER JOIN attributes_value_language AS vl ON vl.id_attribute_value = r.id_attribute_value
-                        INNER JOIN ct_languages AS a ON a.id_language = al.id_language
-                    WHERE r.id_product_related = ? AND vl.id_language = a.id_language';
-            $result = $this->query($sql, array($id_product_related));
-            if($result->num_rows != 0) {
-                $attributes = array();
-                while($row = $result->fetch_assoc()) {
-                    if(!isset($attributes[$row['language_name']])) {
-                        $attributes[$row['language_name']] = array();
-                    }
-                    array_push($attributes[$row['language_name']], $row);
-                }
-                return $attributes;
-            } else {
-                return null;
-            }
-        }
-
         public function refresh_cart_stock($id_cart) {
             $sql = 'SELECT c.id, c.amount, r.stock
                     FROM '.DDBB_PREFIX.'carts_products AS c
@@ -235,6 +213,26 @@
             return $total;
         }
 
+        private function get_product_related_attributes($id_product_related) {
+            $sql = 'SELECT al.name AS attribute_name, vl.name AS value_name, a.name AS language_name
+                    FROM products_related_attributes AS r
+                        INNER JOIN attributes_language AS al ON al.id_attribute = r.id_attribute
+                        INNER JOIN attributes_value_language AS vl ON vl.id_attribute_value = r.id_attribute_value
+                        INNER JOIN ct_languages AS a ON a.id_language = al.id_language
+                    WHERE r.id_product_related = ? AND vl.id_language = a.id_language';
+            $result = $this->query($sql, array($id_product_related));
+            $attributes = array();
+            if($result->num_rows != 0) {
+                while($row = $result->fetch_assoc()) {
+                    if(!isset($attributes[$row['language_name']])) {
+                        $attributes[$row['language_name']] = array();
+                    }
+                    array_push($attributes[$row['language_name']], $row);
+                }
+            }
+            return $attributes;
+        }
+
         public function get_cart_array($id_cart) {
             // I get the product and cart data
             $sql = 'SELECT c.*, p.price, pl.name AS product_name, r.price_change, r.stock, r.offer, r.offer_start_date, r.offer_end_date
@@ -245,7 +243,7 @@
                         INNER JOIN '.DDBB_PREFIX.'ct_languages AS a ON a.id_language = pl.id_language
                     WHERE c.id_cart = ? AND a.name = ? ORDER BY c.id';
             $result = $this->query($sql, array($id_cart, strtolower(LANG)));
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 $cart = array(
                     'total' => 0,
                     'total_string' => '',
@@ -255,7 +253,10 @@
                 );
                 while($row = $result->fetch_assoc()) {
                     // Get attributes
-                    $attributes = $this->get_product_related_attributes($row['id_product_related'])[strtolower(LANG)];
+                    $attributes = $this->get_product_related_attributes($row['id_product_related']);
+                    if(!empty($attributes)) {
+                        $attributes = $attributes[strtolower(LANG)];
+                    }
                     // Get the route of the main product related of the product
                     $product_url = null;
                     $product_routes = $this->get_product_routes($row['id_product'], $row['id_category']);
@@ -269,7 +270,7 @@
                                 INNER JOIN '.DDBB_PREFIX.'products_images AS p ON p.id_product_image = ri.id_product_image
                                 INNER JOIN '.DDBB_PREFIX.'images AS i ON i.id_image = p.id_image
                             WHERE ri.id_product_related = ? ORDER BY p.priority LIMIT 1';
-                    $result_image = $this->query($sql, array($row['id_product_related']));
+                    $result_image = $this->query($sql, $row['id_product_related']);
                     if($result_image->num_rows != 0) {
                         $row_image = $result_image->fetch_assoc();
                         $image_url = PUBLIC_PATH.'/img/products/thumbnails/'.$row_image['name'];
@@ -302,7 +303,7 @@
                                     } else if($rule['id_code_rule_type'] == 2) {
                                         // I check if any of the categories match the rule
                                         $sql = 'SELECT id_category FROM '.DDBB_PREFIX.'products_categories WHERE id_product = ?';
-                                        $result_categories = $this->query($sql, array($row['id_product']));
+                                        $result_categories = $this->query($sql, $row['id_product']);
                                         while($row_categories = $result_categories->fetch_assoc()) {
                                             foreach($rule['elements'] as $element) {
                                                 if($element == $row_categories['id_category']) {

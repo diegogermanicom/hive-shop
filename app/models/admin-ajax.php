@@ -78,7 +78,11 @@
                     $category_route = $this->get_category_route($row_category['id_parent'], $row_language['id_language']);
                     $category_route .= '/'.$row_language['slug'];
                     $sql = 'INSERT INTO '.DDBB_PREFIX.'categories_routes (id_category, id_language, route) VALUES (?, ?, ?)';
-                    $this->query($sql, array($row_category['id_category'], $row_language['id_language'], $category_route));
+                    $this->query($sql, array(
+                        $row_category['id_category'],
+                        $row_language['id_language'],
+                        $category_route
+                    ));
                 }
             }
             // I check if there are repeated routes, correct them and remake all routes
@@ -132,9 +136,16 @@
                 $_POST['properties'][$i]['slug'] = $this->parse_slug($_POST['properties'][$i]['slug']);
                 $sql = 'INSERT INTO '.DDBB_PREFIX.'categories_language (id_category , id_language, `name`, `description`, slug, meta_title, meta_description, meta_keywords)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-                $this->query($sql, array($id_category, $_POST['properties'][$i]['id_lang'],
-                    $_POST['properties'][$i]['name'], $_POST['properties'][$i]['description'], $_POST['properties'][$i]['slug'],
-                    $_POST['meta_data'][$i]['meta_title'], $_POST['meta_data'][$i]['meta_description'], $_POST['meta_data'][$i]['meta_keywords']));
+                $this->query($sql, array(
+                    $id_category,
+                    $_POST['properties'][$i]['id_lang'],
+                    $_POST['properties'][$i]['name'],
+                    $_POST['properties'][$i]['description'],
+                    $_POST['properties'][$i]['slug'],
+                    $_POST['meta_data'][$i]['meta_title'],
+                    $_POST['meta_data'][$i]['meta_description'],
+                    $_POST['meta_data'][$i]['meta_keywords']
+                ));
             }
             // Save the route of the category for each language
             foreach($_POST['properties'] as $value) {
@@ -157,7 +168,13 @@
                 }
             }
             $sql = 'UPDATE '.DDBB_PREFIX.'categories SET id_parent = ?, id_category_view = ?, alias = ?, id_state = ? WHERE id_category = ?';
-            $this->query($sql, array($_POST['id_parent'], $_POST['id_view'], $_POST['alias'], $_POST['id_state'], $_POST['id_category']));
+            $this->query($sql, array(
+                $_POST['id_parent'],
+                $_POST['id_view'],
+                $_POST['alias'],
+                $_POST['id_state'],
+                $_POST['id_category']
+            ));
             // Saving properties
             for($i = 0; $i < count($_POST['properties']); $i++) {
                 if($_POST['properties'][$i]['slug'] == '') {
@@ -166,9 +183,16 @@
                 $_POST['properties'][$i]['slug'] = $this->parse_slug($_POST['properties'][$i]['slug']);
                 $sql = 'UPDATE '.DDBB_PREFIX.'categories_language SET `name` = ?, `description` = ?, slug = ?, meta_title = ?, meta_description = ?, meta_keywords = ?
                         WHERE id_category = ? AND id_language = ?';
-                $this->query($sql, array($_POST['properties'][$i]['name'], $_POST['properties'][$i]['description'], $_POST['properties'][$i]['slug'],
-                    $_POST['meta_data'][$i]['meta_title'], $_POST['meta_data'][$i]['meta_description'], $_POST['meta_data'][$i]['meta_keywords'],
-                    $_POST['id_category'], $_POST['properties'][$i]['id_lang']));
+                $this->query($sql, array(
+                    $_POST['properties'][$i]['name'],
+                    $_POST['properties'][$i]['description'],
+                    $_POST['properties'][$i]['slug'],
+                    $_POST['meta_data'][$i]['meta_title'],
+                    $_POST['meta_data'][$i]['meta_description'],
+                    $_POST['meta_data'][$i]['meta_keywords'],
+                    $_POST['id_category'],
+                    $_POST['properties'][$i]['id_lang']
+                ));
             }
             // I recreate all category routes
             $this->create_all_category_routes();
@@ -240,7 +264,11 @@
                     $category_route = $this->get_category_route($_POST['id_category'], $value['id_language']);
                     $product_route = $category_route.$value['route'];
                     $sql = 'INSERT INTO '.DDBB_PREFIX.'categories_custom_routes (id_category, id_language, route) VALUES (?, ?, ?)';
-                    $this->query($sql, array($_POST['id_category'], $value['id_language'], $product_route));
+                    $this->query($sql, array(
+                        $_POST['id_category'],
+                        $value['id_language'],
+                        $product_route
+                    ));
                 }
             }
             return array('response' => 'ok');            
@@ -252,7 +280,12 @@
             $id_attribute = $this->db->insert_id;
             foreach($_POST['properties'] as $value) {
                 $sql = 'INSERT INTO '.DDBB_PREFIX.'attributes_language (id_attribute, id_language, `name`, `description`) VALUES (?, ?, ?, ?)';
-                $this->query($sql, array($id_attribute, $value['id_lang'], $value['name'], $value['description']));
+                $this->query($sql, array(
+                    $id_attribute,
+                    $value['id_lang'],
+                    $value['name'],
+                    $value['description']
+                ));
             }
             if(!empty($_POST['values'])) {
                 foreach($_POST['values'] as $value) {
@@ -264,11 +297,21 @@
 
         public function save_edit_attribute() {
             $sql = 'UPDATE '.DDBB_PREFIX.'attributes SET alias = ?, id_attribute_type = ?, id_attribute_html = ? WHERE id_attribute = ? LIMIT 1';
-            $this->query($sql, array($_POST['alias'], $_POST['type'], $_POST['view'], $_POST['id_attribute']));
+            $this->query($sql, array(
+                $_POST['alias'],
+                $_POST['type'],
+                $_POST['view'],
+                $_POST['id_attribute']
+            ));
             // I save the attribute properties
             foreach($_POST['properties'] as $value) {
                 $sql = 'UPDATE '.DDBB_PREFIX.'attributes_language SET name = ?, description = ? WHERE id_attribute = ? AND id_language = ? LIMIT 1';
-                $this->query($sql, array($value['name'], $value['description'], $_POST['id_attribute'], $value['id_lang']));
+                $this->query($sql, array(
+                    $value['name'],
+                    $value['description'],
+                    $_POST['id_attribute'],
+                    $value['id_lang']
+                ));
             }
             if(!empty($_POST['values'])) {
                 $value_ids = [];
@@ -447,7 +490,12 @@
             foreach($_POST['properties'] as $value) {
                 $sql = 'UPDATE '.DDBB_PREFIX.'attributes_value_language SET `name` = ?, `description` = ?
                         WHERE id_attribute_value = ? AND id_language  = ? LIMIT 1';
-                $this->query($sql, array($value['name'], $value['description'], $_POST['id_attribute_value'], $value['id_lang']));
+                $this->query($sql, array(
+                    $value['name'],
+                    $value['description'],
+                    $_POST['id_attribute_value'],
+                    $value['id_lang']
+                ));
             }
             return array(
                 'response' => 'ok',
@@ -499,8 +547,19 @@
                         (`name`, code, `type`, amount, available, registered, exclude_sales, minimum, per_user, compatible, free_shipping, `start_date`, end_date, id_state)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
             $this->query($sql, array(
-                $_POST['name'], $_POST['code'], $_POST['type'], $amount, $_POST['available'], $_POST['registered'], $_POST['exclude'],
-                $minimum, $_POST['per_user'], $_POST['compatible'], $_POST['free_shipping'], $_POST['start_date'], $_POST['end_date'], $_POST['id_state']
+                $_POST['name'],
+                $_POST['code'],
+                $_POST['type'],
+                $amount,
+                $_POST['available'],
+                $_POST['registered'],
+                $_POST['exclude'],
+                $minimum, $_POST['per_user'],
+                $_POST['compatible'],
+                $_POST['free_shipping'],
+                $_POST['start_date'],
+                $_POST['end_date'],
+                $_POST['id_state']
             ));
             return array('response' => 'ok');
         }
@@ -512,9 +571,20 @@
                         exclude_sales = ?, minimum = ?, per_user = ?, compatible = ?, free_shipping = ?, `start_date` = ?, end_date = ?, id_state = ?
                     WHERE id_code = ?';
             $this->query($sql, array(
-                $_POST['name'], $_POST['code'], $_POST['type'], $amount, $_POST['available'], $_POST['registered'], $_POST['exclude'],
-                $minimum, $_POST['per_user'], $_POST['compatible'], $_POST['free_shipping'], $_POST['start_date'],
-                $_POST['end_date'], $_POST['id_state'], $_POST['id_code']
+                $_POST['name'],
+                $_POST['code'],
+                $_POST['type'],
+                $amount,
+                $_POST['available'],
+                $_POST['registered'],
+                $_POST['exclude'],
+                $minimum, $_POST['per_user'],
+                $_POST['compatible'],
+                $_POST['free_shipping'],
+                $_POST['start_date'],
+                $_POST['end_date'],
+                $_POST['id_state'],
+                $_POST['id_code']
             ));
             return array(
                 'response' => 'ok',
@@ -532,7 +602,11 @@
             $sql = 'SELECT id_code_rule FROM '.DDBB_PREFIX.'codes_rules WHERE id_code = ?';
             $result = $this->query($sql, array($_POST['id_code']));
             $sql = 'INSERT INTO '.DDBB_PREFIX.'codes_rules (id_code, id_code_rule_type, id_code_rule_add_type) VALUES (?, ?, ?)';
-            $this->query($sql, array($_POST['id_code'], $_POST['id_rule_type'], $_POST['id_rule_add_type']));
+            $this->query($sql, array(
+                $_POST['id_code'],
+                $_POST['id_rule_type'],
+                $_POST['id_rule_add_type']
+            ));
             $id_code_rule = $this->db->insert_id;
             foreach($_POST['elements'] as $value) {
                 $sql = 'INSERT INTO '.DDBB_PREFIX.'codes_rules_elements (id_code_rule, id_element) VALUES (?, ?)';
@@ -707,13 +781,24 @@
             );
         }
 
+        public function create_order_from_cart($id_cart) {
+            $sql = '';
+            return array('response' => 'ok');                
+        }
+
         public function save_edit_user() {
             // We check that this email does not already exist in the database
             $sql = 'SELECT id_user FROM '.DDBB_PREFIX.'users WHERE email = ? AND id_user != ? LIMIT 1';
             $result = $this->query($sql, array($_POST['email'], $_POST['id_user']));
             if($result->num_rows == 0) {
                 $sql = 'UPDATE '.DDBB_PREFIX.'users SET name = ?, lastname = ?, email = ?, id_state = ? WHERE id_user = ? LIMIT 1';
-                $result = $this->query($sql, array($_POST['name'], $_POST['lastname'], $_POST['email'], $_POST['id_state'], $_POST['id_user']));
+                $result = $this->query($sql, array(
+                    $_POST['name'],
+                    $_POST['lastname'],
+                    $_POST['email'],
+                    $_POST['id_state'],
+                    $_POST['id_user']
+                ));
                 // I Save the main address
                 $sql = 'UPDATE '.DDBB_PREFIX.'users_addresses SET main_address = 0 WHERE id_user = ?';
                 $this->query($sql, array($_POST['id_user']));
@@ -833,8 +918,15 @@
             $sql = 'UPDATE '.DDBB_PREFIX.'users_addresses SET id_continent = ?, id_country = ?, id_province = ?,
                         `address` = ?, location = ?, postal_code = ?, telephone = ?
                     WHERE id_user_address = ? LIMIT 1';
-            $this->query($sql, array($_POST['id_continent'], $_POST['id_country'], $_POST['id_province'], $_POST['address'],
-                $_POST['location'], $_POST['postal_code'], $_POST['telephone'], $_POST['id_user_address']
+            $this->query($sql, array(
+                $_POST['id_continent'],
+                $_POST['id_country'],
+                $_POST['id_province'],
+                $_POST['address'],
+                $_POST['location'],
+                $_POST['postal_code'],
+                $_POST['telephone'],
+                $_POST['id_user_address']
             ));
             return array(
                 'response' => 'ok',
@@ -885,7 +977,13 @@
             $result = $this->query($sql, array($_POST['email']));
             if($result->num_rows == 0) {
                 $sql = 'INSERT INTO '.DDBB_PREFIX.'users_admin (name, lastname, email, pass, id_admin_type) VALUES (?, ?, ?, ?, ?)';
-                $result = $this->query($sql, array($_POST['name'], $_POST['lastname'], $_POST['email'], md5($_POST['pass1']), $_POST['id_admin_type']));
+                $result = $this->query($sql, array(
+                    $_POST['name'],
+                    $_POST['lastname'],
+                    $_POST['email'],
+                    md5($_POST['pass1']),
+                    $_POST['id_admin_type']
+                ));
                 return array('response' => 'ok');
             } else {
                 return array(
@@ -897,7 +995,14 @@
 
         public function save_edit_admin_user() {
             $sql = 'UPDATE '.DDBB_PREFIX.'users_admin SET name = ?, lastname = ?, email = ?, id_admin_type = ?, id_state = ? WHERE id_admin = ? LIMIT 1';
-            $this->query($sql, array($_POST['name'], $_POST['lastname'], $_POST['email'], $_POST['id_admin_type'], $_POST['id_state'], $_POST['id_admin']));
+            $this->query($sql, array(
+                $_POST['name'],
+                $_POST['lastname'],
+                $_POST['email'],
+                $_POST['id_admin_type'],
+                $_POST['id_state'],
+                $_POST['id_admin']
+            ));
             if($_POST['pass1'] != '' && strlen($_POST['pass1']) >= 8) {
                 $sql = 'UPDATE '.DDBB_PREFIX.'users_admin SET pass = ? WHERE id_admin = ? LIMIT 1';
                 $this->query($sql, array(md5($_POST['pass1']), $_POST['id_admin']));

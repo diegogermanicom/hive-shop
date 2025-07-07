@@ -46,7 +46,7 @@
                         INNER JOIN '.DDBB_PREFIX.'attributes AS a ON a.id_attribute  = r.id_attribute
                         INNER JOIN '.DDBB_PREFIX.'attributes_value AS v ON v.id_attribute_value = r.id_attribute_value
                     WHERE r.id_product_related = ?';
-            $result = $this->query($sql, array($id_product_related));
+            $result = $this->query($sql, $id_product_related);
             $html = '';
             if($result->num_rows != 0) {
                 while($row = $result->fetch_assoc()) {
@@ -104,22 +104,41 @@
             // I save the product data
             $_POST['price'] = $this->parse_float_point($_POST['price']);
             $_POST['weight'] = $this->parse_float_point($_POST['weight']);
-            $sql = 'INSERT INTO '.DDBB_PREFIX.'products (id_product_view, price, weight, alias, id_state) VALUES (?, ?, ?, ?)';
+            if($_POST['id_state'] == 2) {
+                $publicDate = 'NOW()';
+            } else {
+                $publicDate = 'NULL';
+            }
+            $sql = 'INSERT INTO '.DDBB_PREFIX.'products (id_product_view, price, weight, id_tax_type, alias, id_state, public_date)
+                    VALUES (?, ?, ?, ?, ?, ?, '.$publicDate.')';
             $this->query($sql, array(
-                $_POST['id_view'], $_POST['price'], $_POST['weight'], $_POST['alias'], $_POST['id_state']
+                $_POST['id_view'],
+                $_POST['price'],
+                $_POST['weight'],
+                $_POST['id_tax_type'],
+                $_POST['alias'],
+                $_POST['id_state']
             ));
             $id_product = $this->db->insert_id;
             // Saving categories
             foreach($_POST['categories'] as $value) {
                 $main = ($_POST['main_category'] == $value) ? 1 : 0;
                 $sql = 'INSERT INTO '.DDBB_PREFIX.'products_categories (id_product, id_category, main) VALUES (?, ?, ?)';
-                $this->query($sql, array($id_product, $value, $main));
+                $this->query($sql, array(
+                    $id_product,
+                    $value,
+                    $main
+                ));
             }
             // Saving attributes
             if(!empty($_POST['attributes'])) {
                 for($i = 0; $i < count($_POST['attributes']); $i++) {
                     $sql = 'INSERT INTO '.DDBB_PREFIX.'products_attributes (id_product, id_attribute, priority) VALUES (?, ?, ?)';
-                    $this->query($sql, array($id_product, $_POST['attributes'][$i], ($i + 1)));
+                    $this->query($sql, array(
+                        $id_product,
+                        $_POST['attributes'][$i],
+                        ($i + 1)
+                    ));
                 }
             }
             // Saving properties (I need $i for $_POST['meta_data'])
@@ -130,9 +149,16 @@
                 $_POST['properties'][$i]['slug'] = $this->parse_slug($_POST['properties'][$i]['slug']);
                 $sql = 'INSERT INTO '.DDBB_PREFIX.'products_language (id_product , id_language, `name`, `description`, slug, meta_title, meta_description, meta_keywords)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-                $this->query($sql, array($id_product, $_POST['properties'][$i]['id_lang'],
-                    $_POST['properties'][$i]['name'], $_POST['properties'][$i]['description'], $_POST['properties'][$i]['slug'],
-                    $_POST['meta_data'][$i]['meta_title'], $_POST['meta_data'][$i]['meta_description'], $_POST['meta_data'][$i]['meta_keywords']));
+                $this->query($sql, array(
+                    $id_product,
+                    $_POST['properties'][$i]['id_lang'],
+                    $_POST['properties'][$i]['name'],
+                    $_POST['properties'][$i]['description'],
+                    $_POST['properties'][$i]['slug'],
+                    $_POST['meta_data'][$i]['meta_title'],
+                    $_POST['meta_data'][$i]['meta_description'],
+                    $_POST['meta_data'][$i]['meta_keywords']
+                ));
             }
             // Saving images if they are not empty (I need $i for main_image and hover_image)
             if(!empty($_POST['images'])) {
@@ -147,7 +173,11 @@
                     $this->query($sql, array($name, '/img/products/'.$name));
                     $id_image = $this->db->insert_id;
                     $sql = 'INSERT INTO '.DDBB_PREFIX.'products_images (id_product, id_image, priority) VALUES (?, ?, ?)';
-                    $this->query($sql, array($id_product, $id_image, ($i + 1)));
+                    $this->query($sql, array(
+                        $id_product,
+                        $id_image,
+                        ($i + 1)
+                    ));
                     $id_product_image = $this->db->insert_id;
                     // Saving the image on the server
                     $this->base64_to_file($_POST['images'][$i]['data'], IMG_PATH.'/products/'.$name);
@@ -545,14 +575,23 @@
             $sql = 'INSERT INTO '.DDBB_PREFIX.'products_related (id_product, stock, price_change, weight_change, main, id_state)
                     VALUES (?, ?, ?, ?, ?, ?)';
             $this->query($sql, array(
-                $_POST['id_product'], $_POST['stock'], $_POST['price_change'], $_POST['weight_change'], $main, $_POST['id_state']
+                $_POST['id_product'],
+                $_POST['stock'],
+                $_POST['price_change'],
+                $_POST['weight_change'],
+                $main,
+                $_POST['id_state']
             ));
             $id_related = $this->db->insert_id;
             // I save the attributes
             if(!empty($_POST['attributes'])) {
                 foreach($_POST['attributes'] as $i => $value) {
                     $sql = 'INSERT INTO '.DDBB_PREFIX.'products_related_attributes (id_product_related, id_attribute, id_attribute_value) VALUES (?, ?, ?)';
-                    $this->query($sql, array($id_related, $value['id_attribute'], $value['id_value']));
+                    $this->query($sql, array(
+                        $id_related,
+                        $value['id_attribute'],
+                        $value['id_value']
+                    ));
                 }
             }
             // I save the images
@@ -622,8 +661,13 @@
                         id_state = ?, offer = ?, offer_start_date = ?, offer_end_date = ?
                     WHERE id_product_related = ? LIMIT 1';
             $this->query($sql, array(
-                $_POST['stock'], $price_change, $weight_change, $_POST['id_state'],
-                $offer, $_POST['offer_start'], $_POST['offer_end'], $_POST['id_product_related']
+                $_POST['stock'],
+                $price_change,
+                $weight_change,
+                $_POST['id_state'],
+                $offer, $_POST['offer_start'],
+                $_POST['offer_end'],
+                $_POST['id_product_related']
             ));
             // I save the images
             $sql = 'DELETE FROM products_related_images WHERE id_product_related = ?';
@@ -684,9 +728,21 @@
             // I save the product data
             $_POST['price'] = $this->parse_float_point($_POST['price']);
             $_POST['weight'] = $this->parse_float_point($_POST['weight']);
-            $sql = 'UPDATE '.DDBB_PREFIX.'products SET id_product_view = ?, price = ?, weight = ?, alias = ?, id_state = ? WHERE id_product = ?';
+            if($_POST['id_state'] == 2) {
+                $publicDate = 'NOW()';
+            } else {
+                $publicDate = 'NULL';
+            }
+            $sql = 'UPDATE '.DDBB_PREFIX.'products SET id_product_view = ?, price = ?, weight = ?, id_tax_type = ? ,alias = ?, id_state = ?,
+                    public_date = '.$publicDate.' WHERE id_product = ?';
             $this->query($sql, array(
-                $_POST['id_view'], $_POST['price'], $_POST['weight'], $_POST['alias'], $_POST['id_state'], $_POST['id_product']
+                $_POST['id_view'],
+                $_POST['price'],
+                $_POST['weight'],
+                $_POST['id_tax_type'],
+                $_POST['alias'],
+                $_POST['id_state'],
+                $_POST['id_product']
             ));
             // Saving categories
             $sql = 'DELETE FROM '.DDBB_PREFIX.'products_categories WHERE id_product = ?';
@@ -694,7 +750,11 @@
             foreach($_POST['categories'] as $value) {
                 $main = ($_POST['main_category'] == $value) ? 1 : 0;
                 $sql = 'INSERT INTO '.DDBB_PREFIX.'products_categories (id_product, id_category, main) VALUES (?, ?, ?)';
-                $this->query($sql, array($_POST['id_product'], $value, $main));
+                $this->query($sql, array(
+                    $_POST['id_product'],
+                    $value,
+                    $main
+                ));
             }
             // Saving attributes
             $sql = 'DELETE FROM '.DDBB_PREFIX.'products_attributes WHERE id_product = ?';
@@ -702,7 +762,11 @@
             if(!empty($_POST['attributes'])) {
                 for($i = 0; $i < count($_POST['attributes']); $i++) {
                     $sql = 'INSERT INTO '.DDBB_PREFIX.'products_attributes (id_product, id_attribute, priority) VALUES (?, ?, ?)';
-                    $this->query($sql, array($_POST['id_product'], $_POST['attributes'][$i], ($i + 1)));
+                    $this->query($sql, array(
+                        $_POST['id_product'],
+                        $_POST['attributes'][$i],
+                        ($i + 1)
+                    ));
                 }
             }
             // Saving properties
@@ -713,9 +777,15 @@
                 $_POST['properties'][$i]['slug'] = $this->parse_slug($_POST['properties'][$i]['slug']);
                 $sql = 'UPDATE '.DDBB_PREFIX.'products_language SET `name` = ?, `description` = ?, slug = ?, meta_title = ?, meta_description = ?, meta_keywords = ?
                         WHERE id_product = ? AND id_language = ?';
-                $this->query($sql, array($_POST['properties'][$i]['name'], $_POST['properties'][$i]['description'], $_POST['properties'][$i]['slug'],
-                    $_POST['meta_data'][$i]['meta_title'], $_POST['meta_data'][$i]['meta_description'], $_POST['meta_data'][$i]['meta_keywords'],
-                    $_POST['id_product'], $_POST['properties'][$i]['id_lang']));
+                $this->query($sql, array(
+                    $_POST['properties'][$i]['name'],
+                    $_POST['properties'][$i]['description'],
+                    $_POST['properties'][$i]['slug'],
+                    $_POST['meta_data'][$i]['meta_title'],
+                    $_POST['meta_data'][$i]['meta_description'],
+                    $_POST['meta_data'][$i]['meta_keywords'],
+                    $_POST['id_product'],
+                    $_POST['properties'][$i]['id_lang']));
             }
             // Saving images if they are not empty
             if(!empty($_POST['images'])) {
@@ -737,7 +807,10 @@
                         $this->save_product_image($_POST['images'][$i]['data'], $name);
                     } else if($_POST['images'][$i]['type'] == 'server') {
                         $sql = 'INSERT INTO '.DDBB_PREFIX.'products_images (id_product, id_image, priority) VALUES (?, ?, ?)';
-                        $this->query($sql, array($_POST['id_product'], $_POST['images'][$i]['id_image'], $priority));
+                        $this->query($sql, array(
+                            $_POST['id_product'],
+                            $_POST['images'][$i]['id_image'],
+                            $priority));
                     } else if($_POST['images'][$i]['type'] == 'product') {
                         $sql = 'UPDATE '.DDBB_PREFIX.'products_images SET priority = ? WHERE id_product_image = ? LIMIT 1';
                         $this->query($sql, array($priority, $_POST['images'][$i]['id_product_image']));
@@ -832,7 +905,12 @@
                     $category_route = $this->get_category_route($_POST['id_category'], $value['id_language']);
                     $product_route = $category_route.$value['route'];
                     $sql = 'INSERT INTO '.DDBB_PREFIX.'products_custom_routes (id_product, id_category, id_language, route) VALUES (?, ?, ?, ?)';
-                    $this->query($sql, array($_POST['id_product'], $_POST['id_category'], $value['id_language'], $product_route));
+                    $this->query($sql, array(
+                        $_POST['id_product'],
+                        $_POST['id_category'],
+                        $value['id_language'],
+                        $product_route
+                    ));
                 }
             }
             return array('response' => 'ok');
@@ -854,7 +932,7 @@
                         LEFT JOIN products AS m ON m.main_image = p.id_product_image AND m.id_product = p.id_product
                         LEFT JOIN products AS h ON h.hover_image = p.id_product_image AND h.id_product = p.id_product
                     WHERE p.id_product = ? ORDER BY p.priority';
-            $result = $this->query($sql, array($id_product));
+            $result = $this->query($sql, $id_product);
             $html = '';
             if($result->num_rows != 0) {
                 while($row = $result->fetch_assoc()) {

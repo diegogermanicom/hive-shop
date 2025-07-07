@@ -272,19 +272,11 @@
                             exit;
                         } else {
                             $message = 'The function you are trying to access via the <b>'.$route['route'].'</b> route does not exist.';
-                            if(METHOD == 'get') {
-                                Utils::error($message);
-                            } else {
-                                Utils::errorPost($message);
-                            }
+                            Utils::error($message);
                         }
                     } else {
                         $message = 'The controller you are trying to access via the <b>'.$route['route'].'</b> route does not exist.';
-                        if(METHOD == 'get') {
-                            Utils::error($message);
-                        } else {
-                            Utils::errorPost($message);
-                        }
+                        Utils::error($message);
                     }
                 }
             } 

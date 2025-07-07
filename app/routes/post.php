@@ -34,6 +34,7 @@
         ['/delete-billing-address'          , 'delete_billing_address'],
         ['/save-edit-billing-address'       , 'save_edit_billing_address'],
         ['/get-shipping-methods'            , 'get_shipping_methods'],
+        ['/get-payment-methods'             , 'get_payment_methods'],
         ['/apply-code'                      , 'apply_code'],
         ['/save-order-to-cart'              , 'save_order_to_cart'],
         ['/get-countries-list'              , 'get_countries_list'],

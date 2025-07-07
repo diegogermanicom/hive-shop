@@ -33,12 +33,18 @@
                         </div>
                         <div class="row pb-20">
                             <div class="col-12 col-sm-3 pr-10 pr-sm-0">
+                                <div class="pb-10"><b>Tax type</b></div>
+                                <div>
+                                    <select id="select-tax" class="w-100"><?= $data['tax_types']; ?></select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-3 pr-10 pr-sm-0">
                                 <div class="pb-10"><b>View</b></div>
                                 <div>
                                     <select id="select-view" class="w-100"><?= $data['product_views']; ?></select>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-3">
+                            <div class="col-12 col-sm-3 pr-10 pr-sm-0">
                                 <div class="pb-10"><b>State</b></div>
                                 <div>
                                     <select id="select-state" class="w-100"><?= $data['product_states']; ?></select>

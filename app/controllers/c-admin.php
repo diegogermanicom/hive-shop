@@ -99,6 +99,7 @@
                 'products'
             ];
             $data['meta']['title'] = $admin->setTitle('New Product');
+            $data['tax_types'] = $admin->get_tax_types_list();
             $data['product_views'] = $admin->get_product_views_list();
             $data['product_states'] = $admin->get_states_list();
             $data['categories'] = $admin->get_categories_custom_list();
@@ -125,6 +126,7 @@
                 header('Location: '.ADMIN_PATH.'/products');
                 exit;
             }
+            $data['tax_types'] = $admin->get_tax_types_list($data['product']['id_tax_type']);
             $data['product_views'] = $admin->get_product_views_list($data['product']['id_product_view']);
             $data['product_states'] = $admin->get_states_list($data['product']['id_state']);
             $data['categories'] = $admin->get_categories_custom_list($_GET['id_product']);

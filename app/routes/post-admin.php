@@ -51,6 +51,7 @@
         ['/get-code-rule'                   , 'get_code_rule'],
         ['/get-code-rules'                  , 'get_code_rules'],
         ['/get-code-rule-elements-list'     , 'get_code_rule_elements_list'],
+        ['/create-order-from-cart'          , 'create_order_from_cart'],
         // Shipment
         ['/save-new-shipment'               , 'save_new_shipment'],
         ['/save-edit-shipment'              , 'save_edit_shipment'],

@@ -54,17 +54,7 @@
                                 <textarea id="textarea-comment" class="w-100"></textarea>
                             </div>
                             <div class="title-container text-left pt-40">Selecciona el método de pago</div>
-                            <div>
-                                <div>
-                                    <label class="radio"><input type="radio" value="1" name="input-payment" class="input-radio-payment" checked><span class="checkmark"></span> Tarjeta de crédito o débito.</label>
-                                </div>
-                                <div>
-                                    <label class="radio"><input type="radio" value="2" name="input-payment" class="input-radio-payment"><span class="checkmark"></span> Transferencia bancaria.</label>
-                                </div>
-                                <div>
-                                    <label class="radio"><input type="radio" value="3" name="input-payment" class="input-radio-payment"><span class="checkmark"></span> Pago contra reembolso.</label>
-                                </div>
-                            </div>
+                            <div id="payment-methods-list"></div>
                         </div>
                         <div class="col-12 col-sm-4 pl-20 pl-sm-0">
                             <div class="title-container text-left">En tu cesta</div>

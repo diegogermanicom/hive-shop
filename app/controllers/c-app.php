@@ -219,6 +219,7 @@
 
         public function checkout($args) {
             $app = new App('checkout-page');
+            $app->security_app_login();
             $data = $app->getAppData();
             if(LANG == 'en') {
                 $data['meta']['title'] = $app->setTitle('Checkout');
@@ -229,12 +230,21 @@
             }
             $data['routes'] = ROUTES['checkout'];
             $data['continents'] = $app->get_continents_active_options();
+            $app->refresh_cart_stock($_COOKIE['id_cart']);
             $data['cart'] = $app->get_checkout_cart($_COOKIE['id_cart']);
+            if($data['cart'] == null) {
+                header('Location: '.PUBLIC_ROUTE.'/');
+                exit;
+            }
             $data['javascript'] = json_encode(array(
                 'shippingAddressErrorTitle' => 'Missing Data',
                 'shippingAddressErrorText' => 'To continue with your order, you must fill in a shipping address.',
                 'billingAddressErrorTitle' => 'Missing Data',
-                'billingAddressErrorText' => 'To continue with your order, you must enter a billing address.'
+                'billingAddressErrorText' => 'To continue with your order, you must enter a billing address.',
+                'shippingMethodErrorTitle' => 'Missing Data',
+                'shippingMethodErrorText' => 'To continue with your order, you must select a shipping method.',
+                'paymentMethodErrorTitle' => 'Missing Data',
+                'paymentMethodErrorText' => 'To continue with your order, you must select a payment method.'
             ));
             $this->view('/checkout', $data);
         }

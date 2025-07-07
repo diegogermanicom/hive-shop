@@ -1680,6 +1680,23 @@
             return $html;
         }
 
+        public function get_tax_types_list($id_tax_type = null) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'tax_types WHERE id_state = 2 ORDER BY id_tax_type';
+            $result = $this->query($sql);
+            $html = '';
+            if($result->num_rows != 0) {
+                while($row = $result->fetch_assoc()) {
+                    $selected = '';
+                    // If it is the tax you have selected
+                    if($id_tax_type == $row['id_tax_type']) {
+                        $selected = ' selected';
+                    }
+                    $html .= '<option value="'.$row['id_tax_type'].'"'.$selected.'>'.$row['name'].'</option>';
+                }
+            }
+            return $html;
+        }
+
     }
 
 ?>

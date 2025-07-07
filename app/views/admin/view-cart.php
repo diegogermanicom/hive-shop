@@ -12,6 +12,9 @@
                     <div class="container">
                         <div class="title-container underline text-left">View Cart</div>
                         <div class="view-cart-product-list"><?= $data['carts']['html_products']; ?></div>
+                        <div class="text-center pt-40">
+                            <div class="btn btn-black" id="btn-create-order-from-cart">Create order from cart</div>
+                        </div>
                     </div>
                 </section>
                 <?php include VIEWS_ADMIN.'/partials/footer.php'; ?>
