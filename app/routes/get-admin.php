@@ -65,9 +65,10 @@
         ['/payment-zones'                   , 'payment_zones'],
         ['/new-payment-zone'                , 'new_payment_zone'],
         ['/edit-payment-zone'               , 'edit_payment_zone'],
-        // Other
+        // Settings
         ['/locations'                       , 'locations'],
         ['/sitemap'                         , 'sitemap'],
+        ['/configuration'                   , 'configuration'],
         ['/ftp-upload'                      , 'ftp_upload']
     );
 

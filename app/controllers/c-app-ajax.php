@@ -93,7 +93,7 @@
         public function remove_cart_product($args) {
             $app = new AppAjax('ajax-remove-cart-product');
             $result = [];
-            $result['remove_cart_product'] = $app->remove_cart_product($_COOKIE['id_cart'], $_POST['id']);
+            $result['remove_cart_product'] = $app->remove_cart_product($_COOKIE['id_cart'], $_POST['id_cart_product']);
             echo json_encode($result);
         }
 
@@ -211,6 +211,7 @@
 
         public function save_order_to_cart($args) {
             $app = new AppAjax('ajax-save-order-to-cart');
+            $app->security_app_login();
             $result = [];
             $result['save_order_to_cart'] = $app->save_order_to_cart();
             echo json_encode($result);

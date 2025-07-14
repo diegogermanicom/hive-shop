@@ -282,7 +282,7 @@
                 $html = '';
                 foreach($cart['products'] as $value) {
                     // Draw html
-                    $html .= '<div class="row item" id-cart="'.$value['row']['id'].'">';
+                    $html .= '<div class="row item" id-cart-product="'.$value['row']['id_cart_product'].'">';
                     $html .=    '<div class="btn-remove-cart-product" title="'.LANGTXT['delete-from-cart'].'">';
                     $html .=        '<i class="fa-solid fa-trash-can"></i>';
                     $html .=    '</div>';
@@ -339,19 +339,22 @@
             );
         }
 
-        public function remove_cart_product($id_cart, $id) {
-            $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ? AND id = ? LIMIT 1';
-            $this->query($sql, array($id_cart, $id));
+        public function remove_cart_product($id_cart, $id_cart_product) {
+            $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ? AND id_cart_product = ? LIMIT 1';
+            $this->query($sql, array(
+                $id_cart,
+                $id_cart_product
+            ));
             return array('response' => 'ok');
         }
 
         public function change_product_amount() {
             // I do not need to check the stock here since I do it when loading the cart again
-            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id_cart = ? AND id = ? LIMIT 1';
+            $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id_cart = ? AND id_cart_product = ? LIMIT 1';
             $this->query($sql, array(
                 $_POST['amount'],
                 $_COOKIE['id_cart'],
-                $_POST['id']
+                $_POST['id_cart_product']
             ));
             return array('response' => 'ok');
         }
@@ -716,6 +719,7 @@
         }
 
         public function get_shipping_methods($id_cart) {
+            usleep($this->sleep);
             $cart_price = $this->get_cart_total_price($id_cart);
             $cart_weight = $this->get_cart_total_weight($id_cart);
             $sql = 'SELECT s.*, l.name AS shipping_name FROM '.DDBB_PREFIX.'shipping_methods AS s
@@ -832,6 +836,7 @@
         }
 
         public function get_payment_methods($id_cart) {
+            usleep($this->sleep);
             $cart_price = $this->get_cart_total_price($id_cart);
             $sql = 'SELECT s.*, l.name AS payment_name FROM '.DDBB_PREFIX.'payment_methods AS s
                         INNER JOIN '.DDBB_PREFIX.'payment_methods_language AS l ON l.id_payment_method = s.id_payment_method
@@ -881,9 +886,34 @@
             );
         }
 
+        private function save_products_price_to_cart($id_cart) {
+            $sql = 'SELECT c.id_cart_product, p.price, r.price_change, r.offer, r.offer_start_date, r.offer_end_date
+                    FROM '.DDBB_PREFIX.'carts_products AS c
+                        INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
+                        INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
+                    WHERE c.id_cart = ? ORDER BY c.id_cart_product';
+            $result = $this->query($sql, array($id_cart));
+            if($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    // If you have an offer and it is within the deadline
+                    $offer = 0;
+                    if($row['offer'] != 0 && date('Y-m-d') > $row['offer_start_date'] && date('Y-m-d') < $row['offer_end_date']) {
+                        $offer = $row['offer'];
+                    }
+                    $price = $row['price'] + $row['price_change'] - $offer;
+                    $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET price = ? WHERE id_cart_product = ? LIMIT 1';
+                    $this->query($sql, array(
+                        $price,
+                        $row['id_cart_product']
+                    ));
+                }
+            }
+        }
+
         public function save_order_to_cart() {
+            $transactionId = uniqid().'-'.rand(1000, 9999);
             $sql = 'UPDATE '.DDBB_PREFIX.'carts SET id_user_address = ?, id_user_billing_address = ?,
-                        id_shipping_method = ?, id_payment_method = ?, comments = ?
+                        id_shipping_method = ?, id_payment_method = ?, comments = ?, id_transaction = ?
                     WHERE id_cart = ? LIMIT 1';
             $this->query($sql, array(
                 $_POST['id_user_address'],
@@ -891,25 +921,97 @@
                 $_POST['id_shipping_method'],
                 $_POST['id_payment_method'],
                 $_POST['comments'],
+                $transactionId,
                 $_COOKIE['id_cart']
             ));
-            return array('response' => 'ok');
+            // I save the current price of the products in the cart
+            $this->save_products_price_to_cart($_COOKIE['id_cart']);
+            // Payment by card via Stripe
+            if($_POST['id_payment_method'] == 1) {
+                // I get the keys from Stripe
+                $sql = 'SELECT * FROM '.DDBB_PREFIX.'configuration WHERE name = "STRIPE_ENV" LIMIT 1';
+                $result_env = $this->query($sql);
+                $row_env = $result_env->fetch_assoc();
+                if($row_env['value'] == 'pro') {
+                    $sql = 'SELECT
+                                (SELECT value FROM settings WHERE name = "STRIPE_DEV_TOKEN" LIMIT 1) AS token,
+                                (SELECT value FROM settings WHERE name = "STRIPE_DEV_TOKEN_PK" LIMIT 1) AS token_pk';
+                    $result_stripe = $this->query($sql);
+                } else {
+                    $sql = 'SELECT
+                                (SELECT value FROM settings WHERE name = "STRIPE_DEV_TOKEN" LIMIT 1) AS token,
+                                (SELECT value FROM settings WHERE name = "STRIPE_DEV_TOKEN_PK" LIMIT 1) AS token_pk';
+                    $result_stripe = $this->query($sql);
+                }
+                $row_stripe = $result_stripe->fetch_assoc();
+                $cart_price = $this->get_cart_total_price($_COOKIE['id_cart']);
+                $sessionId = $this->stripe_create_session($row_stripe['token'], $transactionId, $cart_price);
+                // I save the transaction id with Stripe
+                $sql = 'UPDATE '.DDBB_PREFIX.'carts SET id_stripe = ? WHERE id_cart = ? LIMIT 1';
+                $this->query($sql, array($sessionId, $_COOKIE['id_cart']));
+                return array(
+                    'response' => 'ok',
+                    'token' => $row_stripe['token_pk'],
+                    'session_id' => $sessionId
+                );
+            }
+            $url = '';
+            // Payment by back transfer
+            if($_POST['id_payment_method'] == 2) {
+                $this->save_order_from_cart($_COOKIE['id_cart']);
+                foreach(ROUTES['checkout-bank-transfer'] as $route) {
+                    if($route['language'] == LANG) {
+                        $url = $route['route'].'?transaction_id='.$transactionId;
+                    }
+                }
+                return array(
+                    'response' => 'ok',
+                    'url' => $url
+                );
+            }
+            // Payment by cash on delivery
+            if($_POST['id_payment_method'] == 3) {
+                $this->save_order_from_cart($_COOKIE['id_cart']);
+                foreach(ROUTES['checkout-cash-delivery'] as $route) {
+                    if($route['language'] == LANG) {
+                        $url = $route['route'].'?transaction_id='.$transactionId;
+                    }
+                }
+                return array(
+                    'response' => 'ok',
+                    'url' => $url
+                );
+            }
+            return array(
+                'response' => 'error',
+                'message' => 'An error occurred while applying the payment method. Please try again.'
+            );
         }
 
-        public function save_order($id_cart) {
-            $sql = 'SELECT * FROM '.DDBB_PREFIX.'carts WHERE id_cart = ? LIMIT 1';
-            $result = $this->query($sql, array($id_cart));
-            if($result->num_rows != 0) {
-                // I create a random value for the order code
-                $random = rand(1000, 9999);
-                $order_code = uniqid().$random;
-                $sql = 'INSERT INTO '.DDBB_PREFIX.'orders (order_code, id_cart, id_user)
-                        VALUES ()';
-                //$this->query($sql, array($id_cart));
-                return array('response' => 'ok');                
-            } else {
-                return array('response' => 'error');
-            }
+        private function stripe_create_session($token, $transactionId, $amount) {
+            require_once(SERVER_PATH.'/app/vendor/stripe/init.php');
+            \Stripe\Stripe::setApiKey($token);
+            $urlSuccess = URL_ROUTE.'/save-checkout-successful?transaction_id='.$transactionId;
+            $urlFail = URL_ROUTE.'/checkout-failed';
+            $session = \Stripe\Checkout\Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'eur',
+                        'product_data' => [
+                            'name' => HOST.': order '.$_COOKIE['id_cart'],
+                            'images' => [URL_ROUTE.'/img/stripe-image.png']
+                        ],
+                        'unit_amount' => ($amount * 100),
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => $urlSuccess,
+                'cancel_url' => $urlFail,
+                'customer_email' => $_SESSION['user']['email']
+            ]);
+            return $session->id;
         }
 
     }

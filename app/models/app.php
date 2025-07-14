@@ -55,8 +55,7 @@
             // If you don't have the id_cart cookie, I create one
 			if(!(isset($_COOKIE["id_cart"]))) {
                 // I create a random value for the cart id
-                $random = rand(1000, 9999);
-                $id_cart = uniqid().$random;
+                $id_cart = uniqid().'-'.rand(1000, 9999);
                 Utils::initCookie('id_cart', $id_cart, Utils::ONEYEAR);
                 // If logged in, save the user id in the cart.
                 if(isset($_SESSION['user'])) {
@@ -99,7 +98,7 @@
                     $result = $this->query($sql, array($_SESSION['user']['id_user'], $_COOKIE["user_remember"]));
                     if($result->num_rows == 0) {
                         $this->logout();
-                        header('Location: '.PUBLIC_PATH.'/');
+                        Utils::redirect('/');
                         exit;
                     }
                 }
@@ -283,7 +282,7 @@
         public function get_product_related_values($id_product_related) {
             // I collect the values of the attributes of a related product
             $sql = 'SELECT id_attribute_value FROM '.DDBB_PREFIX.'products_related_attributes WHERE id_product_related = ?';
-            $result = $this->query($sql, array($id_product_related));
+            $result = $this->query($sql, $id_product_related);
             if($result->num_rows != 0) {
                 $values_id = array();
                 while($row = $result->fetch_assoc()) {
@@ -324,6 +323,19 @@
                 );
             } else {
                 return null;
+            }
+        }
+
+        public function check_transaction_id($transactionId) {
+            $sql = 'SELECT id_cart FROM '.DDBB_PREFIX.'carts WHERE id_transaction = ? AND id_cart = ? LIMIT 1';
+            $result = $this->query($sql, array(
+                $transactionId,
+                $_COOKIE['id_cart']
+            ));
+            if($result->num_rows > 0) {
+                return true;
+            } else {
+                return false;
             }
         }
 

@@ -99,6 +99,9 @@
                     <a href="<?= ADMIN_PATH ?>/users-admin"<?php if(in_array('users-admin', $data['admin']['tags'])) echo ' class="active"'; ?>>
                         <i class="fa-solid fa-user-secret"></i>&nbsp;&nbsp;Admin Users
                     </a>
+                    <a href="<?= ADMIN_PATH ?>/configuration"<?php if(in_array('configuration', $data['admin']['tags'])) echo ' class="active"'; ?>>
+                    <i class="fa-solid fa-wrench"></i>&nbsp;&nbsp;Configuration
+                    </a>
                     <a href="<?= ADMIN_PATH ?>/sitemap"<?php if(in_array('sitemap', $data['admin']['tags'])) echo ' class="active"'; ?>>
                         <i class="fa-solid fa-sitemap"></i>&nbsp;&nbsp;Sitemap
                     </a>

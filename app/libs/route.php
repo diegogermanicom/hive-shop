@@ -175,7 +175,7 @@
                     }
                     // I check that the route is not repeated
                     $this->checkRepeat($objRoute['route']);
-                    array_push($this->routes[$this->method][$route[3]], $objRoute);
+                    $this->routes[$this->method][$route[3]][$route[2]] = $objRoute;
                 } else {
                     //If you specify a specific route
                     if($this->root == null) {
@@ -195,7 +195,7 @@
         }
 
         private function checkRepeat($checkRoute) {
-            foreach($this->routes as $method => $methods) {
+            foreach($this->routes as $methods) {
                 foreach($methods as $alias) {
                     foreach($alias as $route) {
                         if($route['route'] == $checkRoute) {
@@ -319,14 +319,14 @@
 
         public function empty() {
             if(METHOD == 'get') {
-                header('Location: '.PUBLIC_ROUTE.'/404');
+                Utils::redirect('/404');
             } else {
                 echo json_encode(array(
                     'status' => '404',
                     'error' => 'Route not found'
                 ));
+                exit;
             }
-            exit;
         }
 
         public function get_categories() {

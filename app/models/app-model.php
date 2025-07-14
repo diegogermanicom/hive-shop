@@ -20,8 +20,7 @@
         public function security_app_logout() {
             if(isset($_SESSION['user'])) {
                 if(METHOD == 'get') {
-                    header('Location: '.PUBLIC_ROUTE.'/');
-                    exit;
+                    Utils::redirect('/');
                 } else {
                     return json_encode(array(
                         'response' => 'error',
@@ -34,8 +33,7 @@
         public function security_app_login() {
             if(!isset($_SESSION['user'])) {
                 if(METHOD == 'get') {
-                    header('Location: '.PUBLIC_ROUTE.'/');
-                    exit;
+                    Utils::redirect('/access');
                 } else {
                     return json_encode(array(
                         'response' => 'error',
@@ -47,9 +45,11 @@
 
         public function login($email, $pass, $remember = 0) {
             // Pass must come in md5
-            $sql = 'SELECT * FROM '.DDBB_PREFIX.'users WHERE email = ? AND pass = ? LIMIT 1';
+            $sql = 'SELECT u.* FROM '.DDBB_PREFIX.'users AS u
+                        INNER JOIN users_addresses AS a ON a.id_user = u.id_user
+                    WHERE u.email = ? AND u.pass = ? LIMIT 1';
             $result = $this->query($sql, array($email, $pass));
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
                 if($row['id_state'] == 2) {
                     $sql = 'UPDATE '.DDBB_PREFIX.'users SET last_access = NOW(), ip_last_access = ? WHERE id_user = ? LIMIT 1';
@@ -63,14 +63,20 @@
                     if($row["remember_code"] == '') {
                         $row["remember_code"] = uniqid();
                         $sql = 'UPDATE '.DDBB_PREFIX.'users SET remember_code = ? WHERE id_user = ? LIMIT 1';
-                        $this->query($sql, array($row["remember_code"], $row['id_user']));
+                        $this->query($sql, array(
+                            $row["remember_code"],
+                            $row['id_user']
+                        ));
                     }
                     if($remember == 1) {
                         Utils::initCookie('user_remember', $row["remember_code"], Utils::ONEMONTH);
                     }
                     // I associate the cart to the user
                     $sql = 'UPDATE '.DDBB_PREFIX.'carts SET id_user = ? WHERE id_cart = ? AND id_user = 0 LIMIT 1';
-                    $this->query($sql, array($row['id_user'], $_COOKIE['id_cart']));
+                    $this->query($sql, array(
+                        $row['id_user'],
+                        $_COOKIE['id_cart']
+                    ));
                     // If you come from the place order page
                     if(isset($_POST['checkout']) && $_POST['checkout'] == 1) {
                         if(LANG == 'en') {
@@ -105,7 +111,7 @@
                         INNER JOIN ct_languages AS l ON l.id_language = r.id_language
                     WHERE r.id_product = ? AND r.id_category = ?';
             $result = $this->query($sql, array($id_product, $id_category));
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 $routes = array();
                 while($row = $result->fetch_assoc()) {
                     if(MULTILANGUAGE == true) {
@@ -132,7 +138,7 @@
                         INNER JOIN ct_languages AS l ON l.id_language = r.id_language
                     WHERE r.id_product = ? AND c.main = 1';
             $result = $this->query($sql, array($id_product));
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 $routes = array();
                 while($row = $result->fetch_assoc()) {
                     if(MULTILANGUAGE == true) {
@@ -153,36 +159,36 @@
         }
 
         public function refresh_cart_stock($id_cart) {
-            $sql = 'SELECT c.id, c.amount, r.stock
+            $sql = 'SELECT c.id_cart_product, c.amount, r.stock
                     FROM '.DDBB_PREFIX.'carts_products AS c
                         INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
-                    WHERE c.id_cart = ? ORDER BY c.id';
+                    WHERE c.id_cart = ? ORDER BY c.id_cart_product';
             $result = $this->query($sql, array($id_cart));
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     // If there is less stock than what you ask for, I update it
                     if($row['stock'] < $row['amount']) {
-                        $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id = ? LIMIT 1';
-                        $this->query($sql, array($row['stock'], $row['id']));
+                        $sql = 'UPDATE '.DDBB_PREFIX.'carts_products SET amount = ? WHERE id_cart_product = ? LIMIT 1';
+                        $this->query($sql, array($row['stock'], $row['id_cart_product']));
                     }
                     // If it's out of stock, I'll remove it from the cart.
                     if($row['stock'] == 0) {
-                        $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id = ? LIMIT 1';
-                        $this->query($sql, array($id_cart, $row['id']));
+                        $sql = 'DELETE FROM '.DDBB_PREFIX.'carts_products WHERE id_cart_product = ? LIMIT 1';
+                        $this->query($sql, array($id_cart, $row['id_cart_product']));
                     }
                 }
             }
         }
 
         public function get_cart_total_price($id_cart) {
-            $sql = 'SELECT p.price, r.price_change, r.offer, r.offer_start_date, r.offer_end_date
+            $sql = 'SELECT c.amount, p.price, r.price_change, r.offer, r.offer_start_date, r.offer_end_date
                     FROM '.DDBB_PREFIX.'carts_products AS c
                         INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
                         INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
-                    WHERE c.id_cart = ? ORDER BY c.id';
+                    WHERE c.id_cart = ? ORDER BY c.id_cart_product';
             $result = $this->query($sql, array($id_cart));
             $total = 0;
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     // If you have an offer and it is within the deadline
                     $offer = 0;
@@ -190,24 +196,24 @@
                         $offer = $row['offer'];
                     }
                     $price = $row['price'] + $row['price_change'] - $offer;
-                    $total += $price;
+                    $total += $price * $row['amount'];
                 }
             }
             return $total;
         }
 
         public function get_cart_total_weight($id_cart) {
-            $sql = 'SELECT p.weight, r.weight_change
+            $sql = 'SELECT c.amount, p.weight, r.weight_change
                     FROM '.DDBB_PREFIX.'carts_products AS c
                         INNER JOIN '.DDBB_PREFIX.'products AS p ON p.id_product = c.id_product
                         INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
-                    WHERE c.id_cart = ? ORDER BY c.id';
+                    WHERE c.id_cart = ? ORDER BY c.id_cart_product';
             $result = $this->query($sql, array($id_cart));
             $total = 0;
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     $weight = $row['weight'] + $row['weight_change'];
-                    $total += $weight;
+                    $total += $weight * $row['amount'];
                 }
             }
             return $total;
@@ -222,7 +228,7 @@
                     WHERE r.id_product_related = ? AND vl.id_language = a.id_language';
             $result = $this->query($sql, array($id_product_related));
             $attributes = array();
-            if($result->num_rows != 0) {
+            if($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     if(!isset($attributes[$row['language_name']])) {
                         $attributes[$row['language_name']] = array();
@@ -241,7 +247,7 @@
                         INNER JOIN '.DDBB_PREFIX.'products_related AS r ON r.id_product_related = c.id_product_related
                         INNER JOIN '.DDBB_PREFIX.'products_language AS pl ON pl.id_product = c.id_product
                         INNER JOIN '.DDBB_PREFIX.'ct_languages AS a ON a.id_language = pl.id_language
-                    WHERE c.id_cart = ? AND a.name = ? ORDER BY c.id';
+                    WHERE c.id_cart = ? AND a.name = ? ORDER BY c.id_cart_product';
             $result = $this->query($sql, array($id_cart, strtolower(LANG)));
             if($result->num_rows > 0) {
                 $cart = array(
@@ -360,7 +366,7 @@
                     WHERE id_cart = ?';
             $result_codes = $this->query($sql, array($id_cart));
             $codes = array();
-            if($result_codes->num_rows != 0) {
+            if($result_codes->num_rows > 0) {
                 while($row_code = $result_codes->fetch_assoc()) {
                     $result_code = $this->check_code($row_code['code'], $id_cart);
                     // If the code returns an error or it is not compatible with other codes I delete it
@@ -372,11 +378,11 @@
                         $sql = 'SELECT * FROM '.DDBB_PREFIX.'codes_rules WHERE id_code = ?';
                         $result_rules = $this->query($sql, array($row_code['id_code']));
                         $rules = array();
-                        if($result_rules->num_rows != 0) {
+                        if($result_rules->num_rows > 0) {
                             while($row_rule = $result_rules->fetch_assoc()) {
                                 // I collect the ids of the rule elements
                                 $sql = 'SELECT * FROM '.DDBB_PREFIX.'codes_rules_elements WHERE id_code_rule = ?';
-                                $result_elements = $this->query($sql, array($row_rule['id_code_rule']));
+                                $result_elements = $this->query($sql, $row_rule['id_code_rule']);
                                 $elements = array();
                                 while($row_element = $result_elements->fetch_assoc()) {
                                     array_push($elements, $row_element['id_element']);
@@ -505,6 +511,18 @@
                 'title' => LANGTXT['apply-code-ok-title'],
                 'description' => LANGTXT['apply-code-ok-description']
             );
+        }
+
+        public function save_order_from_cart($id_cart) {
+            $sql = 'SELECT * FROM '.DDBB_PREFIX.'carts WHERE id_cart = ? LIMIT 1';
+            $result = $this->query($sql, array($id_cart));
+            if($result->num_rows > 0) {
+                // I create a random value for the order code
+                $order_code = uniqid().'-'.rand(1000, 9999);
+                $sql = 'INSERT INTO '.DDBB_PREFIX.'orders (order_code, id_cart, id_user)
+                        VALUES ()';
+                //$this->query($sql, array($id_cart));
+            }
         }
 
     }

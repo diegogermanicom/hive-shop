@@ -2,6 +2,7 @@
 <html lang="<?= LANG; ?>">
     <head>
         <?php include VIEWS_PUBLIC.'/partials/head.php'; ?>
+        <script src="https://js.stripe.com/v3/"></script>
     </head>
     <body id="<?= $data['app']['name_page']; ?>" class="<?= $_COOKIE['color-mode']; ?>">
         <?php include VIEWS_PUBLIC.'/partials/header-body.php'; ?>

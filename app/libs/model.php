@@ -36,8 +36,7 @@
             }
             if(MAINTENANCE == true && ROUTE != PUBLIC_ROUTE.'/service-down') {
                 if(METHOD == 'get') {
-                    header('Location: '.PUBLIC_ROUTE.'/service-down');
-                    exit;
+                    Utils::redirect('/service-down');
                 } else {
                     return json_encode(array(
                         'response' => 'error',
@@ -53,8 +52,10 @@
             if($params != null) {
                 $type = '';
                 $types = array(
-                    'integer' => 'i', 'double' => 'd',
-                    'string' => 's', 'boolean' => 'b'
+                    'integer' => 'i',
+                    'double' => 'd',
+                    'string' => 's',
+                    'boolean' => 'b'
                 );
                 if(!is_array($params)) {
                     $params = array($params);

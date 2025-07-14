@@ -10,7 +10,7 @@
             <div id="container-admin">
                 <section>
                     <div class="container">
-                        <div class="title-container underline text-left">Edit language</div>
+                        <div class="title-container underline text-left">Configuration</div>
                     </div>
                 </section>
                 <?php include VIEWS_ADMIN.'/partials/footer.php'; ?>

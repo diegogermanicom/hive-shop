@@ -346,9 +346,13 @@
 
         public function get_related($id_product) {
             // Drawing the list of related products
-            $sql = 'SELECT p.*, s.name AS state_name, CASE WHEN ISNULL(i.num_images) THEN 0 ELSE i.num_images END AS num_images FROM '.DDBB_PREFIX.'products_related AS p
+            $sql = 'SELECT p.*, s.name AS state_name, CASE WHEN ISNULL(i.num_images) THEN 0 ELSE i.num_images END AS num_images
+                    FROM '.DDBB_PREFIX.'products_related AS p
                         INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = p.id_state
-                        LEFT JOIN (SELECT COUNT(id_products_related_image) AS num_images, id_product_related FROM '.DDBB_PREFIX.'products_related_images GROUP BY id_product_related) AS i ON i.id_product_related = p.id_product_related
+                        LEFT JOIN (
+                            SELECT COUNT(id_products_related_image) AS num_images, id_product_related
+                            FROM '.DDBB_PREFIX.'products_related_imagesGROUP BY id_product_related
+                        ) AS i ON i.id_product_related = p.id_product_related
                     WHERE p.id_product = ? ORDER BY id_product_related';
             $result = $this->query($sql, array($id_product));
             $html = '';

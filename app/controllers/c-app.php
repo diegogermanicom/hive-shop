@@ -12,12 +12,7 @@
         // App services ------------------------------------------------
         
         public function root($args) {
-            if(LANG == 'en') {
-                header('Location: '.PUBLIC_ROUTE.'/home');
-            } else if(LANG == 'es') {
-                header('Location: '.PUBLIC_ROUTE.'/inicio');
-            }
-            exit;
+            Utils::redirect('/home');
         }
 
         // Store categories controller
@@ -183,12 +178,28 @@
             $this->view('/404', $data);
         }
 
+        public function my_account($args) {
+            $app = new App('my_account-page');
+            $app->security_app_login();
+            $data = $app->getAppData();
+            if(LANG == 'en') {
+                $data['meta']['title'] = $app->setTitle('My account');
+                $data['meta']['description'] = 'Review and modify your user data.';
+            } else if(LANG == 'es') {
+                $data['meta']['title'] = $app->setTitle('Mi cuenta');
+                $data['meta']['description'] = 'Revisa y modifica tu datos de usuario.';
+            }
+            $data['routes'] = ROUTES['my-account'];
+            $this->view('/my-account', $data);
+        }
+
         public function logout($args) {
             $app = new App();
             $app->security_app_login();
             $app->logout();
-            header('Location: '.PUBLIC_ROUTE.'/?logout');
-            exit;
+            Utils::redirect('/home', array(
+                'logout' => 'true'
+            ));
         }
 
         public function validate_email($args) {
@@ -247,6 +258,78 @@
                 'paymentMethodErrorText' => 'To continue with your order, you must select a payment method.'
             ));
             $this->view('/checkout', $data);
+        }
+
+        public function save_checkout_successful($args) {
+            // Intermediate step between Stripe's response and the payment information screen
+            if(!isset($_GET['transaction_id'])) {
+                header('Location: '.PUBLIC_ROUTE.'/checkout_failed');
+                exit();
+            }
+            $app = new App('save-checkout-successful-page');
+            if($app->check_transaction_id($_GET['transaction_id']) == true) {
+                $app->save_order_from_cart($_COOKIE['id_cart']);
+                header('Location: '.PUBLIC_ROUTE.'/checkout_successful');
+                exit();
+            } else {
+                header('Location: '.PUBLIC_ROUTE.'/checkout_failed');
+                exit();
+            }
+        }
+        public function checkout_successful($args) {
+            $app = new App('checkout-successful-page');
+            $data = $app->getAppData();
+            if(LANG == 'en') {
+                $data['meta']['title'] = $app->setTitle('Checkout successful');
+                $data['meta']['description'] = 'Your order has been placed successfully.';
+            } else if(LANG == 'es') {
+                $data['meta']['title'] = $app->setTitle('Pedido realizado correctamente');
+                $data['meta']['description'] = 'Tu pedido se ha realizado correctamente.';
+            }
+            $data['routes'] = ROUTES['checkout-successful'];
+            $this->view('/checkout-successful', $data);
+        }
+
+        public function checkout_failed($args) {
+            $app = new App('checkout-failed-page');
+            $data = $app->getAppData();
+            if(LANG == 'en') {
+                $data['meta']['title'] = $app->setTitle('Checkout failed');
+                $data['meta']['description'] = 'An error occurred while placing your order.';
+            } else if(LANG == 'es') {
+                $data['meta']['title'] = $app->setTitle('Pedido fallido');
+                $data['meta']['description'] = 'Se ha producido un error al realizar tu pedido.';
+            }
+            $data['routes'] = ROUTES['checkout-failed'];
+            $this->view('/checkout-failed', $data);
+        }
+
+        public function checkout_bank_transfer($args) {
+            $app = new App('checkout-bank-transfer-page');
+            $data = $app->getAppData();
+            if(LANG == 'en') {
+                $data['meta']['title'] = $app->setTitle('Checkout bank transfer');
+                $data['meta']['description'] = 'Order placed by bank transfer.';
+            } else if(LANG == 'es') {
+                $data['meta']['title'] = $app->setTitle('Pedido por transferencia bancaria');
+                $data['meta']['description'] = 'Pedido realizado mediante transferencia bancaria.';
+            }
+            $data['routes'] = ROUTES['checkout-bank-transfer'];
+            $this->view('/checkout-bank-transfer', $data);
+        }
+
+        public function checkout_cash_delivery($args) {
+            $app = new App('checkout-cash-delivery-page');
+            $data = $app->getAppData();
+            if(LANG == 'en') {
+                $data['meta']['title'] = $app->setTitle('Checkout cash delivery');
+                $data['meta']['description'] = 'Order placed by cash delivery.';
+            } else if(LANG == 'es') {
+                $data['meta']['title'] = $app->setTitle('Pedido por contrareembolso');
+                $data['meta']['description'] = 'Pedido realizado por contrareembolso.';
+            }
+            $data['routes'] = ROUTES['checkout-cash-delivery'];
+            $this->view('/checkout-cash-delivery', $data);
         }
 
     }

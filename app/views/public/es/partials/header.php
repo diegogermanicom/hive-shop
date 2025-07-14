@@ -49,7 +49,7 @@
             </li>
         </ul>
         <div class="content-buttons">
-            <a href="<?= PUBLIC_ROUTE; ?>/acceso"><i class="fa-solid fa-user"></i></a>
+            <a href="<?= PUBLIC_ROUTE; ?>/mi-cuenta"><i class="fa-solid fa-user"></i></a>
             <div id="btn-show-cart"><i class="fa-solid fa-cart-shopping"></i><?= $_COOKIE["cart_items"]; ?></div>
         </div>
     </header>

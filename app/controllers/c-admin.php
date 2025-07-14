@@ -872,6 +872,19 @@
             $this->viewAdmin('/locations', $data);
         }
 
+        public function configuration($args) {
+            $admin = new Admin('admin-configuration-page');
+            $admin->security_admin_login();
+            $data = $admin->getAdminData();
+            $data['admin']['tags'] = [
+                'settings',
+                'configuration'
+            ];
+            $data['meta']['title'] = $admin->setTitle('Configuration');
+            $data['configuration'] = $admin->get_configuration();
+            $this->viewAdmin('/configuration', $data);
+        }
+
         public function ftp_upload($args) {
             $admin = new Admin('ftp-upload-page');
             $admin->security_admin_login();

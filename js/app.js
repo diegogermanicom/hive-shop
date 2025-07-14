@@ -84,7 +84,7 @@ var APP = {
                     $('.btn-remove-cart-product').on('click', function() {
                         var btn = $(this);
                         var obj = {
-                            id: btn.closest('.item').attr('id-cart')
+                            id_cart_product: btn.closest('.item').attr('id-cart-product')
                         }
                         if(!btn.hasClass('disabled')) {
                             btn.addClass('disabled');
@@ -102,7 +102,7 @@ var APP = {
                     $('.input-cart-product-amount').on('change', function() {
                         var btn = $(this);
                         var obj = {
-                            id: btn.closest('.item').attr('id-cart'),
+                            id_cart_product: btn.closest('.item').attr('id-cart-product'),
                             amount: $(this).val().trim()
                         }
                         btn.closest('.item *').removeClass('error');
@@ -770,8 +770,8 @@ var APP = {
                     $('#billing-content').addClass('hidden');
                 } else {
                     $('#billing-content').removeClass('hidden');
-                    APP.getBillingAddresses();
                 }
+                APP.getBillingAddresses();
             });
             $('#input-checkout-code').on('click', function() {
                 if($('#input-checkout-code:checked').is(':checked')) {
@@ -802,8 +802,8 @@ var APP = {
             $('#btn-checkout-payment').on('click', function() {
                 var btn = $(this);
                 var obj = {
-                    id_user_address: null,
-                    id_user_billing_address: null,
+                    id_user_address: 0,
+                    id_user_billing_address: 0,
                     comments: $('#textarea-comment').val().trim(),
                     id_shipping_method: $('.input-shipping-methods:checked').val(),
                     id_payment_method: $('.input-payment-methods:checked').val()
@@ -848,7 +848,18 @@ var APP = {
                         success: function(data) {
                             if(data.save_order_to_cart.response == 'ok') {
                                 btn.addClass('btn-ok');
+                                if(obj.id_payment_method == 1) {
+                                    var stripe = Stripe(data.save_order_to_cart.token);
+                                    stripe.redirectToCheckout({
+                                        sessionId: data.save_order_to_cart.session_id
+                                    });        
+                                } else if(obj.id_payment_method == 2) {
+                                    window.location.href = data.save_order_to_cart.url;
+                                } else if(obj.id_payment_method == 3) {
+                                    window.location.href = data.save_order_to_cart.url;
+                                }
                             } else {
+                                UTILS.showInfo('Uups', data.save_order_to_cart.message);
                                 btn.removeClass('disabled');
                             }
                         }

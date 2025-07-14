@@ -1697,6 +1697,10 @@
             return $html;
         }
 
+        public function get_configuration() {
+            return 1;
+        }
+
     }
 
 ?>

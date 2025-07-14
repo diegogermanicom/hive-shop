@@ -81,6 +81,29 @@
             exit;
         }
 
+        public static function redirect($route, $vars = array()) {
+            if(MULTILANGUAGE == true) {
+                if($route == '/' || $route == '') {
+                    $url = PUBLIC_ROUTE;
+                } else {
+                    $route = ltrim($route, '/');
+                    $url = ROUTES[$route][LANG]['route'];
+                }
+            } else {
+                $url = PUBLIC_ROUTE.$route;
+            }
+            // If you have parameters to add by get
+            if(!empty($vars)) {
+                $url .= '?';
+                foreach($vars as $index => $value) {
+                    $url .= $index.'='.$value.'&';
+                }
+                $url = substr($url, 0, -1);
+            }
+            header('Location: '.$url);
+            exit;
+        }
+
         public static function debug($var) {
             echo '<pre>';
             var_dump($var);
