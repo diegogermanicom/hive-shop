@@ -112,7 +112,7 @@
         }
 
         public static function query($sql, $params = null) {
-            Utils::checkDefined('HAS_DDBB', 'LANGTXT');
+            Utils::checkDefined('HAS_DDBB');
             if(HAS_DDBB == true) {
                 // This function is created to avoid malicious sql injections
                 global $DB;
@@ -120,8 +120,10 @@
                 if($params != null) {
                     $type = '';
                     $types = array(
-                        'integer' => 'i', 'double' => 'd',
-                        'string' => 's', 'boolean' => 'b'
+                        'integer' => 'i',
+                        'double' => 'd',
+                        'string' => 's',
+                        'boolean' => 'b'
                     );
                     if(!is_array($params)) {
                         $params = array($params);
@@ -134,7 +136,7 @@
                         }
                     }    
                     if(!@$query->bind_param($type, ...$params)) {
-                        Utils::error(LANGTXT['error-query-description']);
+                        Utils::error('An error occurred while connecting to the database. Please check your connection credentials and domain.');
                     }
                 }
                 $query->execute();
@@ -318,8 +320,7 @@
         public static function checkServiceDownView() {
             Utils::checkDefined(array('MAINTENANCE', 'ROUTE', 'PUBLIC_ROUTE'));
             if(MAINTENANCE == false && ROUTE == PUBLIC_ROUTE.'/service-down') {
-                header('Location: '.PUBLIC_ROUTE);
-                exit;
+                Utils::redirect('/');
             }        
         }
 
@@ -342,6 +343,16 @@
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]);            
+        }
+
+        public static function getSettings() {
+            $sql = 'SELECT
+                        (SELECT value FROM settings WHERE name = "LOCATION_CONTINENT" LIMIT 1) AS location_continent,
+                        (SELECT value FROM settings WHERE name = "LOCATION_COUNTRY" LIMIT 1) AS location_country,
+                        (SELECT value FROM settings WHERE name = "LOCATION_PROVINCE" LIMIT 1) AS location_province';
+            $result = UTILS::query($sql);
+            $row = $result->fetch_assoc();
+            return $row;
         }
 
     }

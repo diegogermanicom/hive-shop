@@ -28,7 +28,7 @@
                 $xmlLang .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
                 foreach(ROUTES as $alias) {
                     foreach($alias as $route) {
-                        if($route['language'] == $lang) {
+                        if($route['language'] == $lang && $route['index'] == true) {
                             $xmlLang .= '<url>';
                             $xmlLang .=     '<loc>'.URL.$route['route'].'</loc>';
                             $xmlLang .=     '<lastmod>'.date('Y-m-d').'</lastmod>';

@@ -17,6 +17,7 @@
             $this->check_maintenance();
             $this->set_cart();
             $this->set_cart_items();
+            $this->set_location();
             $this->login_remember();
         }
 
@@ -51,7 +52,7 @@
             return $data;
         }
 
-        public function set_cart() {
+        private function set_cart() {
             // If you don't have the id_cart cookie, I create one
 			if(!(isset($_COOKIE["id_cart"]))) {
                 // I create a random value for the cart id
@@ -68,20 +69,27 @@
 			}
         }
 
-        public function set_cart_items() {
-			if(!(isset($_COOKIE["cart_items"]))) {
-                Utils::initCookie('cart_items', 0, Utils::ONEYEAR);
-			}
+        private function set_cart_items() {
             // I check how many products you have in your cart
             $sql = 'SELECT SUM(amount) AS num_items FROM '.DDBB_PREFIX.'carts_products WHERE id_cart = ?';
             $result = $this->query($sql, array($_COOKIE["id_cart"]));
             if($result->num_rows != 0) {
                 $row = $result->fetch_assoc();
-                $_COOKIE["cart_items"] = $row['num_items'];
+                $_SESSION["cart_items"] = $row['num_items'];
             }
         }
 
-        public function login_remember() {
+        private function set_location() {
+            if(!isset($_COOKIE['location'])) {
+                $_COOKIE['location'] = array(
+                    'id_continent' => LOCATION_CONTINENT,
+                    'id_country' => LOCATION_COUNTRY,
+                    'id_province' => LOCATION_PROVINCE
+                );
+            }
+        }
+
+        private function login_remember() {
 			if(isset($_COOKIE["user_remember"])) {
                 if(!isset($_SESSION['user'])) {
                     $sql = 'SELECT email, pass FROM '.DDBB_PREFIX.'users WHERE remember_code = ? AND id_state = 2 LIMIT 1';

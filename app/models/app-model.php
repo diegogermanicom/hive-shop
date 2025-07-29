@@ -77,12 +77,23 @@
                         $row['id_user'],
                         $_COOKIE['id_cart']
                     ));
+                    // I collect the user's location
+                    $sql = 'SELECT * FROM '.DDBB_PREFIX.'users_addresses WHERE id_user = ? AND main_address = 1';
+                    $result = $this->query($sql, $row['id_user']);
+                    if($result->num_rows > 0) {
+                        $row_location = $result->fetch_assoc();
+                        $_COOKIE['location'] = array(
+                            'id_continent' => $row_location['id_continent'],
+                            'id_country' => $row_location['id_country'],
+                            'id_province' => $row_location['id_province']
+                        );        
+                    }
                     // If you come from the place order page
                     if(isset($_POST['checkout']) && $_POST['checkout'] == 1) {
-                        if(LANG == 'en') {
-                            $url = PUBLIC_ROUTE.'/checkout?login';
-                        } else if(LANG == 'es') {
-                            $url = PUBLIC_ROUTE.'/tramitar-pedido?login';
+                        if(MULTILANGUAGE == true) {
+                            $url = ROUTES['checkout'][LANG]['route'];
+                        } else {
+                            $url = ROUTES['checkout']['root']['route'];
                         }
                     } else {
                         $url = PUBLIC_ROUTE.'/?login';

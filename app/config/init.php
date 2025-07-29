@@ -7,27 +7,41 @@
      * @lastUpdated 2025
      */
 
-    require_once __DIR__.'/../libs/utils.php';
+    require_once __DIR__.'/autoload-libs.php';
+    require_once __DIR__.'/autoload-models.php';
+    $controllers = require_once __DIR__.'/autoload-controllers.php';
+    define('CONTROLLERS', $controllers);
 
-    $settings = require_once __DIR__.'/settings.php';
-    // If all setting values are correct continue
-    Utils::settingsValidator($settings);
- 
     // Constant system variables
     define('HOST', strtolower($_SERVER['HTTP_HOST']));
     define('METHOD', strtolower($_SERVER['REQUEST_METHOD']));
     define('ROUTE', strtolower(strtok($_SERVER["REQUEST_URI"], '?')));
 
+    $settings = require_once __DIR__.'/settings.php';
+    // If all setting values are correct continue
+    Utils::settingsValidator($settings);
+ 
     define('HOST_DEV', $settings['HOST_DEV']);
     define('HOST_PRO', $settings['HOST_PRO']);
     define('ENVIRONMENT', Utils::getEnviroment());
 
-    define('PROTOCOL', $settings[ENVIRONMENT]['PROTOCOL']);
-    define('PUBLIC_PATH', $settings[ENVIRONMENT]['PUBLIC_PATH']);
+    define('HAS_DDBB', $settings['HAS_DDBB']);
+    define('DDBB_PREFIX', $settings['DDBB_PREFIX']);
     define('DDBB_HOST', $settings[ENVIRONMENT]['DDBB_HOST']);
     define('DDBB_USER', $settings[ENVIRONMENT]['DDBB_USER']);
     define('DDBB_PASS', $settings[ENVIRONMENT]['DDBB_PASS']);
     define('DDBB', $settings[ENVIRONMENT]['DDBB']);
+
+    // I create the object to connect to the database at this point, in case you want to load configuration data from the administrator.
+    $DB = new Ddbb();
+
+    $loadSettings = Utils::getSettings();
+    define('LOCATION_CONTINENT', $loadSettings['location_continent']);
+    define('LOCATION_COUNTRY', $loadSettings['location_country']);
+    define('LOCATION_PROVINCE', $loadSettings['location_province']);
+
+    define('PROTOCOL', $settings[ENVIRONMENT]['PROTOCOL']);
+    define('PUBLIC_PATH', $settings[ENVIRONMENT]['PUBLIC_PATH']);
 
     define('APP_NAME', $settings['APP_NAME']);
     define('ADMIN_NAME', $settings['ADMIN_NAME']);
@@ -35,9 +49,6 @@
     define('LANGUAGE', $settings['LANGUAGE']);
     define('MULTILANGUAGE', $settings['MULTILANGUAGE']);
     define('LANGUAGES', $settings['LANGUAGES']);
-
-    define('HAS_DDBB', $settings['HAS_DDBB']);
-    define('DDBB_PREFIX', $settings['DDBB_PREFIX']);
 
     define('MAINTENANCE', $settings['MAINTENANCE']);
     define('MAINTENANCE_IPS', $settings['MAINTENANCE_IPS']);
@@ -65,10 +76,6 @@
 
     define('URL', PROTOCOL.'://'.HOST);
     define('SERVER_PATH', $_SERVER['DOCUMENT_ROOT'].PUBLIC_PATH);
-    define('LIBS_PATH', SERVER_PATH.'/app/libs');
-    define('CONTROLLERS_PATH', SERVER_PATH.'/app/controllers');
-    define('MODELS_PATH', SERVER_PATH.'/app/models');
-    define('ROUTES_PATH', SERVER_PATH.'/app/routes');
     define('LANG_PATH', SERVER_PATH.'/app/langs');
     define('IMG_PATH', SERVER_PATH.'/img');
     define('EMAILS_PATH', SERVER_PATH.'/app/emails');
@@ -97,15 +104,8 @@
     Utils::checkServiceDownView();
     Utils::setThemeColor();
 
-    require_once __DIR__.'/autoload-libs.php';
-    require_once __DIR__.'/autoload-models.php';
-    $controllers = require_once __DIR__.'/autoload-controllers.php';
-    define('CONTROLLERS', $controllers);
-
-    // I create the core objects
-    $DB = new Ddbb();
+    // I start the route recognition process
     $R = new Route();
-
     require_once __DIR__.'/autoload-routes.php';
     define('ROUTES', $R->getRoutes());
     $R->init();

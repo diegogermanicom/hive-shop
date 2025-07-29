@@ -25,7 +25,7 @@
     #RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
     #RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
     
-    RewriteRule ^app(/.*)?$ 404 [L]
+    RewriteRule ^app(/.*)?$ page-404 [L]
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [NC,L,QSA]

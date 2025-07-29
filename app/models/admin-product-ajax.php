@@ -351,9 +351,9 @@
                         INNER JOIN '.DDBB_PREFIX.'ct_states AS s ON s.id_state = p.id_state
                         LEFT JOIN (
                             SELECT COUNT(id_products_related_image) AS num_images, id_product_related
-                            FROM '.DDBB_PREFIX.'products_related_imagesGROUP BY id_product_related
+                            FROM '.DDBB_PREFIX.'products_related_images GROUP BY id_product_related
                         ) AS i ON i.id_product_related = p.id_product_related
-                    WHERE p.id_product = ? ORDER BY id_product_related';
+                    WHERE p.id_product = ? ORDER BY p.id_product_related';
             $result = $this->query($sql, array($id_product));
             $html = '';
             if($result->num_rows != 0) {

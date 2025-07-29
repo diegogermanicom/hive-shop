@@ -959,11 +959,7 @@
             // Payment by back transfer
             if($_POST['id_payment_method'] == 2) {
                 $this->save_order_from_cart($_COOKIE['id_cart']);
-                foreach(ROUTES['checkout-bank-transfer'] as $route) {
-                    if($route['language'] == LANG) {
-                        $url = $route['route'].'?transaction_id='.$transactionId;
-                    }
-                }
+                $url = ROUTES['checkout-bank-transfer'][LANG]['route'].'?transaction_id='.$transactionId;
                 return array(
                     'response' => 'ok',
                     'url' => $url
@@ -972,11 +968,7 @@
             // Payment by cash on delivery
             if($_POST['id_payment_method'] == 3) {
                 $this->save_order_from_cart($_COOKIE['id_cart']);
-                foreach(ROUTES['checkout-cash-delivery'] as $route) {
-                    if($route['language'] == LANG) {
-                        $url = $route['route'].'?transaction_id='.$transactionId;
-                    }
-                }
+                $url = ROUTES['checkout-cash-delivery'][LANG]['route'].'?transaction_id='.$transactionId;
                 return array(
                     'response' => 'ok',
                     'url' => $url

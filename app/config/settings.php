@@ -16,7 +16,7 @@
         'HOST_DEV' => 'dev-germanicom.codeanyapp.com',
         'HOST_PRO' => 'nombredemitienda.com',
         // App default language (ISO language codes)
-        'LANGUAGE' => 'en',
+        'LANGUAGE' => 'es',
         // Set if the web is multilanguage.
         'MULTILANGUAGE' => true,
         // Languages supported by the application if it is multilingual (ISO language codes)

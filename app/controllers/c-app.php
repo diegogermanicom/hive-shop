@@ -21,7 +21,7 @@
             $data = $app->getAppData();
             $data['category'] = $app->get_category($id_category);
             if($data['category'] == null) {
-                header('Location: '.PUBLIC_ROUTE.'/404');
+                header('Location: '.PUBLIC_ROUTE.'/page-404');
                 exit;
             }
             $data['meta']['title'] = $app->setTitle($data['category']['meta_title']);
@@ -41,20 +41,20 @@
             $data = $app->getAppData();
             $data['product'] = $app->get_product($id_product, $id_category);
             if($data['product'] == null) {
-                header('Location: '.PUBLIC_ROUTE.'/404');
+                header('Location: '.PUBLIC_ROUTE.'/page-404');
                 exit;
             }
             // This variable indicates the related product that we want to see
             if(!isset($_GET['r'])) {
                 $_GET['r'] = $app->get_product_related_id($data['product']['valid_ids']['valid_products_related_id']);
                 if($_GET['r'] == null) {
-                    header('Location: '.PUBLIC_ROUTE.'/404');
+                    header('Location: '.PUBLIC_ROUTE.'/page-404');
                     exit;
                 }
             } else {
                 // I check that the related product Id is correct
                 if(!in_array($_GET['r'], $data['product']['valid_ids']['valid_products_related_id'])) {
-                    header('Location: '.PUBLIC_ROUTE.'/404');
+                    header('Location: '.PUBLIC_ROUTE.'/page-404');
                     exit;
                 }
             }
@@ -175,7 +175,7 @@
             if($args['_index'] == false) {
                 $data['head']['robots'] = 'noindex, noimageindex, follow';
             }
-            $this->view('/404', $data);
+            $this->view('/page-404', $data);
         }
 
         public function my_account($args) {
@@ -204,8 +204,7 @@
 
         public function validate_email($args) {
             if(!isset($_GET['code'])) {
-                header('Location: '.PUBLIC_ROUTE.'/');
-                exit;
+                Utils::redirect('/');
             }
             $app = new App();
             $data = $app->getAppData();
@@ -244,8 +243,7 @@
             $app->refresh_cart_stock($_COOKIE['id_cart']);
             $data['cart'] = $app->get_checkout_cart($_COOKIE['id_cart']);
             if($data['cart'] == null) {
-                header('Location: '.PUBLIC_ROUTE.'/');
-                exit;
+                Utils::redirect('/');
             }
             $data['javascript'] = json_encode(array(
                 'shippingAddressErrorTitle' => 'Missing Data',
@@ -263,17 +261,14 @@
         public function save_checkout_successful($args) {
             // Intermediate step between Stripe's response and the payment information screen
             if(!isset($_GET['transaction_id'])) {
-                header('Location: '.PUBLIC_ROUTE.'/checkout_failed');
-                exit();
+                Utils::redirect('/checkout-failed');
             }
             $app = new App('save-checkout-successful-page');
             if($app->check_transaction_id($_GET['transaction_id']) == true) {
                 $app->save_order_from_cart($_COOKIE['id_cart']);
-                header('Location: '.PUBLIC_ROUTE.'/checkout_successful');
-                exit();
+                Utils::redirect('/checkout-successful');
             } else {
-                header('Location: '.PUBLIC_ROUTE.'/checkout_failed');
-                exit();
+                Utils::redirect('/checkout-failed');
             }
         }
         public function checkout_successful($args) {

@@ -9,49 +9,51 @@
 
     // App Get
     $R->setController('CApp');
+
     // Routes in English
-    $R->get(
-        [''                                 , 'root'                    , 'en', 'empty-root'],
-        ['/'                                , 'root'                    , 'en', 'bar-root'],
-        ['/404'                             , 'page_404'                , 'en', 'page-404'],
-        ['/home'                            , 'home'                    , 'en', 'home'],
-        ['/privacy-policy'                  , 'privacy_policy'          , 'en', 'privacy-policy'],
-        ['/cookie-policy'                   , 'privacy_policy'          , 'en', 'cookie-policy'],
-        ['/access'                          , 'access'                  , 'en', 'access'],
-        ['/register'                        , 'register'                , 'en', 'register'],
-        ['/cart'                            , 'cart'                    , 'en', 'cart'],
-        ['/checkout'                        , 'checkout'                , 'en', 'checkout'],
-        ['/save-checkout-successful'        , 'save_checkout_successful', 'en', 'save-checkout-successful'],
-        ['/checkout-successful'             , 'checkout_successful'     , 'en', 'checkout-successful'],
-        ['/checkout-failed'                 , 'checkout_failed'         , 'en', 'checkout-failed'],
-        ['/checkout-bank-transfer'          , 'checkout_bank_transfer'  , 'en', 'checkout-bank-transfer'],
-        ['/checkout-cash-delivery'          , 'checkout_cash_delivery'  , 'en', 'checkout-cash-delivery'],
-        ['/service-down'                    , 'service_down'            , 'en', 'service-down'],
-        ['/validate-email'                  , 'validate_email'          , 'en', 'validate-email'],
-        ['/my-account'                      , 'my_account'              , 'en', 'my-account'],
-        ['/logout'                          , 'logout'                  , 'en', 'logout']
-    );
+    $R->setLanguage('en');
+
+    $R->get('')                                 ->call('root')                      ->add('empty-root');
+    $R->get('/')                                ->call('root')                      ->add('bar-root');
+    $R->get('/page-404')                        ->call('page_404')                  ->add('page-404', false);
+    $R->get('/home')                            ->call('home')                      ->add('home');
+    $R->get('/privacy-policy')                  ->call('privacy_policy')            ->add('privacy-policy');
+    $R->get('/cookie-policy')                   ->call('cookie_policy')             ->add('cookie-policy');
+    $R->get('/access')                          ->call('access')                    ->add('access');
+    $R->get('/register')                        ->call('register')                  ->add('register');
+    $R->get('/cart')                            ->call('cart')                      ->add('cart');
+    $R->get('/checkout')                        ->call('checkout')                  ->add('checkout');
+    $R->get('/save-checkout-successful')        ->call('save_checkout_successful')  ->add('save-checkout-successful', false);
+    $R->get('/checkout-successful')             ->call('checkout_successful')       ->add('checkout-successful', false);
+    $R->get('/checkout-failed')                 ->call('checkout_failed')           ->add('checkout-failed', false);
+    $R->get('/checkout-bank-transfer')          ->call('checkout_bank_transfer')    ->add('checkout-bank-transfer', false);
+    $R->get('/checkout-cash-delivery')          ->call('checkout_cash_delivery')    ->add('checkout-cash-delivery', false);
+    $R->get('/service-down')                    ->call('service_down')              ->add('service-down', false);
+    $R->get('/validate-email')                  ->call('validate_email')            ->add('validate-email');
+    $R->get('/my-account')                      ->call('my_account')                ->add('my-account');
+    $R->get('/logout')                          ->call('logout')                    ->add('logout', false);
+
     // Routes in Spanish
-    $R->get(
-        [''                                 , 'root'                    , 'es', 'empty-root'],
-        ['/'                                , 'root'                    , 'es', 'bar-root'],
-        ['/404'                             , 'page_404'                , 'es', 'page-404'],
-        ['/inicio'                          , 'home'                    , 'es', 'home'],
-        ['/politica-de-privacidad'          , 'privacy_policy'          , 'es', 'privacy-policy'],
-        ['/politica-de-cookies'             , 'privacy_policy'          , 'es', 'cookie-policy'],
-        ['/acceso'                          , 'access'                  , 'es', 'access'],
-        ['/registro'                        , 'register'                , 'es', 'register'],
-        ['/carrito'                         , 'cart'                    , 'es', 'cart'],
-        ['/tramitar-pedido'                 , 'checkout'                , 'es', 'checkout'],
-        ['/guardar-tramitacion-correcta'    , 'save_checkout_successful', 'es', 'save-checkout-successful'],
-        ['/tramitacion-correcta'            , 'checkout_successful'     , 'es', 'checkout-successful'],
-        ['/tramitacion-fallida'             , 'checkout_failed'         , 'es', 'checkout-failed'],
-        ['/tramitacion-transferencia'       , 'checkout_bank_transfer'  , 'es', 'checkout-bank-transfer'],
-        ['/tramitacion-contrareembolso'     , 'checkout_cash_delivery'  , 'es', 'checkout-cash-delivery'],
-        ['/servicio-caido'                  , 'service_down'            , 'es', 'service-down'],
-        ['/validar-email'                   , 'validate_email'          , 'es', 'validate-email'],
-        ['/mi-cuenta'                       , 'my_account'              , 'es', 'my-account'],
-        ['/desconectar'                     , 'logout'                  , 'es', 'logout']
-    );
+    $R->setLanguage('es');
+
+    $R->get('')                                 ->call('root')                      ->add('empty-root');
+    $R->get('/')                                ->call('root')                      ->add('bar-root');
+    $R->get('/pagina-404')                      ->call('page_404')                  ->add('page-404', false);
+    $R->get('/inicio')                          ->call('home')                      ->add('home');
+    $R->get('/politica-de-privacidad')          ->call('privacy_policy')            ->add('privacy-policy');
+    $R->get('/politica-de-cookies')             ->call('cookie_policy')             ->add('cookie-policy');
+    $R->get('/acceso')                          ->call('access')                    ->add('access');
+    $R->get('/registro')                        ->call('register')                  ->add('register');
+    $R->get('/carrito')                         ->call('cart')                      ->add('cart');
+    $R->get('/tramitar-pedido')                 ->call('checkout')                  ->add('checkout');
+    $R->get('/guardar-tramitacion-correcta')    ->call('save_checkout_successful')  ->add('save-checkout-successful', false);
+    $R->get('/tramitacion-correcta')            ->call('checkout_successful')       ->add('checkout-successful', false);
+    $R->get('/tramitacion-fallida')             ->call('checkout_failed')           ->add('checkout-failed', false);
+    $R->get('/tramitacion-transferencia')       ->call('checkout_bank_transfer')    ->add('checkout-bank-transfer', false);
+    $R->get('/tramitacion-contrareembolso')     ->call('checkout_cash_delivery')    ->add('checkout-cash-delivery', false);
+    $R->get('/servicio-caido')                  ->call('service_down')              ->add('service-down', false);
+    $R->get('/validar-email')                   ->call('validate_email')            ->add('validate-email');
+    $R->get('/mi-cuenta')                       ->call('my_account')                ->add('my-account');
+    $R->get('/desconectar')                     ->call('logout')                    ->add('logout', false);
 
 ?>

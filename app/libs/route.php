@@ -9,12 +9,22 @@
 
     class Route {
 
-        public $prefix = '';
-        public $root = null;
-        public $controller = null;
-        public $method = null;
+        private $route = null;
+        private $controller = null;
+        private $function = null;
+        private $language = null;
+        private $alias = null;
+        private $index = null;
+        // Method being processed
+        private $method = null;
+        // Default route variables
+        private $defaultPrefix = '';
+        private $defaultRoot = PUBLIC_PATH;
+        private $defaultController = null;
+        private $defaultLanguage = null;
+        private $defaultIndex = true;
         // I save all the routes that have been configured in this array
-        public $routes;
+        private $routes;
 
         function __construct() {
             $this->routes = array(
@@ -29,26 +39,67 @@
         }
 
         public function reset() {
-            $this->prefix = '';
-            $this->root = null;
-            $this->controller = null;
+            $this->resetRoute();
+            $this->resetDefault();
+        }
+
+        private function resetRoute() {
             $this->method = null;
+            $this->route = null;
+            $this->controller = null;
+            $this->function = null;
+            $this->language = null;
+            $this->alias = null;
+            $this->index = null;
+        }
+
+        private function resetDefault() {
+            // Default route variables
+            $this->defaultPrefix = '';
+            $this->defaultRoot = PUBLIC_PATH;
+            $this->defaultController = null;
+            $this->defaultLanguage = null;
+            $this->defaultIndex = true;
         }
 
         public function setPrefix($prefix) {
-            $this->prefix = $prefix;
+            $this->defaultPrefix = $prefix;
         }
         
         public function setRoot($root) {
-            $this->root = $root;
+            $this->defaultRoot = $root;
         }
 
         public function setController($controller) {
-            $this->controller = $controller;
+            $this->defaultController = $controller;
         }
 
-        public function setMethod($method) {
-            $this->method = $method;
+        public function setLanguage($lang) {
+            $this->defaultLanguage = $lang;
+        }
+
+        public function setIndex($index) {
+            $this->defaultIndex = $index;
+        }
+
+        public function resetPrefix() {
+            $this->defaultPrefix = '';
+        }
+
+        public function resetRoot() {
+            $this->defaultRoot = PUBLIC_PATH;
+        }
+
+        public function resetController() {
+            $this->defaultController = null;
+        }
+
+        public function resetLanguage() {
+            $this->defaultLanguage = null;
+        }
+
+        public function resetIndex() {
+            $this->defaultIndex = true;
         }
 
         public function getRoutes() {
@@ -77,140 +128,11 @@
             return $routes;
         }
 
-        private function add($routes) {
-            foreach($routes as $route) {
-                $objRoute = array(
-                    'route' => null,
-                    'controller' => null,
-                    'function' => null,
-                    'language' => LANG,
-                    'index' => true
-                );
-                if($this->method == 'get') {
-                    if(MULTILANGUAGE == true) {
-                        if(count($route) < 2 || count($route) > 5) {
-                            Utils::error('The values passed to the function to manage the route are invalid. ('.count($route).')');
-                        }
-                        if(isset($route[3])) {
-                            if(!Utils::validateISOLanguage($route[2])) {
-                                Utils::error('The language value of the route must be an ISO language code.');
-                            }
-                            if(!is_string($route[3]) || $route[3] == '' || strlen($route[3] > 50)) {
-                                Utils::error('The alias value of the route must be a string of maximum 50 characters in <b>'.$route[3].'</b>.');
-                            }
-                            if($route[3] == 'root') {
-                                Utils::error('The alias <b>root</b> cannot be used because it is reserved for the system.');
-                            }
-                        }
-                        // If there is an indexing configuration in the sitemap, I save it.
-                        if(count($route) == 3) {
-                            $objRoute['index'] = $route[2];
-                        }
-                        if(isset($route[4])) {
-                            $objRoute['index'] = $route[4];
-                        }
-                    } else {
-                        if(count($route) < 2 || count($route) > 3) {
-                            Utils::error('The values passed to the function to manage the route are invalid. ('.count($route).')');
-                        }
-                        // If there is an indexing configuration in the sitemap, I save it.
-                        if(isset($route[2])) {
-                            $objRoute['index'] = $route[2];
-                        }
-                    }    
-                    if(count($route) == 3 && !is_bool($route[2]) || count($route) == 5 && !is_bool($route[4])) {
-                        Utils::error('The value to define the indexing of a route must be boolean.');
-                    }
-                } else {
-                    if(count($route) != 2) {
-                        Utils::error('The values passed to the function to manage the route are invalid. ('.count($route).')');
-                    }
-                }
-                if(!is_string($route[0])) {
-                    Utils::error('The route value must be a string '.$route[0].'.');
-                }
-                if(!is_callable($route[1])) {
-                    if($route[1] == '' || !is_string($route[1])) {
-                        Utils::error('The controller value must be a string '.$route[1].'.');
-                    }
-                    // I check if a default controller has been selected
-                    $parts = explode("@", $route[1]);
-                    if(count($parts) > 2) {
-                        Utils::error('An error occurred while processing the route handler '.$route[0].'.');
-                    }    
-                    if($this->controller == null) {
-                        if(count($parts) != 2) {
-                            Utils::error('An error occurred while processing the route handler '.$route[0].'.');
-                        }
-                        list($objRoute['controller'], $objRoute['function']) = $parts;
-                    } else {
-                        if(count($parts) == 2) {
-                            list($objRoute['controller'], $objRoute['function']) = $parts;
-                        } else {
-                            $objRoute['controller'] = $this->controller;
-                            $objRoute['function'] = $route[1];
-                        }
-                    }
-                    if($objRoute['controller'] == '' || is_numeric($objRoute['controller'][0])) {
-                        Utils::error('An error occurred while processing the route handler '.$route[0].'.');
-                    }
-                    if($objRoute['function'] == '' || is_numeric($objRoute['function'][0])) {
-                        Utils::error('An error occurred while processing the route function '.$route[0].'.');
-                    }
-                } else {
-                    $objRoute['function'] = $route[1];
-                }
-                // If you specify a language
-                if(MULTILANGUAGE == true && isset($route[3])) {
-                    //If you specify a specific route
-                    if($this->root == null) {
-                        $objRoute['route'] = PUBLIC_PATH.'/'.$route[2].$this->prefix.$route[0];
-                    } else {
-                        $objRoute['route'] = $this->root.'/'.$route[2].$this->prefix.$route[0];
-                    }
-                    $objRoute['language'] = strtolower($route[2]);
-                    // If the alias does not exist
-                    if(!isset($this->routes[$this->method][$route[3]])) {
-                        $this->routes[$this->method][$route[3]] = array();
-                    }
-                    // I check that the route is not repeated
-                    $this->checkRepeat($objRoute['route']);
-                    $this->routes[$this->method][$route[3]][$route[2]] = $objRoute;
-                } else {
-                    //If you specify a specific route
-                    if($this->root == null) {
-                        $objRoute['route'] = PUBLIC_PATH.$this->prefix.$route[0];
-                    } else {
-                        $objRoute['route'] = $this->root.$this->prefix.$route[0];
-                    }
-                    // If the alias does not exist
-                    if(!isset($this->routes[$this->method]['root'])) {
-                        $this->routes[$this->method]['root'] = array();
-                    }
-                    // I check that the route is not repeated
-                    $this->checkRepeat($objRoute['route']);
-                    array_push($this->routes[$this->method]['root'], $objRoute);
-                }
-            }
-        }
-
-        private function checkRepeat($checkRoute) {
-            foreach($this->routes as $methods) {
-                foreach($methods as $alias) {
-                    foreach($alias as $route) {
-                        if($route['route'] == $checkRoute) {
-                            Utils::error('The <b>'.$checkRoute.'</b> route is repeated.');
-                        }
-                    }
-                }
-            }
-        }
-
         public function init() {
             foreach($this->routes as $method => $methods) {
                 foreach($methods as $alias) {
                     foreach($alias as $route) {
-                        $this->call($method, $route);
+                        $this->processRoute($method, $route);
                     }
                 }
             }
@@ -221,27 +143,27 @@
             $this->empty();
         }
 
-        private function scan_route($route): array {
+        private function scanRoute($route): array {
             // Is dynamic
             if(strpos($route, '$') !== false) {
                 $args = [];
                 // I remove the text from PUBLIC_ROUTE to the path
-                $bars1 = explode("/", ROUTE);
-                $bars2 = explode("/", $route);
+                $varsRoute = explode("/", ROUTE);
+                $varsCode = explode("/", $route);
                 // I check that the routes to compare are equal in length
-                if(count($bars1) == count($bars2) && !in_array(ROUTE, array('', '/'))) {
-                    $parse_route = '';
-                    for($i = 1; $i < count($bars1); $i++) {
-                        if(strpos($bars2[$i], '$') !== false) {
-                            $parse_route .= '/'.$bars1[$i];
-                            $args[str_replace('$', '', $bars2[$i])] = $bars1[$i];
-                        } else if($bars1[$i] == $bars2[$i]) {
-                            $parse_route .= '/'.$bars1[$i];
+                if(count($varsRoute) == count($varsCode) && !in_array(ROUTE, array('', '/'))) {
+                    $parseRoute = '';
+                    for($i = 1; $i < count($varsRoute); $i++) {
+                        if(strpos($varsCode[$i], '$') !== false) {
+                            $parseRoute .= '/'.$varsRoute[$i];
+                            $args[str_replace('$', '', $varsCode[$i])] = $varsRoute[$i];
+                        } else if($varsRoute[$i] == $varsCode[$i]) {
+                            $parseRoute .= '/'.$varsRoute[$i];
                         } else {
                             return array($route, null);
                         }
                     }
-                    return array($parse_route, $args);
+                    return array($parseRoute, $args);
                 } else {
                     return array($route, null);
                 }
@@ -249,18 +171,21 @@
                 return array($route, null);
             }
         }
-        private function call($type, $route) {
-            list($scan_route, $args) = $this->scan_route($route['route']);
+        private function processRoute($type, $route) {
+            list($scan_route, $args) = $this->scanRoute($route['route']);
             // The route is valid
             if(METHOD == $type && ROUTE == $scan_route) {
                 // I save the call details
+                $args['_method'] = $route['method'];
                 $args['_route'] = $route['route'];
                 $args['_controller'] = $route['controller'];
                 $args['_function'] = $route['function'];
+                $args['_language'] = $route['language'];
+                $args['_alias'] = $route['alias'];
                 $args['_index'] = $route['index'];
                 // If you pass it a function instead of a controller and a function
                 if(is_callable($route['function'])) {
-                    call_user_func($route['function']);
+                    call_user_func($route['function'], $args);
                 } else {
                     // If the object exists
                     $class_exist = class_exists($route['controller']);
@@ -282,44 +207,158 @@
             } 
         }
 
-        public function get(...$routes) {
-            $this->method = __FUNCTION__;
-            $this->add($routes);
+        private function checkRepeatRoute($checkRoute) {
+            foreach($this->routes as $methods) {
+                foreach($methods as $alias) {
+                    foreach($alias as $route) {
+                        if($route['route'] == $checkRoute) {
+                            Utils::error('The <b>'.$checkRoute.'</b> route is repeated.');
+                        }
+                    }
+                }
+            }
         }
 
-        public function post(...$routes) {
-            $this->method = __FUNCTION__;
-            $this->add($routes);
+        private function addRoute() {
+            $obj = array(
+                'method' => $this->method,
+                'route' => null,
+                'controller' => $this->controller,
+                'function' => $this->function,
+                'language' => $this->language,
+                'alias' => $this->alias,
+                'index' => $this->index
+            );
+            if(!is_string($this->route)) {
+                Utils::error('The route value must be a string.');
+            }
+            if(MULTILANGUAGE == true && $this->method == 'get') {
+                // If you specify a language
+                if($this->language === null) {
+                    $obj['route'] = $this->defaultRoot.$this->defaultPrefix.$this->route;
+                } else {
+                    $obj['route'] = $this->defaultRoot.'/'.$this->language.$this->defaultPrefix.$this->route;
+                }
+            } else {
+                $obj['route'] = $this->defaultRoot.$this->defaultPrefix.$this->route;
+            }
+            // I check that the route is not repeated
+            $this->checkRepeatRoute($obj['route']);
+            // If the alias does not exist
+            if(!isset($this->routes[$this->method][$this->alias])) {
+                $this->routes[$this->method][$this->alias] = array();
+            }
+            if($this->language === null) {
+                $this->routes[$this->method][$this->alias]['root'] = $obj;
+            } else {
+                $this->routes[$this->method][$this->alias][$this->language] = $obj;
+            }
+            $this->resetRoute();
         }
 
-        public function put(...$routes) {
-            $this->method = __FUNCTION__;
-            $this->add($routes);
+        private function checkRepeatAlias($method, $newAlias, $lang) {
+            foreach($this->routes as $methods) {
+                foreach($methods as $alias) {
+                    foreach($alias as $route) {
+                        if($route['method'] == $method && $route['alias'] == $newAlias && $route['language'] == $lang) {
+                            Utils::error('The <b>'.$newAlias.'</b> alias in the <b>'.$lang.'</b> language is repeated.');
+                        }
+                    }
+                }
+            }
         }
 
-        public function connect(...$routes) {
-            $this->method = __FUNCTION__;
-            $this->add($routes);
+        public function add($alias = '', $index = null) {
+            if($index === null) {
+                $this->index = $this->defaultIndex;
+            } else {
+                if(!is_bool($index)) {
+                    Utils::error('The index value must be a boolean.');
+                }
+                $this->index = $index;
+            }
+            // I collect the alias and language if indicated
+            $arrayAlias = explode(":", $alias);
+            if(count($arrayAlias) == 2) {
+                $this->language = strtolower($arrayAlias[0]);
+                $this->alias = $arrayAlias[1];
+            } else {
+                $this->language = null;
+                $this->alias = $arrayAlias[0];
+            }
+            if($this->defaultLanguage != null) {
+                $this->language = $this->defaultLanguage;
+            }
+            if($this->language != null && !Utils::validateISOLanguage($this->language)) {
+                Utils::error('The language value of the route must be an ISO language code.');
+            }
+            if(!is_string($this->alias)) {
+                Utils::error('The alias value must be a string.');
+            }
+            $this->checkRepeatAlias($this->method, $this->alias, $this->language);
+            $this->addRoute();
         }
 
-        public function trace(...$routes) {
-            $this->method = __FUNCTION__;
-            $this->add($routes);
+        public function call($controller) {
+            $arrayController = explode("@", $controller);
+            if(count($arrayController) == 2) {
+                $this->controller = $arrayController[0];
+                $this->function = $arrayController[1];
+            } else {                
+                if($this->defaultController == null) {
+                    Utils::error('You must select a driver for the route.');
+                }
+                $this->controller = $this->defaultController;
+                $this->function = $arrayController[0];
+            }
+            return $this;
         }
 
-        public function patch(...$routes) {
+        public function get($route) {
             $this->method = __FUNCTION__;
-            $this->add($routes);
+            $this->route = $route;
+            return $this;
         }
 
-        public function delete(...$routes) {
+        public function post($route) {
             $this->method = __FUNCTION__;
-            $this->add($routes);
+            $this->route = $route;
+            return $this;
+        }
+
+        public function put($route) {
+            $this->method = __FUNCTION__;
+            $this->route = $route;
+            return $this;
+        }
+
+        public function connect($route) {
+            $this->method = __FUNCTION__;
+            $this->route = $route;
+            return $this;
+        }
+
+        public function trace($route) {
+            $this->method = __FUNCTION__;
+            $this->route = $route;
+            return $this;
+        }
+
+        public function patch($route) {
+            $this->method = __FUNCTION__;
+            $this->route = $route;
+            return $this;
+        }
+
+        public function delete($route) {
+            $this->method = __FUNCTION__;
+            $this->route = $route;
+            return $this;
         }
 
         public function empty() {
             if(METHOD == 'get') {
-                Utils::redirect('/404');
+                Utils::redirect('/page-404');
             } else {
                 echo json_encode(array(
                     'status' => '404',

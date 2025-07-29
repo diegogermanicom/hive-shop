@@ -9,36 +9,35 @@
 
     // App Post
     $R->setController('CAppAjax');
-    $R->post(
-        ['/choose-language'                 , 'choose_language'],
-        ['/set-cookies'                     , 'set_cookies'],
-        ['/save-newsletter'                 , 'save_newsletter'],
-        ['/login-send'                      , 'login_send'],
-        ['/register-send'                   , 'register_send'],
-        ['/choose-color-mode'               , 'choose_color_mode'],
-        ['/get-product-related'             , 'get_product_related'],
-        ['/add-cart'                        , 'add_cart'],
-        ['/notify-stock'                    , 'notify_stock'],
-        ['/send-notify-stock'               , 'send_notify_stock'],
-        ['/get-popup-cart'                  , 'get_popup_cart'],
-        ['/remove-cart-product'             , 'remove_cart_product'],
-        ['/change-product-amount'           , 'change_product_amount'],
-        ['/get-addresses'                   , 'get_addresses'],
-        ['/save-new-address'                , 'save_new_address'],
-        ['/get-address'                     , 'get_address'],
-        ['/delete-address'                  , 'delete_address'],
-        ['/save-edit-address'               , 'save_edit_address'],
-        ['/get-billing-addresses'           , 'get_billing_addresses'],
-        ['/save-new-billing-address'        , 'save_new_billing_address'],
-        ['/get-billing-address'             , 'get_billing_address'],
-        ['/delete-billing-address'          , 'delete_billing_address'],
-        ['/save-edit-billing-address'       , 'save_edit_billing_address'],
-        ['/get-shipping-methods'            , 'get_shipping_methods'],
-        ['/get-payment-methods'             , 'get_payment_methods'],
-        ['/apply-code'                      , 'apply_code'],
-        ['/save-order-to-cart'              , 'save_order_to_cart'],
-        ['/get-countries-list'              , 'get_countries_list'],
-        ['/get-provinces-list'              , 'get_provinces_list']
-    );
+
+    $R->post('/choose-language')                ->call('choose_language')           ->add('choose-language');
+    $R->post('/set-cookies')                    ->call('set_cookies')               ->add('set-cookies');
+    $R->post('/save-newsletter')                ->call('save_newsletter')           ->add('save-newsletter');
+    $R->post('/login-send')                     ->call('login_send')                ->add('login-send');
+    $R->post('/register-send')                  ->call('register_send')             ->add('register-send');
+    $R->post('/choose-color-mode')              ->call('choose_color_mode')         ->add('choose-color-mode');
+    $R->post('/get-product-related')            ->call('get_product_related')       ->add('get-product-related');
+    $R->post('/add-cart')                       ->call('add_cart')                  ->add('add-cart');
+    $R->post('/notify-stock')                   ->call('notify_stock')              ->add('notify-stock');
+    $R->post('/send-notify-stock')              ->call('send_notify_stock')         ->add('send-notify-stock');
+    $R->post('/get-popup-cart')                 ->call('get_popup_cart')            ->add('get-popup-cart');
+    $R->post('/remove-cart-product')            ->call('remove_cart_product')       ->add('remove-cart-product');
+    $R->post('/change-product-amount')          ->call('change_product_amount')     ->add('change-product-amount');
+    $R->post('/get-addresses')                  ->call('get_addresses')             ->add('get-addresses');
+    $R->post('/save-new-address')               ->call('save_new_address')          ->add('save-new-address');
+    $R->post('/get-address')                    ->call('get_address')               ->add('get-address');
+    $R->post('/delete-address')                 ->call('delete_address')            ->add('delete-address');
+    $R->post('/save-edit-address')              ->call('save_edit_address')         ->add('save-edit-address');
+    $R->post('/get-billing-addresses')          ->call('get_billing_addresses')     ->add('get-billing-addresses');
+    $R->post('/save-new-billing-address')       ->call('save_new_billing_address')  ->add('save-new-billing-address');
+    $R->post('/get-billing-address')            ->call('get_billing_address')       ->add('get-billing-address');
+    $R->post('/delete-billing-address')         ->call('delete_billing_address')    ->add('delete-billing-address');
+    $R->post('/save-edit-billing-address')      ->call('save_edit_billing_address') ->add('save-edit-billing-address');
+    $R->post('/get-shipping-methods')           ->call('get_shipping_methods')      ->add('get-shipping-methods');
+    $R->post('/get-payment-methods')            ->call('get_payment_methods')       ->add('get-payment-methods');
+    $R->post('/apply-code')                     ->call('apply_code')                ->add('apply-code');
+    $R->post('/save-order-to-cart')             ->call('save_order_to_cart')        ->add('save-order-to-cart');
+    $R->post('/get-countries-list')             ->call('get_countries_list')        ->add('get-countries-list');
+    $R->post('/get-provinces-list')             ->call('get_provinces_list')        ->add('get-provinces-list');
     
 ?>

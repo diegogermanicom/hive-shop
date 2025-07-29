@@ -7,14 +7,13 @@
      * @lastUpdated 2025
      */
 
-    // I make sure that the necessary constant is declared
-    Utils::checkDefined('CONTROLLERS_PATH');
+    $controllersPath = __DIR__.'/../controllers';
     $classBefore = get_declared_classes();
     // I add files that are prioritized in order
     $priorityControllers = array();
     foreach($priorityControllers as $value) {
-        if(file_exists(CONTROLLERS_PATH.'/'.$value)) {
-            require_once CONTROLLERS_PATH.'/'.$value;
+        if(file_exists($controllersPath.'/'.$value)) {
+            require_once $controllersPath.'/'.$value;
         } else {
             Utils::error('The priority controller file you are trying to load <b>'.$value.'</b> does not exist.');
         }
@@ -22,10 +21,10 @@
     // I add classes that I will not load
     $ignoreControllers = array();
     // I automatically include each controller
-    $scandir = scandir(CONTROLLERS_PATH);
+    $scandir = scandir($controllersPath);
     $files = array_diff($scandir, array('.', '..'), $ignoreControllers, $priorityControllers);
     foreach($files as $value) {
-        require_once CONTROLLERS_PATH.'/'.$value;
+        require_once $controllersPath.'/'.$value;
     }
     //I ignore system controllers
     $ignoreControllers = array();
