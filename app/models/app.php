@@ -118,6 +118,12 @@
             Utils::killCookie('user_remember');
         }
 
+        public function security_my_account() {
+            if(!isset($_SESSION['user'])) {
+                Utils::redirect('access');
+            }
+        }
+
         public function validate_email($code) {
             $sql = 'SELECT id_user FROM '.DDBB_PREFIX.'users WHERE validation_code = ? LIMIT 1';
             $result = $this->query($sql, array($code));

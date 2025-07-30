@@ -36,7 +36,7 @@
             }
             if(MAINTENANCE == true && ROUTE != PUBLIC_ROUTE.'/service-down') {
                 if(METHOD == 'get') {
-                    Utils::redirect('/service-down');
+                    Utils::redirect('service-down');
                 } else {
                     return json_encode(array(
                         'response' => 'error',

@@ -33,7 +33,7 @@
         public function security_app_login() {
             if(!isset($_SESSION['user'])) {
                 if(METHOD == 'get') {
-                    Utils::redirect('/access');
+                    Utils::redirect('/');
                 } else {
                     return json_encode(array(
                         'response' => 'error',
@@ -90,13 +90,9 @@
                     }
                     // If you come from the place order page
                     if(isset($_POST['checkout']) && $_POST['checkout'] == 1) {
-                        if(MULTILANGUAGE == true) {
-                            $url = ROUTES['checkout'][LANG]['route'];
-                        } else {
-                            $url = ROUTES['checkout']['root']['route'];
-                        }
+                        $url = Utils::getRoute('checkout', array('login' => 'true'));
                     } else {
-                        $url = PUBLIC_ROUTE.'/?login';
+                        $url = Utils::getRoute('/', array('login' => 'true'));
                     }
                     return array(
                         'response' => 'ok',

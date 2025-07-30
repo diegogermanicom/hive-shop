@@ -12,7 +12,7 @@
         // App services ------------------------------------------------
         
         public function root($args) {
-            Utils::redirect('/home');
+            Utils::redirect('home', $_GET);
         }
 
         // Store categories controller
@@ -180,7 +180,7 @@
 
         public function my_account($args) {
             $app = new App('my_account-page');
-            $app->security_app_login();
+            $app->security_my_account();
             $data = $app->getAppData();
             if(LANG == 'en') {
                 $data['meta']['title'] = $app->setTitle('My account');
@@ -197,7 +197,7 @@
             $app = new App();
             $app->security_app_login();
             $app->logout();
-            Utils::redirect('/home', array(
+            Utils::redirect('home', array(
                 'logout' => 'true'
             ));
         }
@@ -261,14 +261,14 @@
         public function save_checkout_successful($args) {
             // Intermediate step between Stripe's response and the payment information screen
             if(!isset($_GET['transaction_id'])) {
-                Utils::redirect('/checkout-failed');
+                Utils::redirect('checkout-failed');
             }
             $app = new App('save-checkout-successful-page');
             if($app->check_transaction_id($_GET['transaction_id']) == true) {
                 $app->save_order_from_cart($_COOKIE['id_cart']);
-                Utils::redirect('/checkout-successful');
+                Utils::redirect('checkout-successful');
             } else {
-                Utils::redirect('/checkout-failed');
+                Utils::redirect('checkout-failed');
             }
         }
         public function checkout_successful($args) {

@@ -14,7 +14,7 @@
     $R->setLanguage('en');
 
     $R->get('')                                 ->call('root')                      ->add('empty-root');
-    $R->get('/')                                ->call('root')                      ->add('bar-root');
+    $R->get('/')                                ->call('root')                      ->add('/');
     $R->get('/page-404')                        ->call('page_404')                  ->add('page-404', false);
     $R->get('/home')                            ->call('home')                      ->add('home');
     $R->get('/privacy-policy')                  ->call('privacy_policy')            ->add('privacy-policy');
@@ -37,7 +37,7 @@
     $R->setLanguage('es');
 
     $R->get('')                                 ->call('root')                      ->add('empty-root');
-    $R->get('/')                                ->call('root')                      ->add('bar-root');
+    $R->get('/')                                ->call('root')                      ->add('/');
     $R->get('/pagina-404')                      ->call('page_404')                  ->add('page-404', false);
     $R->get('/inicio')                          ->call('home')                      ->add('home');
     $R->get('/politica-de-privacidad')          ->call('privacy_policy')            ->add('privacy-policy');

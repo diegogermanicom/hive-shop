@@ -15,6 +15,38 @@
         public const IDDISABLE = 1;
         public const IDACTIVE = 2;
 
+        public static function getRoute($alias, $vars = array()) {
+            Utils::checkDefined('MULTILANGUAGE', 'ROUTES', 'LANG');
+            if(MULTILANGUAGE == true) {
+                if(isset(ROUTES[$alias][LANG]['route'])) {
+                    $url = ROUTES[$alias][LANG]['route'];
+                } else {
+                    $url = PUBLIC_ROUTE;
+                }
+            } else {
+                if(isset(ROUTES[$alias]['root']['route'])) {
+                    $url = ROUTES[$alias]['root']['route'];
+                } else {
+                    $url = PUBLIC_ROUTE;
+                }
+            }
+            // If you have parameters to add by get
+            if(!empty($vars)) {
+                $url .= '?';
+                foreach($vars as $index => $value) {
+                    $url .= $index.'='.$value.'&';
+                }
+                $url = substr($url, 0, -1);
+            }
+            return $url;
+        }
+
+        public static function redirect($alias, $vars = array()) {
+            $url = Utils::getRoute($alias, $vars);
+            header('Location: '.$url);
+            exit;
+        }
+
         public static function validateDomain($dominio) {
             $result = preg_match('/^(?!\-)(?:[a-zA-Z0-9\-]{1,60}\.)+[a-zA-Z]{2,20}$/', $dominio);
             return $result;
@@ -78,29 +110,6 @@
                 'response' => 'error',
                 'message' => $message
             ));
-            exit;
-        }
-
-        public static function redirect($route, $vars = array()) {
-            if(MULTILANGUAGE == true) {
-                if($route == '/' || $route == '') {
-                    $url = PUBLIC_ROUTE;
-                } else {
-                    $route = ltrim($route, '/');
-                    $url = ROUTES[$route][LANG]['route'];
-                }
-            } else {
-                $url = PUBLIC_ROUTE.$route;
-            }
-            // If you have parameters to add by get
-            if(!empty($vars)) {
-                $url .= '?';
-                foreach($vars as $index => $value) {
-                    $url .= $index.'='.$value.'&';
-                }
-                $url = substr($url, 0, -1);
-            }
-            header('Location: '.$url);
             exit;
         }
 
@@ -218,16 +227,10 @@
             }
         }
 
-        public static function checkDefined($definedVars) {
-            if(is_array($definedVars)) {
-                foreach($definedVars as $var) {
-                    if(!defined($var)) {
-                        Utils::error('The '.$var.' constant does not exist.');
-                    }
-                }
-            } else {
-                if(!defined($definedVars)) {
-                    Utils::error('The '.$definedVars.' constant does not exist.');
+        public static function checkDefined(...$definedVars) {
+            foreach($definedVars as $var) {
+                if(!defined($var)) {
+                    Utils::error('The '.$var.' constant does not exist.');
                 }
             }
         }
@@ -243,7 +246,7 @@
         }
 
         public static function getEnviroment() {
-            Utils::checkDefined(array('HOST', 'HOST_DEV', 'HOST_PRO'));
+            Utils::checkDefined('HOST', 'HOST_DEV', 'HOST_PRO');
             if(strpos(HOST, HOST_DEV) !== false && HOST_DEV != '') {
                 error_reporting(E_ALL);
                 ini_set('display_errors', '1');
@@ -258,7 +261,7 @@
         }
 
         public static function getLanguage() {
-            Utils::checkDefined(array('MULTILANGUAGE', 'PUBLIC_PATH', 'ROUTE', 'LANGUAGES', 'LANGUAGE', 'LANG_PATH'));
+            Utils::checkDefined('MULTILANGUAGE', 'PUBLIC_PATH', 'ROUTE', 'LANGUAGES', 'LANGUAGE', 'LANG_PATH');
             if(MULTILANGUAGE == true) {
                 // First I try to get the language from the route
                 $lang = explode(PUBLIC_PATH.'/', ROUTE)[1];
@@ -318,7 +321,7 @@
         }
 
         public static function checkServiceDownView() {
-            Utils::checkDefined(array('MAINTENANCE', 'ROUTE', 'PUBLIC_ROUTE'));
+            Utils::checkDefined('MAINTENANCE', 'ROUTE', 'PUBLIC_ROUTE');
             if(MAINTENANCE == false && ROUTE == PUBLIC_ROUTE.'/service-down') {
                 Utils::redirect('/');
             }        

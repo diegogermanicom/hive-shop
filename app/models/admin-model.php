@@ -73,7 +73,9 @@
                     if($remember == 1) {
                         Utils::initCookie('admin_remember', $row["remember_code"], Utils::ONEMONTH);
                     }
-                    return array('response' => 'ok');                    
+                    return array(
+                        'response' => 'ok'
+                    );
                 } else {
                     return array(
                         'response' => 'error',

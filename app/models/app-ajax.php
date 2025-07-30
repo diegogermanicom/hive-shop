@@ -959,7 +959,7 @@
             // Payment by back transfer
             if($_POST['id_payment_method'] == 2) {
                 $this->save_order_from_cart($_COOKIE['id_cart']);
-                $url = ROUTES['checkout-bank-transfer'][LANG]['route'].'?transaction_id='.$transactionId;
+                $url = Utils::getRoute('checkout-bank-transfer', array('transaction_id' => $transactionId));
                 return array(
                     'response' => 'ok',
                     'url' => $url
@@ -968,7 +968,7 @@
             // Payment by cash on delivery
             if($_POST['id_payment_method'] == 3) {
                 $this->save_order_from_cart($_COOKIE['id_cart']);
-                $url = ROUTES['checkout-cash-delivery'][LANG]['route'].'?transaction_id='.$transactionId;
+                $url = Utils::getRoute('checkout-cash-delivery', array('transaction_id' => $transactionId));
                 return array(
                     'response' => 'ok',
                     'url' => $url

@@ -248,7 +248,7 @@
             if(!isset($this->routes[$this->method][$this->alias])) {
                 $this->routes[$this->method][$this->alias] = array();
             }
-            if($this->language === null) {
+            if($this->language === null || $this->method != 'get') {
                 $this->routes[$this->method][$this->alias]['root'] = $obj;
             } else {
                 $this->routes[$this->method][$this->alias][$this->language] = $obj;
@@ -260,8 +260,14 @@
             foreach($this->routes as $methods) {
                 foreach($methods as $alias) {
                     foreach($alias as $route) {
-                        if($route['method'] == $method && $route['alias'] == $newAlias && $route['language'] == $lang) {
-                            Utils::error('The <b>'.$newAlias.'</b> alias in the <b>'.$lang.'</b> language is repeated.');
+                        if($lang !== null) {
+                            if($route['method'] == $method && $route['alias'] == $newAlias && $route['language'] == $lang) {
+                                Utils::error('The <b>'.$newAlias.'</b> alias in the <b>'.$lang.'</b> language is repeated.');
+                            }    
+                        } else {
+                            if($route['method'] == $method && $route['alias'] == $newAlias) {
+                                Utils::error('The <b>'.$newAlias.'</b> alias in the <b>'.$lang.'</b> language is repeated.');
+                            }    
                         }
                     }
                 }
@@ -283,11 +289,12 @@
                 $this->language = strtolower($arrayAlias[0]);
                 $this->alias = $arrayAlias[1];
             } else {
-                $this->language = null;
+                if($this->defaultLanguage != null) {
+                    $this->language = $this->defaultLanguage;
+                } else {
+                    $this->language = null;
+                }
                 $this->alias = $arrayAlias[0];
-            }
-            if($this->defaultLanguage != null) {
-                $this->language = $this->defaultLanguage;
             }
             if($this->language != null && !Utils::validateISOLanguage($this->language)) {
                 Utils::error('The language value of the route must be an ISO language code.');
@@ -358,7 +365,7 @@
 
         public function empty() {
             if(METHOD == 'get') {
-                Utils::redirect('/page-404');
+                Utils::redirect('page-404');
             } else {
                 echo json_encode(array(
                     'status' => '404',
