@@ -19,5 +19,5 @@
         </div>
         <?php } ?>
         <div class="text-center font-14">Publicado bajo licencia <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a>.</div>
-        <div class="text-center font-14 pt-5">Copyright © <?= date('Y'); ?> <b class="core-color">Hive</b> Framework - <a href="<?= PUBLIC_ROUTE; ?>/politica-de-privacidad">Política de privacidad</a> - <a href="<?= PUBLIC_ROUTE; ?>/politica-de-cookies">Política de cookies</a></div>
+        <div class="text-center font-14 pt-5">Copyright © <?= date('Y'); ?> <b class="core-color">Hive</b> Framework - <a href="<?= Utils::getRoute('privacy-policy'); ?>">Política de privacidad</a> - <a href="<?= Utils::getRoute('cookie-policy'); ?>">Política de cookies</a></div>
     </footer>

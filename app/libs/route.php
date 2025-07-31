@@ -303,37 +303,47 @@
         }
 
         public function call($controller) {
-            if(!is_string($controller) || $controller == '') {
+            if(!is_callable($controller) && (!is_string($controller) || $controller == '')) {
                 Utils::error('The controller must have a non-empty string value.');
             }
-            $arrayController = explode("@", $controller);
-            if(count($arrayController) == 2) {
-                $this->controller = $arrayController[0];
-                $this->function = $arrayController[1];
-            } else {                
-                if($this->defaultController == null) {
-                    Utils::error('You must select a driver for the route.');
+            if(!is_callable($controller)) {
+                $arrayController = explode("@", $controller);
+                if(count($arrayController) == 2) {
+                    $this->controller = $arrayController[0];
+                    $this->function = $arrayController[1];
+                } else {                
+                    if($this->defaultController == null) {
+                        Utils::error('You must select a driver for the route.');
+                    }
+                    $this->controller = $this->defaultController;
+                    $this->function = $arrayController[0];
                 }
-                $this->controller = $this->defaultController;
-                $this->function = $arrayController[0];
+            } else {
+                $this->controller = null;
+                $this->function = $controller;
             }
             return $this;
         }
 
         public function call_admin($controller) {
-            if(!is_string($controller) || $controller == '') {
+            if(!is_callable($controller) && (!is_string($controller) || $controller == '')) {
                 Utils::error('The controller must have a non-empty string value.');
             }
-            $arrayController = explode("@", $controller);
-            if(count($arrayController) == 2) {
-                $this->controller = $arrayController[0];
-                $this->function = $arrayController[1];
-            } else {                
-                if($this->defaultController == null) {
-                    Utils::error('You must select a driver for the route.');
+            if(!is_callable($controller)) {
+                $arrayController = explode("@", $controller);
+                if(count($arrayController) == 2) {
+                    $this->controller = $arrayController[0];
+                    $this->function = $arrayController[1];
+                } else {                
+                    if($this->defaultController == null) {
+                        Utils::error('You must select a driver for the route.');
+                    }
+                    $this->controller = $this->defaultController;
+                    $this->function = $arrayController[0];
                 }
-                $this->controller = $this->defaultController;
-                $this->function = $arrayController[0];
+            } else {
+                $this->controller = null;
+                $this->function = $controller;
             }
             // If the alias does not exist
             if(!isset($this->routes[$this->method]['admin'])) {

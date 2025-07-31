@@ -10,7 +10,7 @@
             <section>
                 <div class="container">
                     <div class="text-center">
-                        <a href="<?= PUBLIC_ROUTE; ?>/desconectar" class="btn btn-black">Desconectar</a>
+                        <a href="<?= Utils::getRoute('logout'); ?>" class="btn btn-black">Desconectar</a>
                     </div>
                 </div>
             </section>
