@@ -60,13 +60,9 @@
                     $this->query($sql, array($email, $validation_code));
                 }
                 if(isset($_POST['checkout']) && $_POST['checkout'] == 1) {
-                    if(LANG == 'en') {
-                        $url = PUBLIC_ROUTE.'/checkout?register';
-                    } else if(LANG == 'es') {
-                        $url = PUBLIC_ROUTE.'/tramitar-pedido?register';
-                    }
+                    $url = Utils::getRoute('checkout', array('register' => 'true'));
                 } else {
-                    $url = PUBLIC_ROUTE.'/?register';
+                    $url = Utils::getRoute('/', array('register' => 'true'));
                 }
                 return array(
                     'response' => 'ok',
