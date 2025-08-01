@@ -256,6 +256,34 @@
         }
 
         public function add($alias = '', $index = null) {
+            $this->setAliasIndex($alias, $index);
+            $this->addRoute();
+        }
+
+        public function call($controller) {
+            $this->setFunction($controller);
+            return $this;
+        }
+
+        public function call_admin($controller) {
+            $this->setFunction($controller);
+            // If the alias does not exist
+            if(!isset($this->routes[$this->method]['admin'])) {
+                $this->routes[$this->method]['admin'] = array();
+            }
+            $obj = array(
+                'method' => $this->method,
+                'route' => ADMIN_PATH.$this->defaultPrefix.$this->route,
+                'controller' => $this->controller,
+                'function' => $this->function,
+                'language' => null,
+                'alias' => null,
+                'index' => false
+            );
+            array_push($this->routes[$this->method]['admin'], $obj);
+        }
+
+        private function setAliasIndex($alias = '', $index = null) {
             if(!is_string($alias)) {
                 Utils::error('The alias value must be a string.');
             }
@@ -299,10 +327,9 @@
                 Utils::error('The alias <b>admin</b> is reserved for the system.');
             }
             $this->checkRepeatAlias();
-            $this->addRoute();
         }
 
-        public function call($controller) {
+        private function setFunction($controller) {
             if(!is_callable($controller) && (!is_string($controller) || $controller == '')) {
                 Utils::error('The controller must have a non-empty string value.');
             }
@@ -322,43 +349,6 @@
                 $this->controller = null;
                 $this->function = $controller;
             }
-            return $this;
-        }
-
-        public function call_admin($controller) {
-            if(!is_callable($controller) && (!is_string($controller) || $controller == '')) {
-                Utils::error('The controller must have a non-empty string value.');
-            }
-            if(!is_callable($controller)) {
-                $arrayController = explode("@", $controller);
-                if(count($arrayController) == 2) {
-                    $this->controller = $arrayController[0];
-                    $this->function = $arrayController[1];
-                } else {                
-                    if($this->defaultController == null) {
-                        Utils::error('You must select a driver for the route.');
-                    }
-                    $this->controller = $this->defaultController;
-                    $this->function = $arrayController[0];
-                }
-            } else {
-                $this->controller = null;
-                $this->function = $controller;
-            }
-            // If the alias does not exist
-            if(!isset($this->routes[$this->method]['admin'])) {
-                $this->routes[$this->method]['admin'] = array();
-            }
-            $obj = array(
-                'method' => $this->method,
-                'route' => ADMIN_PATH.$this->defaultPrefix.$this->route,
-                'controller' => $this->controller,
-                'function' => $this->function,
-                'language' => null,
-                'alias' => null,
-                'index' => false
-            );
-            array_push($this->routes[$this->method]['admin'], $obj);
         }
 
         private function setRoute($route, $function) {
